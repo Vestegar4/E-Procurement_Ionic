@@ -1,0 +1,7 @@
+{
+  "name": "E-Procurement",
+  "integrations": {
+    "capacitor": {}
+  },
+  "type": "angular-standalone"
+}
