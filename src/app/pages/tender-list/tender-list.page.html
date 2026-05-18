@@ -1,13 +1,40 @@
-<ion-header [translucent]="true">
-  <ion-toolbar>
-    <ion-title>tender-list</ion-title>
-  </ion-toolbar>
-</ion-header>
+<ion-content class="tender-page">
 
-<ion-content [fullscreen]="true">
-  <ion-header collapse="condense">
-    <ion-toolbar>
-      <ion-title size="large">tender-list</ion-title>
-    </ion-toolbar>
-  </ion-header>
+  <div class="top-shape"></div>
+
+  <div class="tender-container">
+
+    <div class="header-section">
+      <h1>Tender</h1>
+      <p>Daftar tender yang tersedia</p>
+    </div>
+
+    <div
+      class="tender-card"
+      *ngFor="let tender of tenders"
+      [routerLink]="['/tender-detail', tender.id]">
+
+      <div class="card-top">
+        <h3>{{ tender.title }}</h3>
+        <ion-badge>{{ tender.status }}</ion-badge>
+      </div>
+
+      <p>{{ tender.description }}</p>
+
+      <div class="date-row">
+        <span>{{ tender.start_date }}</span>
+        <span>{{ tender.end_date }}</span>
+      </div>
+
+    </div>
+
+    <ion-button
+      expand="block"
+      fill="clear"
+      routerLink="/dashboard">
+      Kembali ke Dashboard
+    </ion-button>
+
+  </div>
+
 </ion-content>

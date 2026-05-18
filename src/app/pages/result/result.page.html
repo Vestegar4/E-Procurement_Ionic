@@ -1,13 +1,47 @@
-<ion-header [translucent]="true">
-  <ion-toolbar>
-    <ion-title>result</ion-title>
-  </ion-toolbar>
-</ion-header>
+<ion-content class="result-page">
 
-<ion-content [fullscreen]="true">
-  <ion-header collapse="condense">
-    <ion-toolbar>
-      <ion-title size="large">result</ion-title>
-    </ion-toolbar>
-  </ion-header>
+  <div class="top-shape"></div>
+
+  <div class="result-container" *ngIf="tender && result">
+
+    <button class="back-btn" [routerLink]="['/tender-detail', tender.id]">
+      ‹
+    </button>
+
+    <div class="header-section">
+      <h1>Hasil Tender</h1>
+      <p>{{ tender.title }}</p>
+    </div>
+
+    <div class="winner-card">
+      <ion-badge>
+        {{ result.status === 'won' ? 'MENANG' : 'KALAH' }}
+      </ion-badge>
+
+      <h2>{{ result.winner_vendor }}</h2>
+
+      <p class="price">
+        {{ formatCurrency(result.winning_bid) }}
+      </p>
+    </div>
+
+    <div class="info-card">
+      <h3>Tanggal Keputusan</h3>
+      <p>{{ result.decision_date }}</p>
+    </div>
+
+    <div class="info-card">
+      <h3>Catatan Admin</h3>
+      <p>{{ result.note }}</p>
+    </div>
+
+    <ion-button
+      expand="block"
+      class="main-btn"
+      routerLink="/tender-list">
+      Kembali ke Tender
+    </ion-button>
+
+  </div>
+
 </ion-content>

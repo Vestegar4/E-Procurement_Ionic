@@ -1,13 +1,81 @@
-<ion-header [translucent]="true">
-  <ion-toolbar>
-    <ion-title>documents</ion-title>
-  </ion-toolbar>
-</ion-header>
+<ion-content class="documents-page">
 
-<ion-content [fullscreen]="true">
-  <ion-header collapse="condense">
-    <ion-toolbar>
-      <ion-title size="large">documents</ion-title>
-    </ion-toolbar>
-  </ion-header>
+  <div class="top-shape"></div>
+
+  <div class="documents-container">
+
+    <button class="back-btn" routerLink="/dashboard">
+      ‹
+    </button>
+
+    <div class="header-section">
+      <h1>Dokumen</h1>
+      <p>Upload dokumen legal perusahaan</p>
+    </div>
+
+    <div class="upload-card">
+
+      <h3>Upload Dokumen</h3>
+
+      <div class="select-box">
+        <ion-select
+          placeholder="Pilih jenis dokumen"
+          [(ngModel)]="documentType">
+
+          <ion-select-option value="Legalitas">
+            Legalitas
+          </ion-select-option>
+
+          <ion-select-option value="Izin Usaha">
+            Izin Usaha
+          </ion-select-option>
+
+          <ion-select-option value="Dokumen Pendukung">
+            Dokumen Pendukung
+          </ion-select-option>
+
+        </ion-select>
+      </div>
+
+      <label class="file-box">
+        <input
+          type="file"
+          accept=".pdf,.jpg,.jpeg,.png"
+          (change)="onFileSelected($event)" />
+
+        <span>
+          {{ selectedFile ? selectedFile.name : 'Pilih file dokumen' }}
+        </span>
+      </label>
+
+      <ion-button
+        expand="block"
+        class="main-btn"
+        (click)="uploadDocument()">
+        Upload Dokumen
+      </ion-button>
+
+    </div>
+
+    <div class="list-section">
+
+      <h3>Dokumen Terupload</h3>
+
+      <div
+        class="document-card"
+        *ngFor="let doc of uploadedDocuments">
+
+        <div>
+          <h4>{{ doc.type }}</h4>
+          <p>{{ doc.filename }}</p>
+        </div>
+
+        <span>{{ doc.status }}</span>
+
+      </div>
+
+    </div>
+
+  </div>
+
 </ion-content>

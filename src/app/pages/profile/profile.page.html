@@ -1,13 +1,69 @@
-<ion-header [translucent]="true">
-  <ion-toolbar>
-    <ion-title>profile</ion-title>
-  </ion-toolbar>
-</ion-header>
+<ion-content class="profile-page">
 
-<ion-content [fullscreen]="true">
-  <ion-header collapse="condense">
-    <ion-toolbar>
-      <ion-title size="large">profile</ion-title>
-    </ion-toolbar>
-  </ion-header>
+  <div class="top-shape"></div>
+
+  <div class="profile-container">
+
+    <button class="back-btn" routerLink="/dashboard">
+      ‹
+    </button>
+
+    <div class="header-section">
+      <h1>Profile Vendor</h1>
+      <p>Data perusahaan dan status verifikasi</p>
+    </div>
+
+    <div class="status-card">
+      <p>Status Verifikasi</p>
+
+      <ion-badge>
+        {{ vendor.verification_status }}
+      </ion-badge>
+    </div>
+
+    <div class="form-card">
+
+      <div class="input-box">
+        <ion-input
+          type="text"
+          placeholder="Company Name"
+          [(ngModel)]="vendor.company_name">
+        </ion-input>
+      </div>
+
+      <div class="input-box">
+        <ion-input
+          type="email"
+          placeholder="Email"
+          [(ngModel)]="vendor.email">
+        </ion-input>
+      </div>
+
+      <div class="input-box">
+        <ion-input
+          type="text"
+          placeholder="Address"
+          [(ngModel)]="vendor.address">
+        </ion-input>
+      </div>
+
+      <div class="input-box">
+        <ion-input
+          type="text"
+          placeholder="Contact"
+          [(ngModel)]="vendor.contact">
+        </ion-input>
+      </div>
+
+      <ion-button
+        expand="block"
+        class="main-btn"
+        (click)="saveProfile()">
+        Simpan Profile
+      </ion-button>
+
+    </div>
+
+  </div>
+
 </ion-content>
