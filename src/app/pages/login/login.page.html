@@ -1,0 +1,83 @@
+<ion-content class="login-page" [fullscreen]="true">
+  <div class="background-orb orb-left"></div>
+  <div class="background-orb orb-right"></div>
+
+  <div class="login-shell">
+    <section class="brand-panel">
+      <span class="brand-badge">E-Procurement</span>
+
+      <h1>Kelola proses pengadaan dalam satu dashboard.</h1>
+
+      <p>
+        Masuk untuk memantau tender, vendor, dan alur persetujuan dengan lebih
+        cepat dan rapi.
+      </p>
+
+      <div class="brand-highlight">
+        <span class="highlight-label">Workflow yang lebih efisien</span>
+        <strong>Semua kebutuhan pengadaan, dari pengajuan sampai monitoring.</strong>
+      </div>
+    </section>
+
+    <section class="form-card">
+      <div class="form-header">
+        <span class="eyebrow">Welcome back</span>
+        <h2>Login ke akun Anda</h2>
+        <p>Masukkan email dan password untuk melanjutkan.</p>
+      </div>
+
+      <form class="login-form" (ngSubmit)="login()">
+        <div class="field-group">
+          <label for="email">Email</label>
+          <div class="field-control">
+            <ion-input
+              id="email"
+              type="email"
+              inputmode="email"
+              autocomplete="email"
+              placeholder="nama@perusahaan.com"
+              [(ngModel)]="email"
+              name="email">
+            </ion-input>
+          </div>
+        </div>
+
+        <div class="field-group">
+          <div class="field-heading">
+            <label for="password">Password</label>
+          </div>
+
+          <div class="field-control">
+            <ion-input
+              id="password"
+              type="password"
+              autocomplete="current-password"
+              placeholder="Masukkan password"
+              [(ngModel)]="password"
+              name="password">
+            </ion-input>
+          </div>
+        </div>
+
+        <ion-button
+          type="submit"
+          class="login-btn"
+          expand="block"
+          [disabled]="loading">
+          <ion-spinner
+            *ngIf="loading"
+            name="crescent">
+          </ion-spinner>
+
+          <span *ngIf="!loading">Masuk</span>
+        </ion-button>
+      </form>
+
+      <p class="register-text">
+        Belum punya akun?
+        <a routerLink="/register">Daftar sekarang</a>
+      </p>
+    </section>
+  </div>
+</ion-content>
+            
