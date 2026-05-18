@@ -1,0 +1,138 @@
+<ion-content class="register-page" [fullscreen]="true">
+  <div class="background-orb orb-left"></div>
+  <div class="background-orb orb-right"></div>
+
+  <div class="register-shell">
+    <section class="brand-panel">
+      <a class="back-link" routerLink="/login">Back to login</a>
+
+      <span class="brand-badge">E-Procurement</span>
+
+      <h1>Buat akun vendor untuk mulai proses pengadaan.</h1>
+
+      <p>
+        Daftarkan perusahaan Anda untuk mengakses tender, mengelola dokumen,
+        dan memantau proses pengajuan dalam satu tempat.
+      </p>
+
+      <div class="brand-highlight">
+        <span class="highlight-label">Pendaftaran vendor</span>
+        <strong>Isi data perusahaan dengan lengkap agar proses verifikasi lebih cepat.</strong>
+      </div>
+    </section>
+
+    <section class="form-card">
+      <div class="form-header">
+        <span class="eyebrow">Create account</span>
+        <h2>Daftar akun baru</h2>
+        <p>Lengkapi informasi perusahaan Anda untuk melanjutkan.</p>
+      </div>
+
+      <form class="register-form" (ngSubmit)="register()">
+        <div class="field-group">
+          <label for="company_name">Company Name</label>
+          <div class="field-control">
+            <ion-input
+              id="company_name"
+              type="text"
+              autocomplete="organization"
+              placeholder="Nama perusahaan"
+              [(ngModel)]="company_name"
+              name="company_name">
+            </ion-input>
+          </div>
+        </div>
+
+        <div class="field-group">
+          <label for="email">Email</label>
+          <div class="field-control">
+            <ion-input
+              id="email"
+              type="email"
+              inputmode="email"
+              autocomplete="email"
+              placeholder="nama@perusahaan.com"
+              [(ngModel)]="email"
+              name="email">
+            </ion-input>
+          </div>
+        </div>
+
+        <div class="field-group">
+          <label for="address">Address</label>
+          <div class="field-control">
+            <ion-input
+              id="address"
+              type="text"
+              autocomplete="street-address"
+              placeholder="Alamat perusahaan"
+              [(ngModel)]="address"
+              name="address">
+            </ion-input>
+          </div>
+        </div>
+
+        <div class="field-group">
+          <label for="contact">Contact</label>
+          <div class="field-control">
+            <ion-input
+              id="contact"
+              type="text"
+              inputmode="tel"
+              autocomplete="tel"
+              placeholder="Nomor kontak"
+              [(ngModel)]="contact"
+              name="contact">
+            </ion-input>
+          </div>
+        </div>
+
+        <div class="field-group">
+          <label for="password">Password</label>
+          <div class="field-control">
+            <ion-input
+              id="password"
+              type="password"
+              autocomplete="new-password"
+              placeholder="Masukkan password"
+              [(ngModel)]="password"
+              name="password">
+            </ion-input>
+          </div>
+        </div>
+
+        <div class="field-group">
+          <label for="password_confirmation">Confirm Password</label>
+          <div class="field-control">
+            <ion-input
+              id="password_confirmation"
+              type="password"
+              autocomplete="new-password"
+              placeholder="Ulangi password"
+              [(ngModel)]="password_confirmation"
+              name="password_confirmation">
+            </ion-input>
+          </div>
+        </div>
+
+        <ion-button
+          type="submit"
+          class="register-btn"
+          expand="block"
+          [disabled]="loading">
+          <ion-spinner
+            *ngIf="loading"
+            name="crescent">
+          </ion-spinner>
+
+          <span *ngIf="!loading">Sign up</span>
+        </ion-button>
+      </form>
+
+      <p class="login-text">
+        Sudah punya akun?
+        <a routerLink="/login">Masuk sekarang</a>
+      </p>
+    </section>
+  </div>
+</ion-content>
