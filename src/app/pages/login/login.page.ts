@@ -51,46 +51,17 @@ export class LoginPage {
 
   login() {
 
-    if (!this.email || !this.password) {
-      this.showToast('Email dan password wajib diisi');
-      return;
-    }
-
-    this.loading = true;
-
-    const data = {
-      email: this.email,
-      password: this.password
-    };
-
-    this.authService.login(data).subscribe({
-      next: (res) => {
-
-        this.loading = false;
-
-        const token = res.token || res.access_token;
-
-        if (!token) {
-          this.showToast('Token tidak ditemukan');
-          return;
-        }
-
-        this.authService.saveToken(token);
-
-        this.showToast('Login berhasil', 'success');
-
-        this.router.navigate(['/dashboard']);
-      },
-
-      error: (err) => {
-        console.log(err);
-
-        this.loading = false;
-
-        this.showToast('Login gagal');
-      }
-    });
-
+  if (!this.email || !this.password) {
+    this.showToast('Email dan password wajib diisi');
+    return;
   }
+
+  localStorage.setItem('vendor_token', 'dummy-token');
+
+  this.showToast('Login berhasil', 'success');
+
+  this.router.navigate(['/dashboard']);
+
+}
 
 }

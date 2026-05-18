@@ -1,0 +1,92 @@
+.bidding-page {
+  --background: #ffffff;
+  position: relative;
+}
+
+.top-shape {
+  position: absolute;
+  top: -130px;
+  left: -70px;
+  width: 330px;
+  height: 330px;
+  background: linear-gradient(180deg, #d9b8ff, #f2e8ff);
+  border-radius: 50%;
+}
+
+.bidding-container {
+  position: relative;
+  z-index: 10;
+  padding: 60px 24px 32px;
+}
+
+.back-btn {
+  border: none;
+  background: transparent;
+  font-size: 42px;
+  color: #111;
+  margin-bottom: 40px;
+}
+
+.header-section {
+
+  h1 {
+    font-size: 30px;
+    font-weight: 800;
+    color: #111;
+    margin-bottom: 12pcx;
+  }
+}
+
+.countdown-card,
+.bid-card {
+  padding: 22px;
+  border-radius: 24px;
+  background: #c40c96;
+  border: 1px solid #c2c2c2;
+  box-shadow: 0 12px 30px rgba(0,0,0,0.06);
+  margin-top: 22px;
+}
+
+.countdown-card {
+
+  h3 {
+    margin-bottom: 12px;
+  }
+
+  p {
+    font-size: 26px;
+    font-weight: 800;
+    color: #b266ff;
+  }
+}
+
+.bid-card h3 {
+  margin-bottom: 18px;
+}
+
+.input-box {
+
+  ion-input {
+    --background: #fff;
+    --padding-start: 20px;
+    --padding-end: 20px;
+    --padding-top: 18px;
+    --padding-bottom: 18px;
+
+    border: 1.5px solid #ddd;
+    border-radius: 999px;
+  }
+}
+
+.submit-btn {
+  margin-top: 24px;
+
+  --background: #b266ff;
+  --border-radius: 999px;
+
+  height: 50px;
+
+  font-weight: 700;
+
+  text-transform: none;
+}

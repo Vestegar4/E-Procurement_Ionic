@@ -1,13 +1,61 @@
-<ion-header [translucent]="true">
-  <ion-toolbar>
-    <ion-title>bidding</ion-title>
-  </ion-toolbar>
-</ion-header>
+<ion-content class="bidding-page">
 
-<ion-content [fullscreen]="true">
-  <ion-header collapse="condense">
-    <ion-toolbar>
-      <ion-title size="large">bidding</ion-title>
-    </ion-toolbar>
-  </ion-header>
+  <div class="top-shape"></div>
+
+  <div class="bidding-container" *ngIf="tender">
+
+    <button class="back-btn" routerLink="/tender-list">
+      ‹
+    </button>
+
+    <div class="header-section">
+
+      <h1>{{ tender.title }}</h1>
+
+      <ion-badge
+        [color]="biddingActive ? 'success' : 'danger'">
+
+        {{ biddingActive ? 'BIDDING ACTIVE' : 'BIDDING CLOSED' }}
+
+      </ion-badge>
+
+    </div>
+
+    <div class="countdown-card">
+
+      <h3>Countdown</h3>
+
+      <p>{{ countdown }}</p>
+
+    </div>
+
+    <div class="bid-card">
+
+      <h3>Masukkan Penawaran</h3>
+
+      <div class="input-box">
+
+        <ion-input
+          type="number"
+          placeholder="Input harga bidding"
+          [(ngModel)]="bidAmount"
+          [disabled]="!biddingActive">
+        </ion-input>
+
+      </div>
+
+      <ion-button
+        expand="block"
+        class="submit-btn"
+        (click)="submitBid()"
+        [disabled]="!biddingActive">
+
+        Submit Bidding
+
+      </ion-button>
+
+    </div>
+
+  </div>
+
 </ion-content>

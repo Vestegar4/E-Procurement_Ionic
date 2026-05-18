@@ -1,0 +1,96 @@
+.profile-page {
+  --background: #ffffff;
+  position: relative;
+}
+
+.top-shape {
+  position: absolute;
+  top: -130px;
+  left: -70px;
+  width: 330px;
+  height: 330px;
+  background: linear-gradient(180deg, #d9b8ff, #f2e8ff);
+  border-radius: 50%;
+}
+
+.profile-container {
+  position: relative;
+  z-index: 10;
+  padding: 60px 24px 32px;
+}
+
+.back-btn {
+  border: none;
+  background: transparent;
+  font-size: 42px;
+  color: #111;
+  margin-bottom: 40px;
+}
+
+.header-section {
+  margin-bottom: 28px;
+
+  h1 {
+    font-size: 34px;
+    font-weight: 800;
+    color: #111;
+    margin-bottom: 6px;
+  }
+
+  p {
+    color: #777;
+    font-size: 14px;
+  }
+}
+
+.status-card,
+.form-card {
+  padding: 22px;
+  border-radius: 24px;
+  background: #fc57f3;
+  border: 1px solid #141414;
+  box-shadow: 0 12px 30px rgba(230, 8, 8, 0.06);
+  margin-bottom: 18px;
+}
+
+.status-card {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  p {
+    margin: 0;
+    color: #777;
+    font-weight: 600;
+  }
+
+  ion-badge {
+    --background: #b266ff;
+    --color: #fff;
+    text-transform: uppercase;
+  }
+}
+
+.input-box {
+  margin-bottom: 16px;
+
+  ion-input {
+    --background: #ea0af1;
+    --padding-start: 20px;
+    --padding-end: 20px;
+    --padding-top: 16px;
+    --padding-bottom: 16px;
+
+    border: 1.5px solid #ea0af1;
+    border-radius: 999px;
+    font-size: 15px;
+  }
+}
+
+.main-btn {
+  --background: #b266ff;
+  --border-radius: 999px;
+  height: 50px;
+  text-transform: none;
+  font-weight: 700;
+}

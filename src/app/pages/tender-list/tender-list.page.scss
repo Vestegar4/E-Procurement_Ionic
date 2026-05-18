@@ -1,0 +1,77 @@
+.tender-page {
+  --background: #ffffff;
+  position: relative;
+}
+
+.top-shape {
+  position: absolute;
+  top: -130px;
+  left: -70px;
+  width: 330px;
+  height: 330px;
+  background: linear-gradient(180deg, #d9b8ff, #f2e8ff);
+  border-radius: 50%;
+}
+
+.tender-container {
+  position: relative;
+  z-index: 10;
+  padding: 90px 24px 32px;
+}
+
+.header-section {
+  margin-bottom: 34px;
+
+  h1 {
+    font-size: 38px;
+    font-weight: 800;
+    color: #111;
+    margin-bottom: 6px;
+  }
+
+  p {
+    color: #777;
+    font-size: 14px;
+  }
+}
+
+.tender-card {
+  padding: 22px;
+  border-radius: 26px;
+  background: #fff;
+  border: 1px solid #eee;
+  box-shadow: 0 12px 30px rgba(0,0,0,0.07);
+  margin-bottom: 18px;
+}
+
+.card-top {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+
+  h3 {
+    margin: 0;
+    font-size: 18px;
+    font-weight: 800;
+    color: #111;
+  }
+
+  ion-badge {
+    --background: #b266ff;
+    --color: #fff;
+    text-transform: uppercase;
+  }
+}
+
+.tender-card p {
+  font-size: 14px;
+  color: #777;
+  margin: 12px 0 18px;
+}
+
+.date-row {
+  display: flex;
+  justify-content: space-between;
+  font-size: 13px;
+  color: #999;
+}
