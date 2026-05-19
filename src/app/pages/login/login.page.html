@@ -1,32 +1,44 @@
 <ion-content class="login-page" [fullscreen]="true">
-  <div class="background-orb orb-left"></div>
-  <div class="background-orb orb-right"></div>
+  <div class="page-blob page-blob--top"></div>
+  <div class="page-blob page-blob--bottom"></div>
 
-  <div class="login-shell">
+  <div class="auth-shell">
     <section class="brand-panel">
-      <span class="brand-badge">E-Procurement</span>
+      <span class="section-chip">E-Procurement</span>
 
-      <h1>Kelola proses pengadaan dalam satu dashboard.</h1>
+      <h1>Masuk ke workspace pengadaan yang lebih tenang dan terstruktur.</h1>
 
       <p>
-        Masuk untuk memantau tender, vendor, dan alur persetujuan dengan lebih
-        cepat dan rapi.
+        Pantau tender aktif, kelengkapan dokumen, dan status vendor dalam satu
+        pengalaman mobile yang rapi dan profesional.
       </p>
 
-      <div class="brand-highlight">
-        <span class="highlight-label">Workflow yang lebih efisien</span>
-        <strong>Semua kebutuhan pengadaan, dari pengajuan sampai monitoring.</strong>
+      <div class="feature-card">
+        <span class="feature-kicker">Enterprise vendor portal</span>
+        <strong>Semua proses penting disusun ringkas agar keputusan lebih cepat.</strong>
+      </div>
+
+      <div class="brand-metrics">
+        <div class="metric-pill">
+          <strong>12+</strong>
+          <span>Tender aktif</span>
+        </div>
+
+        <div class="metric-pill">
+          <strong>1</strong>
+          <span>Dashboard utama</span>
+        </div>
       </div>
     </section>
 
-    <section class="form-card">
+    <section class="auth-card">
       <div class="form-header">
         <span class="eyebrow">Welcome back</span>
         <h2>Login ke akun Anda</h2>
-        <p>Masukkan email dan password untuk melanjutkan.</p>
+        <p>Gunakan email perusahaan dan password untuk melanjutkan.</p>
       </div>
 
-      <form class="login-form" (ngSubmit)="login()">
+      <form class="auth-form" (ngSubmit)="login()">
         <div class="field-group">
           <label for="email">Email</label>
           <div class="field-control">
@@ -43,10 +55,7 @@
         </div>
 
         <div class="field-group">
-          <div class="field-heading">
-            <label for="password">Password</label>
-          </div>
-
+          <label for="password">Password</label>
           <div class="field-control">
             <ion-input
               id="password"
@@ -61,22 +70,21 @@
 
         <ion-button
           type="submit"
-          class="login-btn"
+          class="primary-button"
           expand="block"
           [disabled]="loading">
           <ion-spinner
             *ngIf="loading"
             name="crescent">
           </ion-spinner>
-
           <span *ngIf="!loading">Masuk</span>
         </ion-button>
       </form>
 
-      <p class="register-text">
-        Belum punya akun?
+      <div class="footnote-row">
+        <span>Belum punya akun?</span>
         <a routerLink="/register">Daftar sekarang</a>
-      </p>
+      </div>
     </section>
   </div>
 </ion-content>

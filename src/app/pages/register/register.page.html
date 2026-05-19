@@ -1,34 +1,45 @@
 <ion-content class="register-page" [fullscreen]="true">
-  <div class="background-orb orb-left"></div>
-  <div class="background-orb orb-right"></div>
+  <div class="page-blob page-blob--top"></div>
+  <div class="page-blob page-blob--bottom"></div>
 
-  <div class="register-shell">
+  <div class="auth-shell">
     <section class="brand-panel">
-      <a class="back-link" routerLink="/login">Back to login</a>
+      <a class="back-link" routerLink="/login">Kembali ke login</a>
+      <span class="section-chip">Vendor onboarding</span>
 
-      <span class="brand-badge">E-Procurement</span>
-
-      <h1>Buat akun vendor untuk mulai proses pengadaan.</h1>
+      <h1>Bangun profil vendor yang siap diverifikasi sejak langkah pertama.</h1>
 
       <p>
-        Daftarkan perusahaan Anda untuk mengakses tender, mengelola dokumen,
-        dan memantau proses pengajuan dalam satu tempat.
+        Lengkapi identitas perusahaan, kontak, dan kredensial akun agar proses
+        registrasi terasa cepat, jelas, dan profesional.
       </p>
 
-      <div class="brand-highlight">
-        <span class="highlight-label">Pendaftaran vendor</span>
-        <strong>Isi data perusahaan dengan lengkap agar proses verifikasi lebih cepat.</strong>
+      <div class="feature-card">
+        <span class="feature-kicker">Pendaftaran modern</span>
+        <strong>Data yang rapi memudahkan tim pengadaan meninjau vendor Anda.</strong>
+      </div>
+
+      <div class="brand-metrics">
+        <div class="metric-pill">
+          <strong>01</strong>
+          <span>Form utama</span>
+        </div>
+
+        <div class="metric-pill">
+          <strong>Fast</strong>
+          <span>Verifikasi awal</span>
+        </div>
       </div>
     </section>
 
-    <section class="form-card">
+    <section class="auth-card">
       <div class="form-header">
         <span class="eyebrow">Create account</span>
-        <h2>Daftar akun baru</h2>
-        <p>Lengkapi informasi perusahaan Anda untuk melanjutkan.</p>
+        <h2>Daftar akun vendor</h2>
+        <p>Masukkan data perusahaan dengan lengkap untuk melanjutkan.</p>
       </div>
 
-      <form class="register-form" (ngSubmit)="register()">
+      <form class="auth-form" (ngSubmit)="register()">
         <div class="field-group">
           <label for="company_name">Company Name</label>
           <div class="field-control">
@@ -117,22 +128,21 @@
 
         <ion-button
           type="submit"
-          class="register-btn"
+          class="primary-button"
           expand="block"
           [disabled]="loading">
           <ion-spinner
             *ngIf="loading"
             name="crescent">
           </ion-spinner>
-
-          <span *ngIf="!loading">Sign up</span>
+          <span *ngIf="!loading">Daftar Sekarang</span>
         </ion-button>
       </form>
 
-      <p class="login-text">
-        Sudah punya akun?
+      <div class="footnote-row">
+        <span>Sudah punya akun?</span>
         <a routerLink="/login">Masuk sekarang</a>
-      </p>
+      </div>
     </section>
   </div>
 </ion-content>

@@ -1,81 +1,91 @@
-<ion-content class="documents-page">
+<ion-content class="documents-page" [fullscreen]="true">
+  <div class="page-blob page-blob--top"></div>
+  <div class="page-blob page-blob--bottom"></div>
 
-  <div class="top-shape"></div>
-
-  <div class="documents-container">
-
-    <button class="back-btn" routerLink="/dashboard">
-      ‹
+  <div class="page-shell">
+    <button class="back-link" routerLink="/dashboard">
+      Kembali ke dashboard
     </button>
 
-    <div class="header-section">
+    <section class="page-header">
+      <span class="section-chip">Vendor documents</span>
       <h1>Dokumen</h1>
-      <p>Upload dokumen legal perusahaan</p>
-    </div>
+      <p>Upload dokumen legal perusahaan dan pantau status file yang sudah tersimpan.</p>
+    </section>
 
-    <div class="upload-card">
-
-      <h3>Upload Dokumen</h3>
-
-      <div class="select-box">
-        <ion-select
-          placeholder="Pilih jenis dokumen"
-          [(ngModel)]="documentType">
-
-          <ion-select-option value="Legalitas">
-            Legalitas
-          </ion-select-option>
-
-          <ion-select-option value="Izin Usaha">
-            Izin Usaha
-          </ion-select-option>
-
-          <ion-select-option value="Dokumen Pendukung">
-            Dokumen Pendukung
-          </ion-select-option>
-
-        </ion-select>
+    <section class="upload-card">
+      <div class="section-heading">
+        <span class="section-label">Upload document</span>
+        <h3>Upload Dokumen</h3>
       </div>
 
-      <label class="file-box">
-        <input
-          type="file"
-          accept=".pdf,.jpg,.jpeg,.png"
-          (change)="onFileSelected($event)" />
+      <div class="field-group">
+        <label for="documentType">Jenis Dokumen</label>
+        <div class="field-control field-control--select">
+          <ion-select
+            id="documentType"
+            placeholder="Pilih jenis dokumen"
+            [(ngModel)]="documentType">
+            <ion-select-option value="Legalitas">
+              Legalitas
+            </ion-select-option>
 
-        <span>
-          {{ selectedFile ? selectedFile.name : 'Pilih file dokumen' }}
-        </span>
-      </label>
+            <ion-select-option value="Izin Usaha">
+              Izin Usaha
+            </ion-select-option>
+
+            <ion-select-option value="Dokumen Pendukung">
+              Dokumen Pendukung
+            </ion-select-option>
+          </ion-select>
+        </div>
+      </div>
+
+      <div class="field-group">
+        <label>Pilih File</label>
+        <label class="file-box">
+          <input
+            type="file"
+            accept=".pdf,.jpg,.jpeg,.png"
+            (change)="onFileSelected($event)" />
+          <span>{{ selectedFile ? selectedFile.name : 'Pilih file dokumen' }}</span>
+        </label>
+      </div>
 
       <ion-button
         expand="block"
-        class="main-btn"
+        class="primary-button"
         (click)="uploadDocument()">
         Upload Dokumen
       </ion-button>
+    </section>
 
-    </div>
-
-    <div class="list-section">
-
-      <h3>Dokumen Terupload</h3>
-
-      <div
-        class="document-card"
-        *ngFor="let doc of uploadedDocuments">
-
-        <div>
-          <h4>{{ doc.type }}</h4>
-          <p>{{ doc.filename }}</p>
-        </div>
-
-        <span>{{ doc.status }}</span>
-
+    <section class="list-section">
+      <div class="section-heading">
+        <span class="section-label">Uploaded files</span>
+        <h3>Dokumen Terupload</h3>
       </div>
 
-    </div>
+      <div class="document-list" *ngIf="uploadedDocuments.length; else emptyDocuments">
+        <div
+          class="document-card"
+          *ngFor="let doc of uploadedDocuments">
+          <div class="document-copy">
+            <h4>{{ doc.type }}</h4>
+            <p>{{ doc.filename }}</p>
+          </div>
 
+          <span class="status-chip">{{ doc.status }}</span>
+        </div>
+      </div>
+
+      <ng-template #emptyDocuments>
+        <div class="empty-card">
+          <span class="section-chip">No documents</span>
+          <h4>Belum ada dokumen terupload</h4>
+          <p>Unggah file pertama Anda untuk mulai melengkapi persyaratan vendor.</p>
+        </div>
+      </ng-template>
+    </section>
   </div>
-
 </ion-content>
