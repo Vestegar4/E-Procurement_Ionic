@@ -1,3 +1,5 @@
+@import url("https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&display=swap");
+
 /*
  * App Global CSS
  * ----------------------------------------------------------------------------
@@ -34,4 +36,30 @@
 
 /* @import "@ionic/angular/css/palettes/dark.always.css"; */
 /* @import "@ionic/angular/css/palettes/dark.class.css"; */
-@import '@ionic/angular/css/palettes/dark.system.css';
+/* @import '@ionic/angular/css/palettes/dark.system.css'; */
+
+:root {
+  --app-primary: #b266ff;
+  --app-primary-deep: #7e2eca;
+  --app-surface: #fff7fe;
+  --app-surface-soft: #f9f5ff;
+  --app-text: #111111;
+  --app-muted: #777777;
+  --app-border: #ebe2f2;
+}
+
+html,
+body,
+ion-app,
+ion-content,
+ion-button,
+ion-input,
+ion-select,
+ion-badge {
+  font-family: "Manrope", "Segoe UI", sans-serif;
+}
+
+body {
+  color: var(--app-text);
+  background: var(--app-surface);
+}

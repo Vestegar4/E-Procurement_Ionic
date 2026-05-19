@@ -1,40 +1,63 @@
-<ion-content class="tender-page">
+<ion-content class="tender-page" [fullscreen]="true">
+  <div class="page-blob page-blob--top"></div>
+  <div class="page-blob page-blob--bottom"></div>
 
-  <div class="top-shape"></div>
-
-  <div class="tender-container">
-
-    <div class="header-section">
-      <h1>Tender</h1>
-      <p>Daftar tender yang tersedia</p>
-    </div>
-
-    <div
-      class="tender-card"
-      *ngFor="let tender of tenders"
-      [routerLink]="['/tender-detail', tender.id]">
-
-      <div class="card-top">
-        <h3>{{ tender.title }}</h3>
-        <ion-badge>{{ tender.status }}</ion-badge>
-      </div>
-
-      <p>{{ tender.description }}</p>
-
-      <div class="date-row">
-        <span>{{ tender.start_date }}</span>
-        <span>{{ tender.end_date }}</span>
-      </div>
-
-    </div>
-
-    <ion-button
-      expand="block"
-      fill="clear"
-      routerLink="/dashboard">
+  <div class="page-shell">
+    <button class="back-link" routerLink="/dashboard">
       Kembali ke Dashboard
-    </ion-button>
+    </button>
 
+    <section class="page-header">
+      <div>
+        <span class="section-chip">Tender directory</span>
+        <h1>Daftar tender yang tersedia</h1>
+        <p>Pilih tender untuk melihat detail, timeline, dan langkah pengajuan berikutnya.</p>
+      </div>
+
+      <div class="summary-pill">
+        <strong>{{ tenders.length }}</strong>
+        <span>Total tender</span>
+      </div>
+    </section>
+
+    <div class="tender-list" *ngIf="tenders.length; else emptyState">
+      <article
+        class="tender-card"
+        *ngFor="let tender of tenders"
+        [routerLink]="['/tender-detail', tender.id]">
+        <div class="card-top">
+          <div class="title-block">
+            <span class="card-label">Procurement item</span>
+            <h3>{{ tender.title }}</h3>
+          </div>
+
+          <ion-badge class="status-badge" [ngClass]="'status-' + tender.status">
+            {{ tender.status }}
+          </ion-badge>
+        </div>
+
+        <p class="card-description">{{ tender.description }}</p>
+
+        <div class="meta-grid">
+          <div class="meta-item">
+            <span>Mulai</span>
+            <strong>{{ tender.start_date }}</strong>
+          </div>
+
+          <div class="meta-item">
+            <span>Berakhir</span>
+            <strong>{{ tender.end_date }}</strong>
+          </div>
+        </div>
+      </article>
+    </div>
+
+    <ng-template #emptyState>
+      <div class="empty-card">
+        <span class="section-chip">No data</span>
+        <h3>Belum ada tender tersedia</h3>
+        <p>Silakan kembali lagi nanti untuk melihat peluang tender terbaru.</p>
+      </div>
+    </ng-template>
   </div>
-
 </ion-content>

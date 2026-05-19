@@ -1,47 +1,45 @@
-<ion-content class="result-page">
+<ion-content class="result-page" [fullscreen]="true">
+  <div class="page-blob page-blob--top"></div>
+  <div class="page-blob page-blob--bottom"></div>
 
-  <div class="top-shape"></div>
-
-  <div class="result-container" *ngIf="tender && result">
-
-    <button class="back-btn" [routerLink]="['/tender-detail', tender.id]">
-      ‹
+  <div class="page-shell" *ngIf="tender && result">
+    <button class="back-link" [routerLink]="['/tender-detail', tender.id]">
+      Kembali ke detail tender
     </button>
 
-    <div class="header-section">
+    <section class="page-header">
+      <span class="section-chip">Tender result</span>
       <h1>Hasil Tender</h1>
       <p>{{ tender.title }}</p>
-    </div>
+    </section>
 
-    <div class="winner-card">
-      <ion-badge>
+    <section class="winner-card">
+      <ion-badge class="status-badge" [ngClass]="result.status === 'won' ? 'status-won' : 'status-lost'">
         {{ result.status === 'won' ? 'MENANG' : 'KALAH' }}
       </ion-badge>
 
       <h2>{{ result.winner_vendor }}</h2>
+      <p class="price">{{ formatCurrency(result.winning_bid) }}</p>
+      <span class="supporting-text">Penawaran terbaik yang ditetapkan pada proses evaluasi akhir.</span>
+    </section>
 
-      <p class="price">
-        {{ formatCurrency(result.winning_bid) }}
-      </p>
-    </div>
-
-    <div class="info-card">
+    <section class="info-card">
+      <span class="section-label">Decision date</span>
       <h3>Tanggal Keputusan</h3>
       <p>{{ result.decision_date }}</p>
-    </div>
+    </section>
 
-    <div class="info-card">
+    <section class="info-card">
+      <span class="section-label">Admin note</span>
       <h3>Catatan Admin</h3>
       <p>{{ result.note }}</p>
-    </div>
+    </section>
 
     <ion-button
       expand="block"
-      class="main-btn"
+      class="primary-button"
       routerLink="/tender-list">
       Kembali ke Tender
     </ion-button>
-
   </div>
-
 </ion-content>

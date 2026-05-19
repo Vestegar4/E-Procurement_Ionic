@@ -1,69 +1,84 @@
-<ion-content class="profile-page">
+<ion-content class="profile-page" [fullscreen]="true">
+  <div class="page-blob page-blob--top"></div>
+  <div class="page-blob page-blob--bottom"></div>
 
-  <div class="top-shape"></div>
-
-  <div class="profile-container">
-
-    <button class="back-btn" routerLink="/dashboard">
-      ‹
+  <div class="page-shell">
+    <button class="back-link" routerLink="/dashboard">
+      Kembali ke dashboard
     </button>
 
-    <div class="header-section">
-      <h1>Profile Vendor</h1>
-      <p>Data perusahaan dan status verifikasi</p>
-    </div>
+    <section class="page-header">
+      <span class="section-chip">Vendor profile</span>
+      <h1>Profil Vendor</h1>
+      <p>Perbarui data perusahaan dan lihat status verifikasi akun Anda.</p>
+    </section>
 
-    <div class="status-card">
-      <p>Status Verifikasi</p>
+    <section class="status-card">
+      <div>
+        <span class="section-label">Verification status</span>
+        <h3>Status Verifikasi</h3>
+      </div>
 
-      <ion-badge>
+      <ion-badge class="status-badge" [ngClass]="'status-' + vendor.verification_status">
         {{ vendor.verification_status }}
       </ion-badge>
-    </div>
+    </section>
 
-    <div class="form-card">
-
-      <div class="input-box">
-        <ion-input
-          type="text"
-          placeholder="Company Name"
-          [(ngModel)]="vendor.company_name">
-        </ion-input>
+    <section class="form-card">
+      <div class="field-group">
+        <label for="company_name">Company Name</label>
+        <div class="field-control">
+          <ion-input
+            id="company_name"
+            type="text"
+            placeholder="Company Name"
+            [(ngModel)]="vendor.company_name">
+          </ion-input>
+        </div>
       </div>
 
-      <div class="input-box">
-        <ion-input
-          type="email"
-          placeholder="Email"
-          [(ngModel)]="vendor.email">
-        </ion-input>
+      <div class="field-group">
+        <label for="email">Email</label>
+        <div class="field-control">
+          <ion-input
+            id="email"
+            type="email"
+            placeholder="Email"
+            [(ngModel)]="vendor.email">
+          </ion-input>
+        </div>
       </div>
 
-      <div class="input-box">
-        <ion-input
-          type="text"
-          placeholder="Address"
-          [(ngModel)]="vendor.address">
-        </ion-input>
+      <div class="field-group">
+        <label for="address">Address</label>
+        <div class="field-control">
+          <ion-input
+            id="address"
+            type="text"
+            placeholder="Address"
+            [(ngModel)]="vendor.address">
+          </ion-input>
+        </div>
       </div>
 
-      <div class="input-box">
-        <ion-input
-          type="text"
-          placeholder="Contact"
-          [(ngModel)]="vendor.contact">
-        </ion-input>
+      <div class="field-group">
+        <label for="contact">Contact</label>
+        <div class="field-control">
+          <ion-input
+            id="contact"
+            type="text"
+            placeholder="Contact"
+            [(ngModel)]="vendor.contact">
+          </ion-input>
+        </div>
       </div>
 
       <ion-button
         expand="block"
-        class="main-btn"
+        class="primary-button"
         (click)="saveProfile()">
         Simpan Profile
       </ion-button>
-
-    </div>
-
+    </section>
   </div>
-
 </ion-content>
