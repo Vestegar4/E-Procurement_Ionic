@@ -47,7 +47,7 @@
 .form-card {
   padding: 22px;
   border-radius: 24px;
-  background: #fc57f3;
+  background: #d9b8ff;
   border: 1px solid #141414;
   box-shadow: 0 12px 30px rgba(230, 8, 8, 0.06);
   margin-bottom: 18px;
@@ -75,20 +75,22 @@
   margin-bottom: 16px;
 
   ion-input {
-    --background: #ea0af1;
+    --background: #9a49b57b;
     --padding-start: 20px;
     --padding-end: 20px;
     --padding-top: 16px;
     --padding-bottom: 16px;
+    --border-radius: 900px;
 
-    border: 1.5px solid #ea0af1;
+
+    border: 1.5px solid #9063bd;
     border-radius: 999px;
     font-size: 15px;
   }
 }
 
 .main-btn {
-  --background: #b266ff;
+  --background: #b366ff8c;
   --border-radius: 999px;
   height: 50px;
   text-transform: none;
