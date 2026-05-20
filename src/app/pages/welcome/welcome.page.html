@@ -1,0 +1,72 @@
+<ion-content class="welcome-page" [fullscreen]="true">
+  <div class="page-blob page-blob--top"></div>
+  <div class="page-blob page-blob--bottom"></div>
+
+  <div class="welcome-shell">
+    <section class="hero-card">
+      <span class="section-chip">Welcome</span>
+
+      <div class="hero-mark">
+        <span class="hero-mark__orb"></span>
+        <span class="hero-mark__core">EP</span>
+      </div>
+
+      <div class="hero-copy">
+        <h1>Portal pengadaan vendor yang bersih, cepat dipahami, dan siap dipakai harian.</h1>
+        <p>
+          Kelola tender, dokumen perusahaan, dan status verifikasi dalam satu
+          workspace mobile-first yang terasa modern dan profesional.
+        </p>
+      </div>
+
+      <div class="hero-points">
+        <div class="point-card">
+          <strong>Tender Tracking</strong>
+          <span>Lihat peluang, detail tender, dan hasil evaluasi.</span>
+        </div>
+
+        <div class="point-card">
+          <strong>Vendor Workspace</strong>
+          <span>Profil, dokumen, dan bidding ditata lebih rapi.</span>
+        </div>
+      </div>
+    </section>
+
+    <section class="action-card">
+      <div class="action-copy">
+        <span class="section-label">Get started</span>
+        <h2>Pilih langkah berikutnya</h2>
+        <p>Masuk ke akun vendor Anda atau buat akun baru untuk mulai mengikuti proses pengadaan.</p>
+      </div>
+
+      <div class="button-stack">
+        <ion-button
+  expand="block"
+  class="main-btn"
+  (click)="startApp()">
+  Mulai Sekarang
+</ion-button>
+
+        <ion-button
+          expand="block"
+          fill="outline"
+          class="secondary-button"
+          routerLink="/register">
+          Daftar Vendor
+        </ion-button>
+      </div>
+
+      <div class="footnote-panel">
+        <div class="footnote-item">
+          <strong>Secure access</strong>
+          <span>Masuk aman untuk vendor dan proses penawaran.</span>
+        </div>
+
+        <div class="footnote-item">
+          <strong>Modern enterprise UI</strong>
+          <span>Visual ringan dengan fokus pada kejelasan informasi.</span>
+        </div>
+      </div>
+    </section>
+  </div>
+</ion-content>
