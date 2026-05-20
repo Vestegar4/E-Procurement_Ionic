@@ -23,6 +23,14 @@ export class AuthService {
     return this.http.post<any>(`${this.apiUrl}/auth/vendor/register`, data);
   }
 
+  me() {
+    return this.http.get<any>(`${this.apiUrl}/auth/vendor/me`);
+  }
+
+  logoutApi() {
+    return this.http.post<any>(`${this.apiUrl}/auth/vendor/logout`, {});
+  }
+
   saveToken(token: string) {
     localStorage.setItem(this.tokenKey, token);
   }

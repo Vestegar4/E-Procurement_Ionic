@@ -1,0 +1,231 @@
+.splash-page {
+  --background: #fff7fe;
+  position: relative;
+  overflow: hidden;
+}
+
+.page-blob {
+  position: absolute;
+  border-radius: 50%;
+  pointer-events: none;
+  filter: blur(12px);
+}
+
+.page-blob--top {
+  top: -180px;
+  left: -110px;
+  width: 360px;
+  height: 360px;
+  background: linear-gradient(180deg, #dcb8ff 0%, #f3dcff 100%);
+}
+
+.page-blob--bottom {
+  right: -120px;
+  bottom: 8%;
+  width: 260px;
+  height: 260px;
+  background: linear-gradient(180deg, rgba(178, 102, 255, 0.18) 0%, rgba(216, 180, 254, 0.04) 100%);
+}
+
+.splash-shell {
+  position: relative;
+  z-index: 1;
+  min-height: 100vh;
+  max-width: 920px;
+  margin: 0 auto;
+  padding: 28px 20px 36px;
+  display: grid;
+  align-content: center;
+  gap: 20px;
+}
+
+.brand-card {
+  padding: 28px 22px;
+  border-radius: 32px;
+  border: 1px solid rgba(126, 46, 202, 0.08);
+  background: rgba(255, 255, 255, 0.94);
+  box-shadow: 0 18px 44px rgba(178, 102, 255, 0.08);
+  backdrop-filter: blur(18px);
+}
+
+.section-chip {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: fit-content;
+  padding: 9px 14px;
+  border-radius: 999px;
+  background: rgba(243, 232, 255, 0.95);
+  color: #7e2eca;
+  font-size: 0.74rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.brand-mark {
+  position: relative;
+  width: 92px;
+  height: 92px;
+  margin: 28px 0 22px;
+  border-radius: 30px;
+  display: grid;
+  place-items: center;
+  background: linear-gradient(160deg, #b266ff 0%, #d8b4fe 100%);
+  box-shadow: 0 22px 40px rgba(178, 102, 255, 0.24);
+  overflow: hidden;
+}
+
+.brand-mark__orb {
+  position: absolute;
+  inset: auto -18px -22px auto;
+  width: 68px;
+  height: 68px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.26);
+}
+
+.brand-mark__core {
+  position: relative;
+  z-index: 1;
+  color: #ffffff;
+  font-size: 1.7rem;
+  font-weight: 800;
+  letter-spacing: -0.03em;
+}
+
+.brand-copy {
+  h1 {
+    margin: 0 0 12px;
+    color: #111111;
+    font-size: clamp(2rem, 8vw, 3rem);
+    line-height: 1.05;
+    letter-spacing: -0.03em;
+    font-weight: 800;
+  }
+
+  p {
+    margin: 0;
+    color: #696174;
+    font-size: 0.98rem;
+    line-height: 1.7;
+    max-width: 34rem;
+  }
+}
+
+.status-panel {
+  margin-top: 28px;
+  padding: 18px;
+  border-radius: 26px;
+  background: linear-gradient(180deg, #ffffff 0%, #faf3ff 100%);
+  border: 1px solid #f0e3fa;
+}
+
+.status-row,
+.status-meta {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.status-row {
+  align-items: center;
+
+  strong {
+    color: #111111;
+    font-size: 0.94rem;
+    font-weight: 700;
+    text-align: right;
+  }
+}
+
+.status-label {
+  color: #8b7a98;
+  font-size: 0.74rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.progress-track {
+  position: relative;
+  height: 10px;
+  margin: 16px 0 12px;
+  border-radius: 999px;
+  background: #efe5f6;
+  overflow: hidden;
+}
+
+.progress-bar {
+  display: block;
+  width: 48%;
+  height: 100%;
+  border-radius: inherit;
+  background: linear-gradient(90deg, #b266ff 0%, #d8b4fe 100%);
+  box-shadow: 0 4px 18px rgba(178, 102, 255, 0.26);
+  animation: loading-slide 1.8s ease-in-out infinite;
+}
+
+.status-meta {
+  color: #777777;
+  font-size: 0.82rem;
+  font-weight: 600;
+}
+
+.feature-strip {
+  display: grid;
+  gap: 12px;
+}
+
+.feature-pill {
+  padding: 16px 18px;
+  border-radius: 24px;
+  background: rgba(255, 255, 255, 0.88);
+  border: 1px solid rgba(126, 46, 202, 0.07);
+  box-shadow: 0 14px 32px rgba(178, 102, 255, 0.06);
+
+  strong,
+  span {
+    display: block;
+  }
+
+  strong {
+    color: #111111;
+    font-size: 0.96rem;
+    font-weight: 800;
+  }
+
+  span {
+    margin-top: 5px;
+    color: #777777;
+    font-size: 0.86rem;
+  }
+}
+
+@keyframes loading-slide {
+  0% {
+    transform: translateX(-18%);
+  }
+
+  50% {
+    transform: translateX(78%);
+  }
+
+  100% {
+    transform: translateX(-18%);
+  }
+}
+
+@media (min-width: 768px) {
+  .splash-shell {
+    padding: 36px 28px 40px;
+  }
+
+  .brand-card {
+    padding: 34px 30px;
+  }
+
+  .feature-strip {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
