@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { FormsModule } from '@angular/forms';
 import {
   IonContent,
   IonBadge,
@@ -15,6 +16,7 @@ import { TenderService } from 'src/app/services/tender.service';
   standalone: true,
   imports: [
     CommonModule,
+    FormsModule,
     RouterModule,
     IonContent,
     IonBadge,
@@ -24,11 +26,70 @@ import { TenderService } from 'src/app/services/tender.service';
 export class TenderListPage implements OnInit {
 
   tenders: any[] = [];
+  searchQuery = '';
+  activeCategory: 'all' | 'infrastructure' = 'all';
 
   constructor(private tenderService: TenderService) {}
 
   ngOnInit() {
     this.tenders = this.tenderService.getTenders();
+  }
+
+  get filteredTenders() {
+    return this.tenders.filter(tender => {
+      const matchesCategory =
+        this.activeCategory === 'all' || this.isInfrastructureTender(tender);
+      const matchesSearch = this.matchesSearch(tender);
+
+      return matchesCategory && matchesSearch;
+    });
+  }
+
+  setCategory(category: 'all' | 'infrastructure') {
+    this.activeCategory = category;
+  }
+
+  private matchesSearch(tender: any) {
+    const query = this.searchQuery.trim().toLowerCase();
+
+    if (!query) {
+      return true;
+    }
+
+    const haystack = [
+      tender.title,
+      tender.description,
+      tender.status,
+      tender.start_date,
+      tender.end_date
+    ]
+      .filter(Boolean)
+      .join(' ')
+      .toLowerCase();
+
+    return haystack.includes(query);
+  }
+
+  private isInfrastructureTender(tender: any) {
+    const text = [tender.title, tender.description]
+      .filter(Boolean)
+      .join(' ')
+      .toLowerCase();
+
+    const infrastructureKeywords = [
+      'internet',
+      'network',
+      'infrastruktur',
+      'infrastructure',
+      'cloud',
+      'data',
+      'digital',
+      'server',
+      'smart city',
+      'it'
+    ];
+
+    return infrastructureKeywords.some(keyword => text.includes(keyword));
   }
 
 }

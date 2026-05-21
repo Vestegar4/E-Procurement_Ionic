@@ -1,47 +1,39 @@
-<ion-content class="login-page" [fullscreen]="true">
-  <div class="page-blob page-blob--top"></div>
-  <div class="page-blob page-blob--bottom"></div>
+<ion-content class="login-page app-page" [fullscreen]="true">
+  <div class="auth-shape auth-shape--top"></div>
+  <div class="auth-shape auth-shape--bottom"></div>
 
-  <div class="auth-shell">
-    <section class="brand-panel">
-      <span class="section-chip">E-Procurement</span>
-
-      <h1>Masuk ke workspace pengadaan yang lebih tenang dan terstruktur.</h1>
-
-      <p>
-        Pantau tender aktif, kelengkapan dokumen, dan status vendor dalam satu
-        pengalaman mobile yang rapi dan profesional.
+  <div class="app-container auth-container">
+    <section class="auth-intro">
+      <span class="app-section-title">Vendor Sign In</span>
+      <h1 class="app-title">Masuk ke workspace procurement dengan kontrol yang lebih tenang dan presisi.</h1>
+      <p class="app-subtitle">
+        Dashboard vendor, tender aktif, dan dokumen penting disusun dengan
+        hierarchy ala aplikasi finansial premium.
       </p>
 
-      <div class="feature-card">
-        <span class="feature-kicker">Enterprise vendor portal</span>
-        <strong>Semua proses penting disusun ringkas agar keputusan lebih cepat.</strong>
-      </div>
-
-      <div class="brand-metrics">
-        <div class="metric-pill">
+      <div class="auth-intro__stack">
+        <div class="app-stat-card">
           <strong>12+</strong>
-          <span>Tender aktif</span>
+          <span>Tender Aktif</span>
         </div>
-
-        <div class="metric-pill">
-          <strong>1</strong>
-          <span>Dashboard utama</span>
+        <div class="app-stat-card auth-intro__dark">
+          <strong>Secure</strong>
+          <span>Vendor session</span>
         </div>
       </div>
     </section>
 
-    <section class="auth-card">
-      <div class="form-header">
-        <span class="eyebrow">Welcome back</span>
-        <h2>Login ke akun Anda</h2>
-        <p>Gunakan email perusahaan dan password untuk melanjutkan.</p>
+    <section class="app-card auth-card">
+      <div class="auth-card__header">
+        <span class="app-section-title">Welcome Back</span>
+        <h2>Login ke akun vendor</h2>
+        <p class="app-subtitle">Masukkan email dan password perusahaan Anda untuk melanjutkan.</p>
       </div>
 
       <form class="auth-form" (ngSubmit)="login()">
         <div class="field-group">
           <label for="email">Email</label>
-          <div class="field-control">
+          <div class="app-input">
             <ion-input
               id="email"
               type="email"
@@ -56,7 +48,7 @@
 
         <div class="field-group">
           <label for="password">Password</label>
-          <div class="field-control">
+          <div class="app-input">
             <ion-input
               id="password"
               type="password"
@@ -70,7 +62,7 @@
 
         <ion-button
           type="submit"
-          class="primary-button"
+          class="app-button-primary"
           expand="block"
           [disabled]="loading">
           <ion-spinner
@@ -81,11 +73,10 @@
         </ion-button>
       </form>
 
-      <div class="footnote-row">
+      <div class="auth-footnote">
         <span>Belum punya akun?</span>
         <a routerLink="/register">Daftar sekarang</a>
       </div>
     </section>
   </div>
 </ion-content>
-            

@@ -1,58 +1,140 @@
-<ion-content class="bidding-page" [fullscreen]="true">
-  <div class="page-blob page-blob--top"></div>
-  <div class="page-blob page-blob--bottom"></div>
+<ion-content class="bidding-page app-page" [fullscreen]="true">
+  <div class="app-container bidding-container">
+    <section class="bidding-topbar">
+      <button
+        type="button"
+        class="bidding-topbar__back"
+        [routerLink]="tender ? ['/tender-detail', tender.id] : '/tender-list'"
+        aria-label="Kembali ke detail tender">
+        <svg viewBox="0 0 24 24">
+          <path d="M15 6 9 12l6 6" />
+        </svg>
+      </button>
 
-  <div class="page-shell" *ngIf="tender">
-    <button class="back-link" routerLink="/tender-list">
-      Kembali ke daftar tender
-    </button>
+      <h1>PROCURA</h1>
 
-    <section class="hero-card">
-      <div class="hero-head">
-        <span class="section-chip">Bidding room</span>
-        <ion-badge class="status-badge" [ngClass]="biddingActive ? 'status-open' : 'status-closed'">
-          {{ biddingActive ? 'Bidding Active' : 'Bidding Closed' }}
-        </ion-badge>
-      </div>
-
-      <h1>{{ tender.title }}</h1>
-      <p>Pastikan nominal penawaran dikirim sebelum waktu bidding berakhir.</p>
+      <button type="button" class="bidding-topbar__icon" aria-label="Notifikasi">
+        <svg viewBox="0 0 24 24">
+          <path d="M12 4a4 4 0 0 0-4 4v2.2c0 .8-.24 1.58-.68 2.24L6 14.5V16h12v-1.5l-1.32-2.06A4.2 4.2 0 0 1 16 10.2V8a4 4 0 0 0-4-4Zm-2 14a2 2 0 0 0 4 0" />
+        </svg>
+      </button>
     </section>
 
-    <section class="countdown-card" [ngClass]="{ 'is-closed': !biddingActive }">
-      <span class="section-label">Countdown</span>
-      <h2>{{ countdown || 'Menyiapkan sesi bidding' }}</h2>
-      <p>
-        {{ biddingActive ? 'Sesi masih aktif. Kirim penawaran Anda sebelum timer habis.' : 'Sesi bidding telah ditutup untuk tender ini.' }}
-      </p>
+    <section class="app-card bidding-empty" *ngIf="!tender">
+      <span class="app-section-title">Bidding Room</span>
+      <h2>Tender tidak ditemukan</h2>
+      <p>Data tender untuk halaman bidding ini belum tersedia atau ID tender tidak valid.</p>
     </section>
 
-    <section class="bid-card" [ngClass]="{ 'is-disabled': !biddingActive }">
-      <div class="section-heading">
-        <span class="section-chip section-chip--muted">Input penawaran</span>
-        <h3>Masukkan nominal bidding</h3>
-      </div>
+    <ng-container *ngIf="tender">
+      <section class="bidding-countdown" [class.is-closed]="!biddingActive">
+      <span class="app-section-title">Bidding Closes In</span>
 
-      <div class="field-group">
-        <label for="bidAmount">Nominal Penawaran</label>
-        <div class="field-control">
-          <ion-input
-            id="bidAmount"
-            type="number"
-            placeholder="Input harga bidding"
-            [(ngModel)]="bidAmount"
-            [disabled]="!biddingActive">
-          </ion-input>
+      <div class="bidding-countdown__clock">
+        <div class="bidding-countdown__block">
+          <strong>{{ countdownHours }}</strong>
+          <span>HRS</span>
+        </div>
+
+        <span class="bidding-countdown__separator">:</span>
+
+        <div class="bidding-countdown__block">
+          <strong>{{ countdownMinutes }}</strong>
+          <span>MINS</span>
+        </div>
+
+        <span class="bidding-countdown__separator">:</span>
+
+        <div class="bidding-countdown__block">
+          <strong>{{ countdownSeconds }}</strong>
+          <span>SECS</span>
         </div>
       </div>
+      </section>
+
+      <section class="bidding-board" [class.is-closed]="!biddingActive">
+        <div class="bidding-board__top">
+          <div class="bidding-board__summary">
+            <span class="app-section-title">Current Lowest Bid</span>
+            <h2>{{ currentLowestBid }}</h2>
+          </div>
+
+          <div class="bidding-board__stats">
+            <strong>{{ activeBidCount }}</strong>
+            <span>Active Bids</span>
+          </div>
+        </div>
+
+        <div class="bidding-board__form">
+          <label for="bidAmount">Your Bid Amount</label>
+
+          <div class="bidding-board__field">
+            <span class="bidding-board__currency">$</span>
+            <input
+              id="bidAmount"
+              type="number"
+              inputmode="numeric"
+              [(ngModel)]="bidAmount"
+              [disabled]="!biddingActive"
+              placeholder="1,230,000" />
+          </div>
+
+          <p class="bidding-board__hint">Minimum decrement: {{ minimumDecrement }}</p>
+        </div>
+      </section>
+
+      <section class="bidding-feed">
+        <div class="bidding-feed__head">
+          <h3>Live Activity Feed</h3>
+
+          <span class="bidding-feed__live">
+            <i></i>
+            Live updates
+          </span>
+        </div>
+
+        <article class="bidding-feed__item" *ngFor="let item of activityFeed">
+          <div class="bidding-feed__identity">
+            <span class="bidding-feed__avatar" aria-hidden="true">
+              <svg viewBox="0 0 24 24">
+                <path d="M12 12a4 4 0 1 0-4-4 4 4 0 0 0 4 4Zm-7 8a7 7 0 0 1 14 0" />
+              </svg>
+            </span>
+
+            <div>
+              <strong>{{ item.bidder }}</strong>
+              <span>{{ item.time }}</span>
+            </div>
+          </div>
+
+          <div class="bidding-feed__amount">
+            <strong>{{ item.amount }}</strong>
+            <span>{{ item.status }}</span>
+          </div>
+        </article>
+      </section>
+
+      <section class="bidding-note">
+        <span class="bidding-note__icon" aria-hidden="true">
+          <svg viewBox="0 0 24 24">
+            <path d="M12 8h.01M11 12h1v4h1M12 3a9 9 0 1 1-9 9 9 9 0 0 1 9-9Z" />
+          </svg>
+        </span>
+
+        <p>
+          By submitting this bid, you agree to the
+          <strong>Contractual Engagement Terms</strong>
+          and certify that all provided documentation remains valid for the duration of this tender process.
+        </p>
+      </section>
 
       <ion-button
         expand="block"
-        class="primary-button"
+        class="app-button-gold bidding-submit"
         (click)="submitBid()"
         [disabled]="!biddingActive">
-        Submit Bidding
+        Submit Bid
       </ion-button>
-    </section>
+    </ng-container>
   </div>
 </ion-content>

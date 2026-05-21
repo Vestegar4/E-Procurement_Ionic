@@ -1,235 +1,144 @@
 .welcome-page {
-  --background: #fff7fe;
   position: relative;
   overflow: hidden;
 }
 
-.page-blob {
+.welcome-shape {
   position: absolute;
   border-radius: 50%;
   pointer-events: none;
-  filter: blur(12px);
 }
 
-.page-blob--top {
-  top: -180px;
-  left: -110px;
-  width: 360px;
-  height: 360px;
-  background: linear-gradient(180deg, #dcb8ff 0%, #f3dcff 100%);
-}
-
-.page-blob--bottom {
+.welcome-shape--top {
+  top: -210px;
   right: -120px;
+  width: 380px;
+  height: 380px;
+  background: radial-gradient(circle, rgba(212, 175, 55, 0.26) 0%, rgba(212, 175, 55, 0.06) 62%, transparent 100%);
+}
+
+.welcome-shape--bottom {
+  left: -130px;
   bottom: 10%;
-  width: 270px;
-  height: 270px;
-  background: linear-gradient(180deg, rgba(178, 102, 255, 0.2) 0%, rgba(216, 180, 254, 0.04) 100%);
+  width: 300px;
+  height: 300px;
+  background: radial-gradient(circle, rgba(26, 26, 26, 0.07) 0%, rgba(26, 26, 26, 0.02) 60%, transparent 100%);
 }
 
-.welcome-shell {
-  position: relative;
-  z-index: 1;
-  min-height: 100vh;
-  max-width: 980px;
-  margin: 0 auto;
-  padding: 28px 20px 36px;
+.welcome-container {
   display: grid;
+  gap: 24px;
   align-content: center;
-  gap: 18px;
+  min-height: 100vh;
 }
 
-.hero-card,
-.action-card {
-  border: 1px solid rgba(126, 46, 202, 0.08);
-  background: rgba(255, 255, 255, 0.94);
-  box-shadow: 0 18px 44px rgba(178, 102, 255, 0.08);
-  backdrop-filter: blur(18px);
-}
-
-.hero-card {
-  padding: 28px 22px;
-  border-radius: 32px;
-}
-
-.section-chip,
-.section-label {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  width: fit-content;
-  border-radius: 999px;
-  font-weight: 700;
-  text-transform: uppercase;
-}
-
-.section-chip {
-  padding: 9px 14px;
-  background: rgba(243, 232, 255, 0.95);
-  color: #7e2eca;
-  font-size: 0.74rem;
-  letter-spacing: 0.08em;
-}
-
-.section-label {
-  color: #8b7a98;
-  font-size: 0.72rem;
-  letter-spacing: 0.08em;
-}
-
-.hero-mark {
-  position: relative;
-  width: 96px;
-  height: 96px;
-  margin: 28px 0 22px;
-  border-radius: 30px;
+.welcome-hero,
+.welcome-actions {
   display: grid;
-  place-items: center;
+  gap: 20px;
+}
+
+.welcome-visual {
+  position: relative;
+  min-height: 230px;
+  border-radius: 30px;
+  background: linear-gradient(180deg, #f7f3f2 0%, #ffffff 100%);
   overflow: hidden;
-  background: linear-gradient(160deg, #b266ff 0%, #d8b4fe 100%);
-  box-shadow: 0 22px 42px rgba(178, 102, 255, 0.24);
 }
 
-.hero-mark__orb {
+.welcome-orb {
   position: absolute;
-  inset: auto -18px -22px auto;
-  width: 70px;
-  height: 70px;
-  border-radius: 50%;
-  background: rgba(255, 255, 255, 0.26);
+  top: 22px;
+  left: 24px;
+  width: 124px;
+  height: 124px;
+  border-radius: 32px;
+  background: linear-gradient(160deg, #1a1a1a 0%, #2c2c2c 100%);
+  box-shadow: 0 18px 32px rgba(0, 0, 0, 0.12);
 }
 
-.hero-mark__core {
-  position: relative;
-  z-index: 1;
+.welcome-orb::after {
+  content: "";
+  position: absolute;
+  inset: 16px;
+  border-radius: 22px;
+  border: 1px solid rgba(212, 175, 55, 0.26);
+}
+
+.welcome-panel {
+  position: absolute;
+  display: grid;
+  gap: 4px;
+  min-width: 170px;
+  padding: 18px;
+  border-radius: 22px;
+  box-shadow: var(--app-shadow-card);
+}
+
+.welcome-panel strong {
+  font-size: 0.95rem;
+  font-weight: 600;
+}
+
+.welcome-panel span {
+  font-size: 0.82rem;
+  color: inherit;
+  opacity: 0.76;
+}
+
+.welcome-panel--dark {
+  top: 34px;
+  right: 18px;
+  background: #1a1a1a;
   color: #ffffff;
-  font-size: 1.8rem;
-  font-weight: 800;
-  letter-spacing: -0.03em;
 }
 
-.hero-copy {
-  h1 {
-    margin: 0 0 12px;
-    color: #111111;
-    font-size: clamp(2rem, 8vw, 3.2rem);
-    line-height: 1.05;
-    letter-spacing: -0.03em;
-    font-weight: 800;
-  }
-
-  p {
-    margin: 0;
-    max-width: 36rem;
-    color: #696174;
-    font-size: 0.98rem;
-    line-height: 1.7;
-  }
+.welcome-panel--gold {
+  right: 46px;
+  bottom: 20px;
+  background: linear-gradient(180deg, #f1d274 0%, #d4af37 100%);
+  color: #1a1a1a;
 }
 
-.hero-points {
+.welcome-points,
+.welcome-actions__buttons {
   display: grid;
   gap: 12px;
-  margin-top: 24px;
 }
 
-.point-card,
-.footnote-item {
-  padding: 16px 18px;
-  border-radius: 24px;
-  background: linear-gradient(180deg, #ffffff 0%, #faf3ff 100%);
-  border: 1px solid #f0e3fa;
-
-  strong,
-  span {
-    display: block;
-  }
-
-  strong {
-    color: #111111;
-    font-size: 0.96rem;
-    font-weight: 800;
-  }
-
-  span {
-    margin-top: 5px;
-    color: #777777;
-    font-size: 0.88rem;
-    line-height: 1.55;
-  }
+.welcome-points .app-list-item {
+  align-items: start;
 }
 
-.action-card {
-  padding: 24px 22px;
-  border-radius: 30px;
+.welcome-points .app-list-item strong {
+  display: block;
+  margin-bottom: 6px;
+  font-size: 0.96rem;
 }
 
-.action-copy {
-  h2 {
-    margin: 8px 0 10px;
-    color: #111111;
-    font-size: 1.45rem;
-    line-height: 1.2;
-    letter-spacing: -0.02em;
-    font-weight: 800;
-  }
-
-  p {
-    margin: 0;
-    color: #696174;
-    font-size: 0.94rem;
-    line-height: 1.65;
-  }
+.welcome-points .app-list-item p {
+  margin: 0;
+  color: var(--app-text-muted);
+  font-size: 0.88rem;
+  line-height: 1.55;
 }
 
-.button-stack {
+.welcome-actions__copy {
   display: grid;
-  gap: 12px;
-  margin-top: 22px;
+  gap: 10px;
 }
 
-.primary-button,
-.secondary-button {
-  min-height: 56px;
-  font-size: 0.98rem;
-  font-weight: 700;
-  text-transform: none;
-}
-
-.primary-button {
-  --background: linear-gradient(135deg, #b266ff 0%, #944ce0 100%);
-  --background-hover: linear-gradient(135deg, #a456f2 0%, #8844d5 100%);
-  --background-activated: linear-gradient(135deg, #a456f2 0%, #8844d5 100%);
-  --border-radius: 999px;
-  --box-shadow: 0 18px 34px rgba(178, 102, 255, 0.28);
-  --color: #ffffff;
-}
-
-.secondary-button {
-  --border-radius: 999px;
-  --color: #7e2eca;
-  --border-color: rgba(178, 102, 255, 0.24);
-  --background: rgba(243, 232, 255, 0.45);
-}
-
-.footnote-panel {
-  display: grid;
-  gap: 12px;
-  margin-top: 20px;
+.welcome-actions__copy h2 {
+  margin: 0;
+  font-size: 1.45rem;
+  font-weight: 600;
+  line-height: 1.2;
+  letter-spacing: -0.02em;
 }
 
 @media (min-width: 768px) {
-  .welcome-shell {
-    padding: 36px 28px 40px;
-  }
-
-  .hero-card,
-  .action-card {
-    padding: 32px 28px;
-  }
-
-  .hero-points,
-  .footnote-panel {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
+  .welcome-container {
+    grid-template-columns: minmax(0, 1.2fr) minmax(320px, 0.8fr);
+    align-items: center;
   }
 }

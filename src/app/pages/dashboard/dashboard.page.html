@@ -1,86 +1,148 @@
-<ion-content class="dashboard-page" [fullscreen]="true">
-  <div class="page-blob page-blob--top"></div>
-  <div class="page-blob page-blob--bottom"></div>
+<ion-content class="dashboard-page app-page" [fullscreen]="true">
+  <div class="app-container dashboard-container">
+    <section class="dashboard-topbar">
+      <div class="dashboard-avatar" aria-hidden="true">
+        <span>A</span>
+      </div>
 
-  <div class="dashboard-shell">
-    <section class="topbar">
-      <div class="topbar-copy">
-        <span class="section-chip">Vendor dashboard</span>
-        <h1>Semua aktivitas pengadaan, tersusun jelas dalam satu tempat.</h1>
-        <p>
-          Akses tender terbaru, kelola profil perusahaan, unggah dokumen, dan
-          pantau status akun dengan pengalaman yang lebih ringan.
-        </p>
+      <div class="dashboard-brand">
+        <h1>PROCURA</h1>
       </div>
 
       <ion-button
         fill="clear"
-        class="logout-btn"
-        (click)="logout()">
-        Logout
+        class="dashboard-logout"
+        (click)="logout()"
+        aria-label="Logout">
+        <span class="dashboard-bell" aria-hidden="true">
+          <svg viewBox="0 0 24 24">
+            <path d="M12 4a4 4 0 0 0-4 4v2.2c0 .8-.24 1.58-.68 2.24L6 14.5V16h12v-1.5l-1.32-2.06A4.2 4.2 0 0 1 16 10.2V8a4 4 0 0 0-4-4Zm-2 14a2 2 0 0 0 4 0" />
+          </svg>
+        </span>
       </ion-button>
     </section>
 
-    <section class="hero-card">
-      <div class="hero-copy">
-        <span class="hero-kicker">Procurement overview</span>
-        <h2>Workspace vendor yang bersih, cepat dipahami, dan siap dipakai mobile.</h2>
-        <p>
-          Setiap menu utama ditata sebagai kartu tindakan agar vendor dapat
-          langsung fokus pada langkah berikutnya.
-        </p>
+    <section class="dashboard-overview">
+      <span class="app-section-title dashboard-overview__kicker">Dashboard Overview</span>
+      <h2>Welcome back, Anderson</h2>
+      <p class="app-subtitle">Review your procurement status for today.</p>
+    </section>
+
+    <section class="dashboard-stats">
+      <div class="app-card dashboard-stat dashboard-stat--light" routerLink="/tender-list">
+        <div class="dashboard-stat__icon">
+          <svg viewBox="0 0 24 24">
+            <path d="m7 17 10-10M9 7h8v8M6 12l6 6" />
+          </svg>
+        </div>
+        <strong>12</strong>
+        <span>Active Bids</span>
       </div>
 
-      <div class="hero-stats">
-        <div class="stat-card">
-          <strong>12</strong>
-          <span>Tender Aktif</span>
+      <div class="app-card dashboard-stat dashboard-stat--dark" routerLink="/result/1">
+        <div class="dashboard-stat__icon dashboard-stat__icon--gold">
+          <svg viewBox="0 0 24 24">
+            <path d="m12 4 2.2 4.45 4.91.72-3.55 3.46.84 4.87L12 15.2 7.6 17.5l.84-4.87-3.55-3.46 4.91-.72Z" />
+            <path d="M12 9.5a2.5 2.5 0 1 0 0 5 2.5 2.5 0 0 0 0-5Z" />
+          </svg>
+        </div>
+        <strong>08</strong>
+        <span>Total Won</span>
+      </div>
+    </section>
+
+    <section class="dashboard-section">
+      <div class="dashboard-section__bar">
+        <h3>Quick Actions</h3>
+        <span>Scroll Left</span>
+      </div>
+
+      <div class="dashboard-actions">
+        <div class="dashboard-pill-action" routerLink="/tender-list">
+          <span class="dashboard-pill-action__icon">
+            <svg viewBox="0 0 24 24">
+              <path d="M11 18a7 7 0 1 1 4.95-2.05L21 21" />
+            </svg>
+          </span>
+          <strong>Find Tenders</strong>
         </div>
 
-        <div class="stat-card">
-          <strong>04</strong>
-          <span>Dokumen Inti</span>
-        </div>
-
-        <div class="stat-card">
-          <strong>Pending</strong>
-          <span>Status Vendor</span>
+        <div class="dashboard-pill-action" routerLink="/documents">
+          <span class="dashboard-pill-action__icon">
+            <svg viewBox="0 0 24 24">
+              <path d="M7 17a4 4 0 0 1 .4-8A5.5 5.5 0 0 1 18 10a3.5 3.5 0 1 1 0 7h-3" />
+              <path d="M12 11v9M8.5 14.5 12 11l3.5 3.5" />
+            </svg>
+          </span>
+          <strong>Upload Docs</strong>
         </div>
       </div>
     </section>
 
-    <section class="section-heading">
-      <div>
-        <span class="section-label">Quick actions</span>
-        <h3>Menu utama vendor</h3>
-        <p>Pilih kartu di bawah untuk melanjutkan alur kerja Anda.</p>
+    <section class="dashboard-section">
+      <div class="dashboard-section__bar">
+        <h3>Recent Activity</h3>
+        <span routerLink="/tender-list">View All</span>
+      </div>
+
+      <div class="dashboard-activity">
+        <article class="app-card dashboard-activity-card" routerLink="/tender-list">
+          <div class="dashboard-activity-card__icon">
+            <svg viewBox="0 0 24 24">
+              <path d="M7 3h7l5 5v13H7z" />
+              <path d="M14 3v5h5M10 12h4M10 16h4" />
+            </svg>
+          </div>
+
+          <div class="dashboard-activity-card__body">
+            <div class="dashboard-activity-card__head">
+              <strong>Logistics Framework 2024</strong>
+              <span class="app-badge app-badge--open">Open</span>
+            </div>
+
+            <p>Price clarification requested by procurement board.</p>
+            <small>2 hours ago</small>
+          </div>
+        </article>
+
+        <article class="app-card dashboard-activity-card" routerLink="/result/1">
+          <div class="dashboard-activity-card__icon">
+            <svg viewBox="0 0 24 24">
+              <path d="m12 3 2.2 1.5 2.65-.18 1.37 2.27 2.4 1.12-.47 2.62 1.18 2.38-1.88 1.88-.08 2.65-2.38 1.18-1.12 2.4-2.62-.47L12 21l-2.2-1.5-2.65.18-1.37-2.27-2.4-1.12.47-2.62L2.67 11.3l1.88-1.88.08-2.65 2.38-1.18 1.12-2.4 2.62.47Z" />
+              <path d="m9.5 12 1.5 1.5 3.5-3.5" />
+            </svg>
+          </div>
+
+          <div class="dashboard-activity-card__body">
+            <div class="dashboard-activity-card__head">
+              <strong>Solar Grid Infrastructure</strong>
+              <span class="app-badge app-badge--finished">Finished</span>
+            </div>
+
+            <p>Contract awarded. Documentation package is being prepared.</p>
+            <small>Yesterday, 4:15 PM</small>
+          </div>
+        </article>
+
+        <article class="app-card dashboard-activity-card" routerLink="/bidding/1">
+          <div class="dashboard-activity-card__icon">
+            <svg viewBox="0 0 24 24">
+              <path d="M4 12a8 8 0 1 0 2.34-5.66" />
+              <path d="M4 4v5h5M12 8v4l3 2" />
+            </svg>
+          </div>
+
+          <div class="dashboard-activity-card__body">
+            <div class="dashboard-activity-card__head">
+              <strong>Fleet Maintenance RFQ</strong>
+              <span class="app-badge app-badge--bidding">Bidding</span>
+            </div>
+
+            <p>Initial bid submission received successfully.</p>
+            <small>Oct 24, 2023</small>
+          </div>
+        </article>
       </div>
     </section>
-
-    <div class="menu-grid">
-      <div class="menu-card menu-card--accent" routerLink="/tender-list">
-        <span class="menu-tag">Tender</span>
-        <h3>Daftar Tender</h3>
-        <p>Lihat peluang tender terbaru dan buka detail penawaran yang tersedia.</p>
-      </div>
-
-      <div class="menu-card" routerLink="/profile">
-        <span class="menu-tag">Profil</span>
-        <h3>Profil Vendor</h3>
-        <p>Perbarui data perusahaan dan cek status verifikasi akun Anda.</p>
-      </div>
-
-      <div class="menu-card" routerLink="/documents">
-        <span class="menu-tag">Dokumen</span>
-        <h3>Dokumen</h3>
-        <p>Unggah dan rapikan dokumen legal agar proses tender tetap lancar.</p>
-      </div>
-
-      <div class="menu-card menu-card--status">
-        <span class="menu-tag">Status</span>
-        <h3>Ringkasan Akun</h3>
-        <p>Vendor aktif dengan proses verifikasi yang sedang menunggu peninjauan.</p>
-      </div>
-    </div>
   </div>
 </ion-content>

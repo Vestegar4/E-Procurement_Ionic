@@ -1,27 +1,20 @@
-<ion-content class="documents-page" [fullscreen]="true">
-  <div class="page-blob page-blob--top"></div>
-  <div class="page-blob page-blob--bottom"></div>
-
-  <div class="page-shell">
-    <button class="back-link" routerLink="/dashboard">
-      Kembali ke dashboard
-    </button>
-
-    <section class="page-header">
-      <span class="section-chip">Vendor documents</span>
-      <h1>Dokumen</h1>
-      <p>Upload dokumen legal perusahaan dan pantau status file yang sudah tersimpan.</p>
+<ion-content class="documents-page app-page" [fullscreen]="true">
+  <div class="app-container documents-container">
+    <section class="app-card documents-hero">
+      <span class="app-section-title">Document Management</span>
+      <h1 class="app-title">Kelola dokumen vendor dengan pengalaman yang rapi, premium, dan siap audit.</h1>
+      <p class="app-subtitle">Upload legalitas dan dokumen pendukung lalu pantau statusnya dari satu alur yang bersih.</p>
     </section>
 
-    <section class="upload-card">
-      <div class="section-heading">
-        <span class="section-label">Upload document</span>
-        <h3>Upload Dokumen</h3>
+    <section class="app-card documents-upload">
+      <div class="documents-upload__head">
+        <span class="app-section-title">Upload Document</span>
+        <h2>Tambah dokumen baru</h2>
       </div>
 
       <div class="field-group">
         <label for="documentType">Jenis Dokumen</label>
-        <div class="field-control field-control--select">
+        <div class="app-input app-input--select">
           <ion-select
             id="documentType"
             placeholder="Pilih jenis dokumen"
@@ -43,7 +36,7 @@
 
       <div class="field-group">
         <label>Pilih File</label>
-        <label class="file-box">
+        <label class="documents-file">
           <input
             type="file"
             accept=".pdf,.jpg,.jpeg,.png"
@@ -54,36 +47,35 @@
 
       <ion-button
         expand="block"
-        class="primary-button"
+        class="app-button-secondary"
         (click)="uploadDocument()">
         Upload Dokumen
       </ion-button>
     </section>
 
-    <section class="list-section">
-      <div class="section-heading">
-        <span class="section-label">Uploaded files</span>
-        <h3>Dokumen Terupload</h3>
+    <section class="documents-list">
+      <div class="documents-list__head">
+        <span class="app-section-title">Uploaded Files</span>
+        <p class="app-subtitle">Daftar file vendor yang sudah masuk ke sistem.</p>
       </div>
 
-      <div class="document-list" *ngIf="uploadedDocuments.length; else emptyDocuments">
+      <div *ngIf="uploadedDocuments.length; else emptyDocuments" class="documents-list__items">
         <div
-          class="document-card"
+          class="app-list-item documents-item"
           *ngFor="let doc of uploadedDocuments">
-          <div class="document-copy">
-            <h4>{{ doc.type }}</h4>
+          <div>
+            <strong>{{ doc.type }}</strong>
             <p>{{ doc.filename }}</p>
           </div>
 
-          <span class="status-chip">{{ doc.status }}</span>
+          <span class="app-badge app-badge--open">{{ doc.status }}</span>
         </div>
       </div>
 
       <ng-template #emptyDocuments>
-        <div class="empty-card">
-          <span class="section-chip">No documents</span>
-          <h4>Belum ada dokumen terupload</h4>
-          <p>Unggah file pertama Anda untuk mulai melengkapi persyaratan vendor.</p>
+        <div class="app-empty-state">
+          <strong>Belum ada dokumen terupload</strong>
+          <span>Unggah file pertama Anda untuk mulai melengkapi persyaratan vendor.</span>
         </div>
       </ng-template>
     </section>

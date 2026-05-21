@@ -42,6 +42,33 @@ export class BiddingPage implements OnInit {
 
   endTime = new Date().getTime() + 3600000;
 
+  readonly currentLowestBid = '$1,240,000.00';
+
+  readonly activeBidCount = 8;
+
+  readonly minimumDecrement = '$5,000.00';
+
+  readonly activityFeed = [
+    {
+      bidder: 'Bidder #0082',
+      time: '2 minutes ago',
+      amount: '$1,245,000',
+      status: 'Decreased'
+    },
+    {
+      bidder: 'Bidder #0145',
+      time: '5 minutes ago',
+      amount: '$1,250,000',
+      status: 'Entered'
+    },
+    {
+      bidder: 'Bidder #0031',
+      time: '8 minutes ago',
+      amount: '$1,265,000',
+      status: 'Initial Bid'
+    }
+  ];
+
   constructor(
     private route: ActivatedRoute,
     private tenderService: TenderService,
@@ -55,7 +82,9 @@ export class BiddingPage implements OnInit {
 
     this.tender = this.tenderService.getTenderById(id);
 
-    this.startCountdown();
+    if (this.tender) {
+      this.startCountdown();
+    }
   }
 
   startCountdown() {
@@ -112,6 +141,13 @@ export class BiddingPage implements OnInit {
 
   submitBid() {
 
+    if (!this.tender) {
+
+      this.showToast('Tender tidak ditemukan', 'danger');
+
+      return;
+    }
+
     if (!this.biddingActive) {
 
       this.showToast('Bidding sudah ditutup', 'danger');
@@ -140,6 +176,44 @@ export class BiddingPage implements OnInit {
       this.bidAmount = '';
     }
 
+  }
+
+  get countdownHours() {
+    return this.getCountdownParts().hours;
+  }
+
+  get countdownMinutes() {
+    return this.getCountdownParts().minutes;
+  }
+
+  get countdownSeconds() {
+    return this.getCountdownParts().seconds;
+  }
+
+  private getCountdownParts() {
+    if (!this.biddingActive || !this.countdown) {
+      return {
+        hours: '00',
+        minutes: '00',
+        seconds: '00'
+      };
+    }
+
+    const match = this.countdown.match(/(\d+)h\s+(\d+)m\s+(\d+)s/);
+
+    if (!match) {
+      return {
+        hours: '00',
+        minutes: '00',
+        seconds: '00'
+      };
+    }
+
+    return {
+      hours: match[1].padStart(2, '0'),
+      minutes: match[2].padStart(2, '0'),
+      seconds: match[3].padStart(2, '0')
+    };
   }
 
 }
