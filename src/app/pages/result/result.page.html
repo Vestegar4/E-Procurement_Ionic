@@ -1,45 +1,113 @@
-<ion-content class="result-page" [fullscreen]="true">
-  <div class="page-blob page-blob--top"></div>
-  <div class="page-blob page-blob--bottom"></div>
+<ion-content class="result-page app-page" [fullscreen]="true">
+  <div class="app-container result-container">
+    <section class="result-topbar">
+      <a
+        *ngIf="tender"
+        class="result-topbar__back"
+        [routerLink]="['/tender-detail', tender.id]"
+        aria-label="Kembali ke detail tender">
+        <svg viewBox="0 0 24 24">
+          <path d="M15 6 9 12l6 6" />
+        </svg>
+      </a>
 
-  <div class="page-shell" *ngIf="tender && result">
-    <button class="back-link" [routerLink]="['/tender-detail', tender.id]">
-      Kembali ke detail tender
-    </button>
+      <a
+        *ngIf="!tender"
+        class="result-topbar__back"
+        routerLink="/tender-list"
+        aria-label="Kembali ke daftar tender">
+        <svg viewBox="0 0 24 24">
+          <path d="M15 6 9 12l6 6" />
+        </svg>
+      </a>
 
-    <section class="page-header">
-      <span class="section-chip">Tender result</span>
-      <h1>Hasil Tender</h1>
-      <p>{{ tender.title }}</p>
+      <h1>PROCURA</h1>
+
+      <div class="result-topbar__icon" aria-hidden="true">
+        <svg viewBox="0 0 24 24">
+          <path d="M12 4a4 4 0 0 0-4 4v2.2c0 .8-.24 1.58-.68 2.24L6 14.5V16h12v-1.5l-1.32-2.06A4.2 4.2 0 0 1 16 10.2V8a4 4 0 0 0-4-4Zm-2 14a2 2 0 0 0 4 0" />
+        </svg>
+      </div>
     </section>
 
-    <section class="winner-card">
-      <ion-badge class="status-badge" [ngClass]="result.status === 'won' ? 'status-won' : 'status-lost'">
-        {{ result.status === 'won' ? 'MENANG' : 'KALAH' }}
-      </ion-badge>
+    <section class="result-content" *ngIf="tender && result">
+      <div class="result-hero">
+        <div class="result-hero__badge" aria-hidden="true">
+          <svg viewBox="0 0 24 24">
+            <path d="m12 3 2 2.3 3-.2.7 2.8 2.5 1.4-1.1 2.7 1.1 2.7-2.5 1.4-.7 2.8-3-.2L12 21l-2-2.3-3 .2-.7-2.8-2.5-1.4 1.1-2.7-1.1-2.7 2.5-1.4.7-2.8 3 .2Z" />
+            <path d="m12 8.2 1 2.1 2.3.3-1.7 1.6.4 2.3-2-1-2 1 .4-2.3-1.7-1.6 2.3-.3Z" />
+            <path d="M10 15.6V20l2-1 2 1v-4.4" />
+          </svg>
+        </div>
 
-      <h2>{{ result.winner_vendor }}</h2>
-      <p class="price">{{ formatCurrency(result.winning_bid) }}</p>
-      <span class="supporting-text">Penawaran terbaik yang ditetapkan pada proses evaluasi akhir.</span>
+        <h2>{{ result.status === 'won' ? 'Winner Selected' : 'Result Available' }}</h2>
+        <p>
+          {{
+            result.status === 'won'
+              ? 'Congratulations. Your proposal for ' + tender.title + ' has been awarded.'
+              : 'The evaluation for ' + tender.title + ' has been completed. Please review the final result below.'
+          }}
+        </p>
+      </div>
+
+      <div class="app-card result-card">
+        <div class="result-card__head">
+          <div>
+            <span class="app-section-title">Contract No.</span>
+            <strong>PRC-2024-EXP-0{{ tender.id }}82</strong>
+          </div>
+
+          <span
+            class="app-badge"
+            [ngClass]="result.status === 'won' ? 'app-badge--finished' : 'app-badge--closed'">
+            {{ result.status === 'won' ? 'Finished' : 'Closed' }}
+          </span>
+        </div>
+
+        <div class="result-card__divider"></div>
+
+        <div class="result-card__meta">
+          <div>
+            <span class="app-section-title">Award Value</span>
+            <strong>{{ formatCurrency(result.winning_bid) }}</strong>
+          </div>
+
+          <div>
+            <span class="app-section-title">Date Of Award</span>
+            <strong>{{ result.decision_date }}</strong>
+          </div>
+        </div>
+
+        <div class="result-card__note">
+          <span class="result-card__note-icon" aria-hidden="true">
+            <svg viewBox="0 0 24 24">
+              <path d="m12 3 2 2.3 3-.2.7 2.8 2.5 1.4-1.1 2.7 1.1 2.7-2.5 1.4-.7 2.8-3-.2L12 21l-2-2.3-3 .2-.7-2.8-2.5-1.4 1.1-2.7-1.1-2.7 2.5-1.4.7-2.8 3 .2Z" />
+              <path d="m9.5 12 1.7 1.7 3.3-3.4" />
+            </svg>
+          </span>
+
+          <div>
+            <span class="app-section-title">Compliance Check</span>
+            <p>{{ result.note }}</p>
+          </div>
+        </div>
+      </div>
+
+      <a class="result-primary-action" routerLink="/documents">Download PO</a>
+      <a
+        class="result-secondary-action"
+        [routerLink]="['/tender-detail', tender.id]">
+        View Full Details
+      </a>
     </section>
 
-    <section class="info-card">
-      <span class="section-label">Decision date</span>
-      <h3>Tanggal Keputusan</h3>
-      <p>{{ result.decision_date }}</p>
+    <section class="result-content" *ngIf="!tender || !result">
+      <div class="app-card result-empty">
+        <span class="app-section-title">Tender Result</span>
+        <h2>Hasil tender belum tersedia</h2>
+        <p>Data pemenang atau hasil evaluasi untuk tender ini belum tersedia saat ini.</p>
+        <a class="result-primary-action" routerLink="/tender-list">Kembali ke Tender</a>
+      </div>
     </section>
-
-    <section class="info-card">
-      <span class="section-label">Admin note</span>
-      <h3>Catatan Admin</h3>
-      <p>{{ result.note }}</p>
-    </section>
-
-    <ion-button
-      expand="block"
-      class="primary-button"
-      routerLink="/tender-list">
-      Kembali ke Tender
-    </ion-button>
   </div>
 </ion-content>

@@ -1,33 +1,176 @@
-<ion-content class="profile-page" [fullscreen]="true">
-  <div class="page-blob page-blob--top"></div>
-  <div class="page-blob page-blob--bottom"></div>
-
-  <div class="page-shell">
-    <button class="back-link" routerLink="/dashboard">
-      Kembali ke dashboard
-    </button>
-
-    <section class="page-header">
-      <span class="section-chip">Vendor profile</span>
-      <h1>Profil Vendor</h1>
-      <p>Perbarui data perusahaan dan lihat status verifikasi akun Anda.</p>
-    </section>
-
-    <section class="status-card">
-      <div>
-        <span class="section-label">Verification status</span>
-        <h3>Status Verifikasi</h3>
+<ion-content class="profile-page app-page" [fullscreen]="true">
+  <div class="app-container profile-container">
+    <section class="profile-topbar">
+      <div class="profile-topbar__avatar" aria-hidden="true">
+        <span>A</span>
       </div>
 
-      <ion-badge class="status-badge" [ngClass]="'status-' + vendor.verification_status">
-        {{ vendor.verification_status }}
-      </ion-badge>
+      <h1>PROCURA</h1>
+
+      <div class="profile-topbar__icon" aria-hidden="true">
+        <svg viewBox="0 0 24 24">
+          <path d="M12 4a4 4 0 0 0-4 4v2.2c0 .8-.24 1.58-.68 2.24L6 14.5V16h12v-1.5l-1.32-2.06A4.2 4.2 0 0 1 16 10.2V8a4 4 0 0 0-4-4Zm-2 14a2 2 0 0 0 4 0" />
+        </svg>
+      </div>
     </section>
 
-    <section class="form-card">
+    <section class="profile-hero">
+      <div class="profile-hero__portrait">
+        <div class="profile-hero__image" aria-hidden="true">
+          <div class="profile-hero__cube"></div>
+          <div class="profile-hero__base"></div>
+        </div>
+        <div class="profile-hero__edit" aria-hidden="true">
+          <svg viewBox="0 0 24 24">
+            <path d="m4 20 4.2-1 9.4-9.4a2 2 0 1 0-2.8-2.8L5.4 16.2 4 20z" />
+            <path d="m13.5 6.5 4 4" />
+          </svg>
+        </div>
+      </div>
+
+      <h2>{{ vendor.company_name || 'Vendor Company' }}</h2>
+      <p>{{ vendor.verification_status === 'approved' ? 'Tier 1 Infrastructure Vendor' : 'Enterprise Vendor Profile' }}</p>
+    </section>
+
+    <section class="profile-stats">
+      <article class="app-card profile-score-card">
+        <span class="app-section-title">Trust Score</span>
+        <div class="profile-score-card__value">
+          <strong>98</strong>
+          <span>/100</span>
+        </div>
+      </article>
+
+      <article class="profile-status-card">
+        <span class="app-section-title">Status</span>
+        <span
+          class="app-badge"
+          [ngClass]="{
+            'app-badge--open': vendor.verification_status === 'approved',
+            'app-badge--bidding': vendor.verification_status === 'pending',
+            'app-badge--closed': vendor.verification_status === 'rejected'
+          }">
+          {{ vendor.verification_status || 'pending' }}
+        </span>
+      </article>
+    </section>
+
+    <section class="app-card profile-info-card">
+      <div class="profile-card-head">
+        <span class="app-section-title">Company Info</span>
+        <span class="profile-card-head__icon" aria-hidden="true">
+          <svg viewBox="0 0 24 24">
+            <path d="M12 16v-4M12 8h.01M12 3a9 9 0 1 1-9 9 9 9 0 0 1 9-9Z" />
+          </svg>
+        </span>
+      </div>
+
+      <div class="profile-info-grid">
+        <div class="profile-info-row">
+          <span>Legal Entity Name</span>
+          <strong>{{ vendor.company_name || '-' }}</strong>
+        </div>
+
+        <div class="profile-info-row">
+          <span>Tax Identification</span>
+          <strong>VAT-998122045-X</strong>
+        </div>
+
+        <div class="profile-info-row">
+          <span>Primary Industry</span>
+          <strong>Urban Infrastructure &amp; Smart Grid Logistics</strong>
+        </div>
+      </div>
+    </section>
+
+    <section class="app-card profile-contact-card">
+      <div class="profile-card-head">
+        <span class="app-section-title">Contact Details</span>
+        <span class="profile-card-head__icon" aria-hidden="true">
+          <svg viewBox="0 0 24 24">
+            <path d="M17 7h.01M7 7h5a4 4 0 0 1 0 8H7m10 0H12a4 4 0 0 1 0-8h5" />
+          </svg>
+        </span>
+      </div>
+
+      <div class="profile-contact-list">
+        <div class="profile-contact-item">
+          <span class="profile-contact-item__icon" aria-hidden="true">
+            <svg viewBox="0 0 24 24">
+              <path d="M4 6h16v12H4z" />
+              <path d="m4 7 8 6 8-6" />
+            </svg>
+          </span>
+          <div>
+            <span>Official Email</span>
+            <strong>{{ vendor.email || '-' }}</strong>
+          </div>
+        </div>
+
+        <div class="profile-contact-item">
+          <span class="profile-contact-item__icon" aria-hidden="true">
+            <svg viewBox="0 0 24 24">
+              <path d="M22 16.9v3a2 2 0 0 1-2.2 2 19.8 19.8 0 0 1-8.6-3.1A19.4 19.4 0 0 1 5.2 12.8 19.8 19.8 0 0 1 2 4.1 2 2 0 0 1 4 2h3a2 2 0 0 1 2 1.7l.5 3a2 2 0 0 1-.6 1.8l-1.3 1.3a16 16 0 0 0 6.4 6.4l1.3-1.3a2 2 0 0 1 1.8-.6l3 .5A2 2 0 0 1 22 16.9z" />
+            </svg>
+          </span>
+          <div>
+            <span>Head Office</span>
+            <strong>{{ vendor.contact || '-' }}</strong>
+          </div>
+        </div>
+
+        <div class="profile-contact-item">
+          <span class="profile-contact-item__icon" aria-hidden="true">
+            <svg viewBox="0 0 24 24">
+              <path d="M12 21s-6-4.35-6-10a6 6 0 1 1 12 0c0 5.65-6 10-6 10Z" />
+              <path d="M12 11.5a1.5 1.5 0 1 0-1.5-1.5 1.5 1.5 0 0 0 1.5 1.5Z" />
+            </svg>
+          </span>
+          <div>
+            <span>Global Headquarters</span>
+            <strong>{{ vendor.address || '-' }}</strong>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="profile-engagements">
+      <span class="app-section-title">Ongoing Engagements</span>
+
+      <div class="profile-engagements__rail">
+        <article class="profile-project-card profile-project-card--featured">
+          <span class="profile-project-card__eyebrow">#PRO-2024-001</span>
+          <strong>Solar Grid Phase II Development</strong>
+          <div class="profile-project-card__footer">
+            <span>$4.2M Valuation</span>
+            <i aria-hidden="true">→</i>
+          </div>
+        </article>
+
+        <article class="profile-project-card">
+          <span class="profile-project-card__eyebrow">#PRO-2024-006</span>
+          <strong>Metro Utility Hub Expansion</strong>
+          <div class="profile-project-card__footer">
+            <span>$1.8M</span>
+          </div>
+        </article>
+      </div>
+    </section>
+
+    <section class="app-card profile-form-card">
+      <div class="profile-card-head">
+        <span class="app-section-title">Edit Information</span>
+        <span class="profile-card-head__icon" aria-hidden="true">
+          <svg viewBox="0 0 24 24">
+            <path d="m4 20 4.2-1 9.4-9.4a2 2 0 1 0-2.8-2.8L5.4 16.2 4 20z" />
+            <path d="m13.5 6.5 4 4" />
+          </svg>
+        </span>
+      </div>
+
       <div class="field-group">
         <label for="company_name">Company Name</label>
-        <div class="field-control">
+        <div class="app-input">
           <ion-input
             id="company_name"
             type="text"
@@ -39,7 +182,7 @@
 
       <div class="field-group">
         <label for="email">Email</label>
-        <div class="field-control">
+        <div class="app-input">
           <ion-input
             id="email"
             type="email"
@@ -51,7 +194,7 @@
 
       <div class="field-group">
         <label for="address">Address</label>
-        <div class="field-control">
+        <div class="app-input">
           <ion-input
             id="address"
             type="text"
@@ -63,7 +206,7 @@
 
       <div class="field-group">
         <label for="contact">Contact</label>
-        <div class="field-control">
+        <div class="app-input">
           <ion-input
             id="contact"
             type="text"
@@ -75,7 +218,7 @@
 
       <ion-button
         expand="block"
-        class="primary-button"
+        class="app-button-primary"
         (click)="saveProfile()">
         Simpan Profile
       </ion-button>

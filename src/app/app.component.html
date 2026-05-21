@@ -1,3 +1,60 @@
-<ion-app>
-  <ion-router-outlet></ion-router-outlet>
+<ion-app class="app-shell">
+  <div class="app-shell__viewport">
+    <ion-router-outlet></ion-router-outlet>
+
+    <nav
+      *ngIf="showBottomNav()"
+      class="app-bottom-nav app-bottom-nav--global"
+      aria-label="Primary navigation">
+      <a
+        class="app-bottom-nav__item"
+        [class.is-active]="isActiveSection('dashboard')"
+        routerLink="/dashboard">
+        <span class="app-bottom-nav__icon" aria-hidden="true">
+          <svg viewBox="0 0 24 24">
+            <path d="M4 10.5 12 4l8 6.5V20H4z" />
+          </svg>
+        </span>
+        <strong>Dashboard</strong>
+      </a>
+
+      <a
+        class="app-bottom-nav__item"
+        [class.is-active]="isActiveSection('tender')"
+        routerLink="/tender-list">
+        <span class="app-bottom-nav__icon" aria-hidden="true">
+          <svg viewBox="0 0 24 24">
+            <path d="M6 7h12M6 12h12M6 17h8" />
+          </svg>
+        </span>
+        <strong>Tender</strong>
+      </a>
+
+      <a
+        class="app-bottom-nav__item"
+        [class.is-active]="isActiveSection('documents')"
+        routerLink="/documents">
+        <span class="app-bottom-nav__icon" aria-hidden="true">
+          <svg viewBox="0 0 24 24">
+            <path d="M14 3H7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8z" />
+            <path d="M14 3v5h5" />
+            <path d="M12 11v6M9 14h6" />
+          </svg>
+        </span>
+        <strong>Upload Docs</strong>
+      </a>
+
+      <a
+        class="app-bottom-nav__item"
+        [class.is-active]="isActiveSection('profile')"
+        routerLink="/profile">
+        <span class="app-bottom-nav__icon" aria-hidden="true">
+          <svg viewBox="0 0 24 24">
+            <path d="M12 12a4 4 0 1 0-4-4 4 4 0 0 0 4 4Zm-7 8a7 7 0 0 1 14 0" />
+          </svg>
+        </span>
+        <strong>Profile</strong>
+      </a>
+    </nav>
+  </div>
 </ion-app>

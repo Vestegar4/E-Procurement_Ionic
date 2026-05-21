@@ -1,158 +1,169 @@
 ---
-name: Luminous Procurement
+name: Aureate Enterprise
 colors:
-  surface: '#fff7fe'
-  surface-dim: '#e1d7e4'
-  surface-bright: '#fff7fe'
+  surface: '#fdf8f8'
+  surface-dim: '#ddd9d8'
+  surface-bright: '#fdf8f8'
   surface-container-lowest: '#ffffff'
-  surface-container-low: '#fbf0fe'
-  surface-container: '#f5eaf8'
-  surface-container-high: '#efe5f2'
-  surface-container-highest: '#e9dfec'
-  on-surface: '#1f1a23'
-  on-surface-variant: '#4c4353'
-  inverse-surface: '#342e38'
-  inverse-on-surface: '#f8edfb'
-  outline: '#7e7385'
-  outline-variant: '#cfc2d6'
-  surface-tint: '#8131cd'
-  primary: '#7e2eca'
+  surface-container-low: '#f7f3f2'
+  surface-container: '#f1edec'
+  surface-container-high: '#ebe7e6'
+  surface-container-highest: '#e5e2e1'
+  on-surface: '#1c1b1b'
+  on-surface-variant: '#444748'
+  inverse-surface: '#313030'
+  inverse-on-surface: '#f4f0ef'
+  outline: '#747878'
+  outline-variant: '#c4c7c7'
+  surface-tint: '#5f5e5e'
+  primary: '#000000'
   on-primary: '#ffffff'
-  primary-container: '#994ce5'
-  on-primary-container: '#fffbff'
-  inverse-primary: '#dcb8ff'
-  secondary: '#635b6e'
+  primary-container: '#1c1b1b'
+  on-primary-container: '#858383'
+  inverse-primary: '#c8c6c5'
+  secondary: '#735c00'
   on-secondary: '#ffffff'
-  secondary-container: '#e9def5'
-  on-secondary-container: '#696174'
-  tertiary: '#5c5b63'
+  secondary-container: '#fed65b'
+  on-secondary-container: '#745c00'
+  tertiary: '#000000'
   on-tertiary: '#ffffff'
-  tertiary-container: '#75737c'
-  on-tertiary-container: '#fffbff'
+  tertiary-container: '#1a1b22'
+  on-tertiary-container: '#83838c'
   error: '#ba1a1a'
   on-error: '#ffffff'
   error-container: '#ffdad6'
   on-error-container: '#93000a'
-  primary-fixed: '#f0dbff'
-  primary-fixed-dim: '#dcb8ff'
-  on-primary-fixed: '#2c0051'
-  on-primary-fixed-variant: '#6802b3'
-  secondary-fixed: '#e9def5'
-  secondary-fixed-dim: '#cdc2d9'
-  on-secondary-fixed: '#1e1929'
-  on-secondary-fixed-variant: '#4a4456'
-  tertiary-fixed: '#e4e1eb'
-  tertiary-fixed-dim: '#c8c5ce'
-  on-tertiary-fixed: '#1b1b22'
-  on-tertiary-fixed-variant: '#47464e'
-  background: '#fff7fe'
-  on-background: '#1f1a23'
-  surface-variant: '#e9dfec'
+  primary-fixed: '#e5e2e1'
+  primary-fixed-dim: '#c8c6c5'
+  on-primary-fixed: '#1c1b1b'
+  on-primary-fixed-variant: '#474746'
+  secondary-fixed: '#ffe088'
+  secondary-fixed-dim: '#e9c349'
+  on-secondary-fixed: '#241a00'
+  on-secondary-fixed-variant: '#574500'
+  tertiary-fixed: '#e3e1ec'
+  tertiary-fixed-dim: '#c6c5cf'
+  on-tertiary-fixed: '#1a1b22'
+  on-tertiary-fixed-variant: '#46464e'
+  background: '#fdf8f8'
+  on-background: '#1c1b1b'
+  surface-variant: '#e5e2e1'
 typography:
-  headline-xl:
-    fontFamily: Manrope
+  display-lg:
+    fontFamily: Inter
     fontSize: 32px
-    fontWeight: '800'
+    fontWeight: '600'
     lineHeight: 40px
     letterSpacing: -0.02em
-  headline-lg:
-    fontFamily: Manrope
+  headline-md:
+    fontFamily: Inter
     fontSize: 24px
-    fontWeight: '700'
+    fontWeight: '600'
     lineHeight: 32px
     letterSpacing: -0.01em
-  headline-md:
-    fontFamily: Manrope
+  headline-sm:
+    fontFamily: Inter
     fontSize: 20px
-    fontWeight: '700'
-    lineHeight: 28px
-  body-lg:
-    fontFamily: Manrope
-    fontSize: 16px
     fontWeight: '500'
+    lineHeight: 28px
+    letterSpacing: 0.02em
+  body-lg:
+    fontFamily: Inter
+    fontSize: 16px
+    fontWeight: '400'
     lineHeight: 24px
+    letterSpacing: '0'
   body-md:
-    fontFamily: Manrope
+    fontFamily: Inter
     fontSize: 14px
     fontWeight: '400'
     lineHeight: 20px
-  label-sm:
-    fontFamily: Manrope
+    letterSpacing: '0'
+  label-caps:
+    fontFamily: Inter
     fontSize: 12px
     fontWeight: '600'
     lineHeight: 16px
+    letterSpacing: 0.1em
+  label-sm:
+    fontFamily: Inter
+    fontSize: 11px
+    fontWeight: '500'
+    lineHeight: 14px
     letterSpacing: 0.02em
-  headline-xl-mobile:
-    fontFamily: Manrope
-    fontSize: 28px
-    fontWeight: '800'
-    lineHeight: 34px
 rounded:
-  sm: 0.5rem
-  DEFAULT: 1rem
-  md: 1.5rem
-  lg: 2rem
-  xl: 3rem
+  sm: 0.25rem
+  DEFAULT: 0.5rem
+  md: 0.75rem
+  lg: 1rem
+  xl: 1.5rem
   full: 9999px
 spacing:
   base: 8px
-  container-padding: 20px
+  margin-mobile: 24px
   gutter: 16px
-  stack-sm: 4px
-  stack-md: 12px
-  stack-lg: 24px
-  section-gap: 40px
+  stack-sm: 12px
+  stack-md: 24px
+  stack-lg: 40px
 ---
 
 ## Brand & Style
+The design system is engineered for a high-stakes e-procurement environment where luxury meets institutional reliability. The target audience includes C-suite executives, high-value vendors, and procurement directors who expect an interface that mirrors the prestige of multi-million dollar contracts. 
 
-The design system is rooted in the "Clean Enterprise" movement, blending the efficiency of a B2B procurement platform with the polished, user-centric aesthetics of high-end Fintech. The goal is to reduce the cognitive load of complex supply chain management through a minimalist interface that feels spacious, trustworthy, and sophisticated.
-
-The visual narrative centers on **clutter-free elegance**. By utilizing expansive white space and a "Mobile-First" priority, the interface transforms dense procurement data into digestible, actionable insights. The emotional response should be one of calm control—moving away from the industrial, grey-heavy legacy software toward a bright, optimistic, and premium digital workspace.
+The aesthetic is **Luxury Minimalist**, blending the precision of high-end fintech with the spatial confidence of an editorial magazine. The emotional response should be one of "calm authority"—removing the friction of complex bidding processes through generous whitespace, premium materiality, and a focused, high-contrast visual hierarchy.
 
 ## Colors
+This design system utilizes a "Prestige Palette" to differentiate between administrative tasks and high-value actions.
 
-The palette is intentionally restrained to maintain a "White-Label" premium feel while using color strategically for brand recognition and hierarchy.
-
-- **Primary Purple (#b266ff):** Used for primary actions, progress indicators, and key brand moments. It represents innovation and modern enterprise.
-- **Light Lavender Gradient:** A soft transition from `#b266ff` to `#d8b4fe` used for high-level cards, empty states, and featured headers to add depth without adding noise.
-- **Typography:** Deep charcoal (`#111111`) ensures high legibility for headings, while a muted slate (`#777777`) is used for metadata and secondary information.
-- **Surface Colors:** Pure white (`#ffffff`) is the foundation, using very light lavender tints (`#f9f5ff`) for background sectioning instead of traditional greys.
+*   **Primary (#1A1A1A):** Used for structural elements, primary buttons, and critical text. It provides the "anchor" for the interface.
+*   **Accent (#D4AF37):** A rich metallic gold reserved exclusively for active states, call-to-actions, and premium status indicators. It must be used sparingly to maintain its impact.
+*   **Neutral (#71717A):** A soft slate used for secondary labels and metadata to ensure the interface doesn't feel aggressive.
+*   **Surface (#FAF9F6):** The warm cream base reduces eye strain compared to pure white and evokes the feeling of premium stationery.
 
 ## Typography
+The typography system relies on **Inter** for its systematic clarity and modern architectural feel. 
 
-This design system utilizes **Manrope** exclusively to maintain a modern, geometric, and highly legible aesthetic across all scales. 
-
-Headings are set with bold weights and tight letter-spacing to create a "Fintech" impact, making titles feel like solid anchors on the page. Body text maintains a medium weight to ensure high readability against the white background. For data-heavy procurement tables or lists, `label-sm` is used in semi-bold to ensure information hierarchy remains clear even at small sizes.
+Hierarchy is established through weight and tracking rather than drastic size changes. Headings utilize tighter tracking for a refined, custom-type look, while smaller labels use wide tracking (letter-spacing) and uppercase transformations to evoke luxury branding. All body text maintains a comfortable line-height to ensure legibility during dense contract reviews.
 
 ## Layout & Spacing
+The layout follows a **Fluid Grid** model optimized for mobile-first procurement. 
 
-The layout follows a **Mobile-First, fluid approach** centered on a "Safe Margin" philosophy.
-
-- **Grid:** On mobile, we use a single-column layout with 20px horizontal margins. On larger screens, the content is capped at 1200px and centered.
-- **Rhythm:** A strict 8px baseline grid is used. Elements are separated by "Spacious Breathers"—using 24px or 40px gaps between major sections to prevent the UI from feeling "crowded" like traditional ERP software.
-- **Alignment:** All content follows a logical vertical stack. Horizontal scrolling is reserved only for "Quick Action" chips or data cards to maximize vertical real estate for procurement lists.
+*   **Margins:** A generous 24px side margin is mandatory to maintain the "luxury" sense of space and prevent the UI from feeling cramped on device edges.
+*   **Vertical Rhythm:** Content is grouped into logical "stacks." Use 40px (stack-lg) to separate major sections (e.g., Tender Details vs. Bid History) and 24px (stack-md) for elements within a section.
+*   **Touch Targets:** All interactive elements must maintain a minimum height of 48px, padded internally to align with the 8px base grid.
 
 ## Elevation & Depth
+This design system uses **Tonal Layers** combined with **Ambient Shadows** to create a sense of physical importance.
 
-To maintain the "Minimalist" aesthetic, depth is created through **Ambient Shadows** and **Tonal Layering** rather than heavy borders.
-
-- **Level 1 (Surface):** The main background is flat white.
-- **Level 2 (Cards):** Use an extremely soft shadow (Y: 4px, Blur: 20px, Opacity: 4%, Color: #b266ff tinted) to make cards "float" gently.
-- **Level 3 (Interactive):** Elements like active buttons or search bars use a slightly more pronounced shadow to indicate interactivity.
-- **Glassmorphism:** Bottom navigation bars and top headers use a subtle backdrop blur (20px) with 80% opacity white to maintain context of the content scrolling beneath them.
+*   **Level 0 (Base):** The #FAF9F6 cream background.
+*   **Level 1 (Cards):** Pure white (#FFFFFF) surfaces with a very soft, high-dispersion shadow (Y: 4, Blur: 20, Opacity: 4% Black). These appear "rested" on the surface.
+*   **Level 2 (Active/Floating):** Elements like the floating navigation bar or active modals use a slightly deeper shadow and an ultra-thin 0.5px border (#1A1A1A at 5% opacity) to define edges against the warm background.
+*   **High-Contrast Tier:** Critical "Premium" sections use a Deep Black (#1A1A1A) background with no shadow, relying on pure contrast to command attention.
 
 ## Shapes
+The shape language is defined by significant corner rounding to soften the "corporate" edge of procurement. 
 
-The shape language is defined by **Pill-shaped components** and oversized radii. 
-
-All primary buttons, input fields, and status badges must use a fully rounded (pill) style. Larger containers like "Purchase Order" cards or "Vendor Profiles" use `rounded-xl` (24px - 48px) to soften the interface. This organic, rounded approach differentiates the design system from the sharp, rigid boxes found in legacy enterprise software, making the app feel approachable and modern.
+Standard containers and cards use a **16px (rounded-lg)** radius. Main action buttons and primary tender cards should lean into the **24px (rounded-xl)** radius to emphasize the modern, approachable luxury feel. Small interactive components like checkboxes or tags utilize a **4px (soft)** radius to maintain a professional, sharp secondary hierarchy.
 
 ## Components
 
-- **Buttons:** Primary buttons are pill-shaped, using the `#b266ff` background with white text. Secondary buttons use a light lavender tint (`#f3e8ff`) with purple text.
-- **Input Fields:** Search bars and text inputs are pill-shaped with a light grey border (`#eeeeee`) that turns purple on focus. Labels are placed above the field in `label-sm`.
-- **Status Chips:** Small pill-shaped badges for status (e.g., "Pending," "Approved"). Use high-transparency versions of semantic colors (e.g., light green for approved) with dark text.
-- **Cards:** All-white background with a soft ambient shadow and `rounded-xl` corners. Information inside is stacked vertically with 12px spacing.
-- **Lists:** Procurement items are separated by subtle 1px dividers or, preferably, grouped into individual floating cards to emphasize the "Fintech" list style.
-- **Progress Bars:** Thin, pill-shaped tracks with the primary gradient to show budget exhaustion or shipping progress.
+### Buttons
+*   **Primary:** Solid Deep Black (#1A1A1A) with White text. High-rounded corners (24px).
+*   **Secondary/Accent:** Solid Gold (#D4AF37) with Deep Black text for the most critical "Submit Bid" actions.
+*   **Ghost:** Transparent background with a 1px Slate (#71717A) border for less urgent actions.
+
+### Cards
+Cards are the primary vessel for information. Use white backgrounds for standard tenders and the Deep Black (#1A1A1A) background for "Featured" or "Urgent" bids. All cards feature 16px - 24px padding.
+
+### Navigation
+A **Floating Bottom Bar** is utilized. It should have a blur effect (backdrop-filter) and sit 16px away from the bottom and side edges. Icons are minimalist line-art; the active state is indicated by a Gold (#D4AF37) dot or icon tint.
+
+### Forms & Inputs
+Inputs use a white background with a subtle 1px border (#E5E5E5). On focus, the border transitions to Deep Black (#1A1A1A) with a very slight gold glow (2px outer spread). Labels are always in `label-caps` style above the field.
+
+### Badges (Status Indicators)
+Badges avoid bright "traffic light" colors in favor of sophisticated tonal variations:
+*   **Open:** Soft Gold background / Deep Brown text.
+*   **Bidding:** Soft Slate background / Deep Black text.
+*   **Closed:** Very light cream background / Slate text.
+*   **Finished:** Deep Black background / Gold text (Premium finish).
