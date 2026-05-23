@@ -27,5 +27,5 @@ export class WelcomePage {
     localStorage.setItem('has_seen_welcome', 'true');
     this.router.navigate(['/login']);
   }
-
+  
 }

@@ -31,6 +31,7 @@ export class LoginPage {
 
   email = '';
   password = '';
+  showPassword = false;
   loading = false;
 
   constructor(

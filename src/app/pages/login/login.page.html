@@ -1,82 +1,104 @@
-<ion-content class="login-page app-page" [fullscreen]="true">
-  <div class="auth-shape auth-shape--top"></div>
-  <div class="auth-shape auth-shape--bottom"></div>
+<ion-content class="login-page" [fullscreen]="true">
+  <div class="login-shell">
+    <header class="login-brand">
+      <img
+        class="login-brand__logo"
+        src="assets/logo/bg_remove_Proculus-logo.png"
+        alt="Proculus Logo" />
+      <strong>PROCULUS</strong>
+      <span>INSTITUTIONAL EXCELLENCE</span>
+    </header>
 
-  <div class="app-container auth-container">
-    <section class="auth-intro">
-      <span class="app-section-title">Vendor Sign In</span>
-      <h1 class="app-title">Masuk ke workspace procurement dengan kontrol yang lebih tenang dan presisi.</h1>
-      <p class="app-subtitle">
-        Dashboard vendor, tender aktif, dan dokumen penting disusun dengan
-        hierarchy ala aplikasi finansial premium.
-      </p>
+    <main class="login-main">
+      <section class="login-copy">
+        <h1>Welcome Back</h1>
+        <p>Access your procurement portal and manage high-value contracts with precision.</p>
+      </section>
 
-      <div class="auth-intro__stack">
-        <div class="app-stat-card">
-          <strong>12+</strong>
-          <span>Tender Aktif</span>
-        </div>
-        <div class="app-stat-card auth-intro__dark">
-          <strong>Secure</strong>
-          <span>Vendor session</span>
-        </div>
-      </div>
-    </section>
-
-    <section class="app-card auth-card">
-      <div class="auth-card__header">
-        <span class="app-section-title">Welcome Back</span>
-        <h2>Login ke akun vendor</h2>
-        <p class="app-subtitle">Masukkan email dan password perusahaan Anda untuk melanjutkan.</p>
-      </div>
-
-      <form class="auth-form" (ngSubmit)="login()">
-        <div class="field-group">
-          <label for="email">Email</label>
-          <div class="app-input">
-            <ion-input
-              id="email"
-              type="email"
-              inputmode="email"
-              autocomplete="email"
-              placeholder="nama@perusahaan.com"
-              [(ngModel)]="email"
-              name="email">
-            </ion-input>
+      <section class="app-card login-card">
+        <form class="login-form" (ngSubmit)="login()">
+          <div class="field-group">
+            <label for="email">Business Email</label>
+            <div class="app-input login-input">
+              <ion-input
+                id="email"
+                type="email"
+                inputmode="email"
+                autocomplete="email"
+                placeholder="executive@enterprise.com"
+                [(ngModel)]="email"
+                name="email">
+              </ion-input>
+            </div>
           </div>
-        </div>
 
-        <div class="field-group">
-          <label for="password">Password</label>
-          <div class="app-input">
-            <ion-input
-              id="password"
-              type="password"
-              autocomplete="current-password"
-              placeholder="Masukkan password"
-              [(ngModel)]="password"
-              name="password">
-            </ion-input>
+          <div class="field-group">
+            <div class="login-field-head">
+              <label for="password">Password</label>
+              <span routerLink="/forgot-password">
+                Forgot password?
+              </span>
+            </div>
+            <div class="app-input login-input password-wrapper">
+              <ion-input
+                id="password"
+                [type]="showPassword ? 'text' : 'password'"
+                autocomplete="current-password"
+                placeholder="Enter your password"
+                [(ngModel)]="password"
+                name="password">
+              </ion-input>
+
+              <button
+                type="button"
+                class="password-toggle"
+                (click)="showPassword = !showPassword"
+                [attr.aria-label]="showPassword ? 'Hide password' : 'Show password'">
+                <svg viewBox="0 0 24 24" *ngIf="!showPassword">
+                  <path d="M2 12s3.5-6 10-6 10 6 10 6-3.5 6-10 6-10-6-10-6Z" />
+                  <path d="M12 15a3 3 0 1 0 0-6 3 3 0 0 0 0 6Z" />
+                </svg>
+                <svg viewBox="0 0 24 24" *ngIf="showPassword">
+                  <path d="m3 3 18 18" />
+                  <path d="M10.6 10.7a3 3 0 0 0 4.2 4.2" />
+                  <path d="M9.9 5.1A11.5 11.5 0 0 1 12 5c6.5 0 10 7 10 7a18.8 18.8 0 0 1-4 4.8" />
+                  <path d="M6.6 6.7C3.8 8.6 2 12 2 12a18.8 18.8 0 0 0 7.5 5.7" />
+                </svg>
+              </button>
+            </div>
           </div>
-        </div>
 
-        <ion-button
-          type="submit"
-          class="app-button-primary"
-          expand="block"
-          [disabled]="loading">
-          <ion-spinner
-            *ngIf="loading"
-            name="crescent">
-          </ion-spinner>
-          <span *ngIf="!loading">Masuk</span>
-        </ion-button>
-      </form>
+          <ion-button
+            type="submit"
+            expand="block"
+            class="login-button-primary"
+            [disabled]="loading">
+            <ion-spinner
+              *ngIf="loading"
+              name="crescent">
+            </ion-spinner>
+            <span *ngIf="!loading">SIGN IN</span>
+            <i *ngIf="!loading" aria-hidden="true">→</i>
+          </ion-button>
+        </form>
 
-      <div class="auth-footnote">
-        <span>Belum punya akun?</span>
-        <a routerLink="/register">Daftar sekarang</a>
-      </div>
-    </section>
+        <section class="login-connect">
+          <span class="app-section-title">Institutional Connect</span>
+
+          <button
+            type="button"
+            class="login-google"
+            (click)="showToast('Google login belum tersedia', 'warning')"
+            aria-label="Google login belum tersedia">
+            <span>G</span>
+          </button>
+        </section>
+      </section>
+    </main>
+
+    <footer class="login-footer">
+      <span>New to the platform?</span>
+      <a routerLink="/register">Request Access</a>
+    </footer>
   </div>
 </ion-content>
