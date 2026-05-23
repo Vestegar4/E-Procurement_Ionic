@@ -98,6 +98,11 @@
   animation: splash-loading 1.8s ease-in-out infinite;
 }
 
+.splash-logo {
+  width: 120px;
+  height: auto;
+}
+
 @keyframes splash-loading {
   0% {
     transform: translateX(-30%);

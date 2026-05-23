@@ -136,6 +136,22 @@
   letter-spacing: -0.02em;
 }
 
+.splash-logo {
+  width: 200px;
+  height: auto;
+
+  filter: drop-shadow(0 10px 20px rgba(0,0,0,0.08));
+  
+}
+
+.logo-wrapper {
+   display: flex;
+  justify-content: center;
+  align-items: center;
+
+  margin-top: 30px;
+  margin-bottom: 36px;
+}
 @media (min-width: 768px) {
   .welcome-container {
     grid-template-columns: minmax(0, 1.2fr) minmax(320px, 0.8fr);
