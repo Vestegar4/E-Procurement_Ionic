@@ -1,70 +1,43 @@
-<ion-content class="welcome-page app-page" [fullscreen]="true">
-  <div class="welcome-shape welcome-shape--top"></div>
-  <div class="welcome-shape welcome-shape--bottom"></div>
+<ion-content class="welcome-page" [fullscreen]="true">
+  <div class="welcome-shell">
+    <header class="welcome-brand">
+      <img
+        class="welcome-brand__logo"
+        src="assets/logo/bg_remove_Proculus-logo.png"
+        alt="Proculus Logo" />
+      
+    </header>
 
-  <div class="app-container welcome-container">
-    <section class="app-card welcome-hero">
-      <span class="app-section-title">Welcome</span>
+    <main class="welcome-main">
+      
+      <section class="welcome-copy">
+        <h1>Streamline your procurement journey.</h1>
+        <p>
+          Experience the precision of high-end institutional reliability. Manage million-dollar contracts with calm authority and effortless friction-free bidding.
+        </p>
+      </section>
 
-      <div class="welcome-visual">
-        <div class="welcome-orb"></div>
-        <div class="welcome-panel welcome-panel--dark">
-          <strong>Premium Vendor Access</strong>
-          <span>Secure onboarding</span>
-        </div>
-        <div class="welcome-panel welcome-panel--gold">
-          <strong>Tender Intelligence</strong>
-          <span>Live opportunity flow</span>
-        </div>
-      </div>
-
-      <h1 class="app-title">Aplikasi procurement vendor dengan pengalaman mobile seperti fintech premium.</h1>
-      <p class="app-subtitle">
-        Pantau tender, lengkapi dokumen, dan masuk ke proses bidding dengan
-        tata letak yang jelas, mewah, dan siap dipakai harian.
-      </p>
-
-      <div class="welcome-points">
-        <div class="app-list-item">
-          <div>
-            <strong>Clear dashboard</strong>
-            <p>Ringkasan tender, status akun, dan aktivitas terbaru dalam satu alur.</p>
-          </div>
-          <span class="app-badge app-badge--finished">Live</span>
-        </div>
-
-        <div class="app-list-item">
-          <div>
-            <strong>Luxury onboarding</strong>
-            <p>Masuk atau daftar dengan CTA yang tegas dan hierarchy yang bersih.</p>
-          </div>
-          <span class="app-badge app-badge--open">New</span>
-        </div>
-      </div>
-    </section>
-
-    <section class="app-card welcome-actions">
-      <div class="welcome-actions__copy">
-        <span class="app-section-title">Get Started</span>
-        <h2>Pilih alur masuk aplikasi</h2>
-        <p class="app-subtitle">Gunakan akun vendor yang sudah ada atau buat akun baru untuk mulai mengikuti tender.</p>
-      </div>
-
-      <div class="welcome-actions__buttons">
+      <section class="welcome-actions">
         <ion-button
           expand="block"
-          class="app-button-primary"
+          class="welcome-button-primary"
+          (click)="startApp()">
+          <span>ENTER THE ECOSYSTEM</span>
+          <i aria-hidden="true">→</i>
+        </ion-button>
+
+        <ion-button
+          expand="block"
+          fill="clear"
+          class="welcome-button-secondary"
           routerLink="/login">
-          Masuk ke Akun
+          VENDOR LOGIN
         </ion-button>
+      </section>
+    </main>
 
-        <ion-button
-          expand="block"
-          class="app-button-secondary"
-          routerLink="/register">
-          Daftar Vendor
-        </ion-button>
-      </div>
-    </section>
+    <footer class="welcome-footer">
+      INSTITUTIONAL GRADE • HIGH-STAKES SECURITY
+    </footer>
   </div>
 </ion-content>

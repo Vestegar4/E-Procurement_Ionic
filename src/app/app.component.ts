@@ -14,7 +14,7 @@ export class AppComponent {
   constructor(private router: Router) {}
 
   showBottomNav() {
-    return !['/splash', '/welcome', '/login', '/register'].some(path =>
+    return !['/splash', '/welcome', '/login', '/register', '/forgot-password'].some(path =>
       this.router.url.startsWith(path)
     );
   }

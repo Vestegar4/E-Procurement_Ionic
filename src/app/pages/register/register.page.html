@@ -1,139 +1,179 @@
-<ion-content class="register-page app-page" [fullscreen]="true">
-  <div class="auth-shape auth-shape--top"></div>
-  <div class="auth-shape auth-shape--bottom"></div>
-
-  <div class="app-container auth-container">
-    <section class="auth-intro">
-      <a class="back-link" routerLink="/login">Kembali ke login</a>
-      <span class="app-section-title">Vendor Onboarding</span>
-      <h1 class="app-title">Bangun profil perusahaan yang siap masuk proses evaluasi vendor.</h1>
-      <p class="app-subtitle">
-        Form onboarding ini dirancang agar data vendor tampil rapi, premium,
-        dan mudah ditinjau oleh tim procurement.
-      </p>
-
-      <div class="auth-intro__stack">
-        <div class="app-stat-card">
-          <strong>01</strong>
-          <span>Registration Flow</span>
-        </div>
-        <div class="app-stat-card auth-intro__gold">
-          <strong>Fast Review</strong>
-          <span>Structured company data</span>
-        </div>
+<ion-content class="register-page" [fullscreen]="true">
+  <div class="register-shell">
+    <header class="register-header">
+      <div class="register-header__brand">
+        <strong>PROCULUS</strong>
       </div>
-    </section>
+      <span>ENTERPRISE PORTAL</span>
+    </header>
 
-    <section class="app-card auth-card">
-      <div class="auth-card__header">
-        <span class="app-section-title">Create Account</span>
-        <h2>Daftar akun vendor</h2>
-        <p class="app-subtitle">Lengkapi setiap field agar proses verifikasi awal berjalan lebih cepat.</p>
+    <main class="register-main">
+      <section class="register-copy">
+        <span class="register-kicker">ONBOARDING</span>
+        <h1>Establish Authority</h1>
+        <p>
+          Join the world’s most exclusive procurement network and connect with high-value institutions.
+        </p>
+      </section>
+
+      <section class="app-card register-card">
+        <div class="register-card__intro">
+          <span class="register-card__eyebrow">Enterprise Registration</span>
+          <p>Submit verified company credentials to activate your vendor authority.</p>
+        </div>
+
+        <form class="register-form" (ngSubmit)="register()" novalidate>
+          <div class="field-group">
+            <label for="company_name">Company Name</label>
+            <div class="app-input register-input">
+              <ion-input
+                id="company_name"
+                type="text"
+                autocomplete="organization"
+                placeholder="e.g. Global Logistics Corp"
+                [(ngModel)]="company_name"
+                name="company_name">
+              </ion-input>
+            </div>
+          </div>
+
+          <div class="field-group">
+            <label for="contact">NIB / Tax ID</label>
+            <div class="app-input register-input">
+              <ion-input
+                id="contact"
+                type="text"
+                inputmode="text"
+                autocomplete="off"
+                placeholder="Enter identification number"
+                [(ngModel)]="contact"
+                name="contact">
+              </ion-input>
+            </div>
+          </div>
+
+          <div class="field-group">
+            <label for="email">Corporate Email</label>
+            <div class="app-input register-input">
+              <ion-input
+                id="email"
+                type="email"
+                inputmode="email"
+                autocomplete="email"
+                placeholder="name@company.com"
+                [(ngModel)]="email"
+                name="email">
+              </ion-input>
+            </div>
+          </div>
+
+          <div class="field-group register-field--secondary">
+            <label for="address">Registered Address</label>
+            <div class="app-input register-input">
+              <ion-input
+                id="address"
+                type="text"
+                autocomplete="street-address"
+                placeholder="Head office address"
+                [(ngModel)]="address"
+                name="address">
+              </ion-input>
+            </div>
+          </div>
+
+          <div class="field-group">
+            <label for="password">Secure Password</label>
+            <div class="app-input register-input register-input--password">
+              <ion-input
+                id="password"
+                [type]="showPassword ? 'text' : 'password'"
+                autocomplete="new-password"
+                placeholder="••••••••"
+                [(ngModel)]="password"
+                name="password">
+              </ion-input>
+
+              <button
+                type="button"
+                class="register-password-toggle"
+                (click)="showPassword = !showPassword"
+                [attr.aria-label]="showPassword ? 'Hide password' : 'Show password'">
+                <svg viewBox="0 0 24 24" *ngIf="!showPassword">
+                  <path d="M2 12s3.5-6 10-6 10 6 10 6-3.5 6-10 6-10-6-10-6Z" />
+                  <path d="M12 15a3 3 0 1 0 0-6 3 3 0 0 0 0 6Z" />
+                </svg>
+                <svg viewBox="0 0 24 24" *ngIf="showPassword">
+                  <path d="m3 3 18 18" />
+                  <path d="M10.6 10.7a3 3 0 0 0 4.2 4.2" />
+                  <path d="M9.9 5.1A11.5 11.5 0 0 1 12 5c6.5 0 10 7 10 7a18.8 18.8 0 0 1-4 4.8" />
+                  <path d="M6.6 6.7C3.8 8.6 2 12 2 12a18.8 18.8 0 0 0 7.5 5.7" />
+                </svg>
+              </button>
+            </div>
+          </div>
+
+          <div class="field-group register-field--secondary">
+            <label for="password_confirmation">Confirm Password</label>
+            <div class="app-input register-input register-input--password">
+              <ion-input
+                id="password_confirmation"
+                [type]="showConfirmPassword ? 'text' : 'password'"
+                autocomplete="new-password"
+                placeholder="••••••••"
+                [(ngModel)]="password_confirmation"
+                name="password_confirmation">
+              </ion-input>
+
+              <button
+                type="button"
+                class="register-password-toggle"
+                (click)="showConfirmPassword = !showConfirmPassword"
+                [attr.aria-label]="showConfirmPassword ? 'Hide password confirmation' : 'Show password confirmation'">
+                <svg viewBox="0 0 24 24" *ngIf="!showConfirmPassword">
+                  <path d="M2 12s3.5-6 10-6 10 6 10 6-3.5 6-10 6-10-6-10-6Z" />
+                  <path d="M12 15a3 3 0 1 0 0-6 3 3 0 0 0 0 6Z" />
+                </svg>
+                <svg viewBox="0 0 24 24" *ngIf="showConfirmPassword">
+                  <path d="m3 3 18 18" />
+                  <path d="M10.6 10.7a3 3 0 0 0 4.2 4.2" />
+                  <path d="M9.9 5.1A11.5 11.5 0 0 1 12 5c6.5 0 10 7 10 7a18.8 18.8 0 0 1-4 4.8" />
+                  <path d="M6.6 6.7C3.8 8.6 2 12 2 12a18.8 18.8 0 0 0 7.5 5.7" />
+                </svg>
+              </button>
+            </div>
+          </div>
+
+          <div class="register-submit-copy">
+            <span>Protected onboarding</span>
+            <p>All submitted enterprise records are reviewed within a secure institutional workflow.</p>
+          </div>
+
+          <ion-button
+            type="submit"
+            class="register-button-primary"
+            expand="block"
+            [disabled]="loading">
+            <ion-spinner
+              *ngIf="loading"
+              name="crescent">
+            </ion-spinner>
+            <span *ngIf="!loading">CREATE ACCOUNT</span>
+            <i *ngIf="!loading" aria-hidden="true">→</i>
+          </ion-button>
+        </form>
+      </section>
+    </main>
+
+    <section class="register-bottom">
+      <div class="register-footnote">
+        <span>Already have an enterprise profile?</span>
+        <a routerLink="/login">Log in</a>
       </div>
 
-      <form class="auth-form" (ngSubmit)="register()">
-        <div class="field-group">
-          <label for="company_name">Company Name</label>
-          <div class="app-input">
-            <ion-input
-              id="company_name"
-              type="text"
-              autocomplete="organization"
-              placeholder="Nama perusahaan"
-              [(ngModel)]="company_name"
-              name="company_name">
-            </ion-input>
-          </div>
-        </div>
-
-        <div class="field-group">
-          <label for="email">Email</label>
-          <div class="app-input">
-            <ion-input
-              id="email"
-              type="email"
-              inputmode="email"
-              autocomplete="email"
-              placeholder="nama@perusahaan.com"
-              [(ngModel)]="email"
-              name="email">
-            </ion-input>
-          </div>
-        </div>
-
-        <div class="field-group">
-          <label for="address">Address</label>
-          <div class="app-input">
-            <ion-input
-              id="address"
-              type="text"
-              autocomplete="street-address"
-              placeholder="Alamat perusahaan"
-              [(ngModel)]="address"
-              name="address">
-            </ion-input>
-          </div>
-        </div>
-
-        <div class="field-group">
-          <label for="contact">Contact</label>
-          <div class="app-input">
-            <ion-input
-              id="contact"
-              type="text"
-              inputmode="tel"
-              autocomplete="tel"
-              placeholder="Nomor kontak"
-              [(ngModel)]="contact"
-              name="contact">
-            </ion-input>
-          </div>
-        </div>
-
-        <div class="field-group">
-          <label for="password">Password</label>
-          <div class="app-input">
-            <ion-input
-              id="password"
-              type="password"
-              autocomplete="new-password"
-              placeholder="Masukkan password"
-              [(ngModel)]="password"
-              name="password">
-            </ion-input>
-          </div>
-        </div>
-
-        <div class="field-group">
-          <label for="password_confirmation">Confirm Password</label>
-          <div class="app-input">
-            <ion-input
-              id="password_confirmation"
-              type="password"
-              autocomplete="new-password"
-              placeholder="Ulangi password"
-              [(ngModel)]="password_confirmation"
-              name="password_confirmation">
-            </ion-input>
-          </div>
-        </div>
-
-        <ion-button
-          type="submit"
-          class="app-button-primary"
-          expand="block"
-          [disabled]="loading">
-          <ion-spinner
-            *ngIf="loading"
-            name="crescent">
-          </ion-spinner>
-          <span *ngIf="!loading">Daftar Sekarang</span>
-        </ion-button>
-      </form>
-
-      <div class="auth-footnote">
-        <span>Sudah punya akun?</span>
-        <a routerLink="/login">Masuk sekarang</a>
+      <div class="register-security">
+        <span class="register-security__line"></span>
+        <span class="register-security__text">SECURED BY PROCURA SHIELD</span>
+        <span class="register-security__line"></span>
       </div>
     </section>
   </div>

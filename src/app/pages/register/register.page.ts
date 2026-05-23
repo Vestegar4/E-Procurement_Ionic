@@ -35,6 +35,8 @@ export class RegisterPage {
   contact = '';
   password = '';
   password_confirmation = '';
+  showPassword = false;
+  showConfirmPassword = false;
 
   loading = false;
 
