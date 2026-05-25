@@ -25,21 +25,22 @@ export const routes: Routes = [
   },
   {
     path: 'dashboard',
+    canActivate: [authGuard],
     loadComponent: () => import('./pages/dashboard/dashboard.page').then(m => m.DashboardPage)
   },
   {
     path: 'tender-list',
-    
+    canActivate: [authGuard],
     loadComponent: () => import('./pages/tender-list/tender-list.page').then(m => m.TenderListPage)
   },
   {
     path: 'tender-detail/:id',
-    
+    canActivate: [authGuard],
     loadComponent: () => import('./pages/tender-detail/tender-detail.page').then(m => m.TenderDetailPage)
   },
   {
     path: 'bidding/:id',
-    
+    canActivate: [authGuard],
     loadComponent: () => import('./pages/bidding/bidding.page').then(m => m.BiddingPage)
   },
   {
@@ -49,7 +50,7 @@ export const routes: Routes = [
   },
   {
     path: 'result/:id',
-    
+    canActivate: [authGuard],
     loadComponent: () => import('./pages/result/result.page').then(m => m.ResultPage)
   },
   {
@@ -59,12 +60,13 @@ export const routes: Routes = [
   },
   {
     path: 'profile',
+    canActivate: [authGuard],
     
     loadComponent: () => import('./pages/profile/profile.page').then(m => m.ProfilePage)
   },
   {
     path: 'documents',
-    
+    canActivate: [authGuard],
     loadComponent: () => import('./pages/documents/documents.page').then(m => m.DocumentsPage)
   },
   {
