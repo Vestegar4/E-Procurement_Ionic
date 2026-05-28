@@ -4,7 +4,7 @@
 
 export const environment = {
   production: false,
-  apiUrl: 'http://api.dartd.my.id/api'
+  apiUrl: 'https://api.dartd.my.id/api'
 };
 
 /*
