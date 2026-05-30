@@ -1,7 +1,7 @@
 .welcome-page {
-  --background: #fdf8f8;
+  --background: var(--app-surface);
   background:
-    radial-gradient(circle at 50% 8%, rgba(212, 175, 55, 0.16) 0%, rgba(212, 175, 55, 0.04) 22%, transparent 48%),
+    radial-gradient(circle at 50% 8%, rgba(212, 175, 55, 0.16) 0%, rgba(212, 175, 55, 0.05) 22%, transparent 48%),
     linear-gradient(180deg, #fdf8f8 0%, #f8f3f0 100%);
   overflow: hidden;
 }
@@ -11,221 +11,342 @@
   min-height: 100dvh;
   padding:
     calc(env(safe-area-inset-top, 0px) + 24px)
-    24px
+    var(--app-container-padding)
     calc(env(safe-area-inset-bottom, 0px) + 28px);
   display: flex;
   flex-direction: column;
-  justify-content: flex-start;
-  gap: 8px;
+  gap: 28px;
 }
 
 .welcome-brand {
   display: flex;
-  flex-direction: column;
   align-items: center;
-  gap: 6px;
-  opacity: 0;
-  animation: welcome-fade-in 0.65s ease-out 0.08s forwards;
+  justify-content: center;
+  gap: 14px;
 }
 
 .welcome-brand__logo {
-  width: 220px;
-  height: auto;
+  width: 64px;
+  height: 64px;
   display: block;
+  object-fit: contain;
   filter: drop-shadow(0 8px 18px rgba(0, 0, 0, 0.08));
 }
 
-.welcome-brand strong {
-  color: #1a1a1a;
-  font-size: clamp(1.5rem, 6vw, 1.95rem);
+.welcome-brand__copy {
+  display: grid;
+  gap: 4px;
+}
+
+.welcome-brand__copy strong {
+  color: var(--app-primary);
+  font-size: 1.2rem;
   font-weight: 700;
   line-height: 1;
   letter-spacing: 0.18em;
   text-transform: uppercase;
-  text-indent: 0.18em;
+}
+
+.welcome-brand__copy span {
+  color: var(--app-text-muted);
+  font-size: 0.72rem;
+  font-weight: 600;
+  line-height: 1.35;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
 }
 
 .welcome-main {
-  display: flex;
-  flex-direction: column;
-  justify-content: flex-start;
-  gap: 14px;
+  flex: 1;
+  display: grid;
+  align-content: start;
+  gap: 16px;
 }
 
-.welcome-hero-card {
-  position: relative;
-  min-height: 292px;
-  border-radius: 26px;
+.welcome-progress {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.welcome-progress__badge {
+  background: rgba(255, 255, 255, 0.72);
+  color: var(--app-text-soft);
+  border: 1px solid rgba(26, 26, 26, 0.06);
+}
+
+.welcome-progress__skip {
+  padding: 0;
+  border: 0;
+  background: transparent;
+  color: var(--app-text-soft);
+  font-size: 0.82rem;
+  font-weight: 600;
+  line-height: 1.2;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.welcome-card {
+  display: grid;
+  gap: 20px;
+  padding: 18px;
+  border-radius: var(--app-radius-lg);
   overflow: hidden;
   background:
-    linear-gradient(135deg, #171a1f 0%, #575c62 36%, #d8d8d8 58%, #20242a 100%);
-  box-shadow: 0 20px 42px rgba(0, 0, 0, 0.1);
-  opacity: 0;
-  transform: translateY(12px);
-  animation: welcome-rise-in 0.82s ease-out 0.16s forwards;
+    linear-gradient(180deg, rgba(255, 255, 255, 0.96) 0%, rgba(255, 255, 255, 0.9) 100%);
+  box-shadow: var(--app-shadow-card);
 }
 
-.welcome-hero-card__glow {
-  position: absolute;
-  inset: auto 18px 18px;
-  height: 32px;
-  border-radius: 999px;
-  background: radial-gradient(circle, rgba(212, 175, 55, 0.34) 0%, rgba(212, 175, 55, 0.08) 48%, rgba(212, 175, 55, 0) 78%);
-  filter: blur(16px);
+.welcome-card__hero {
+  display: grid;
+  gap: 18px;
+  padding: 20px;
+  border-radius: 22px;
+  background:
+    radial-gradient(circle at top right, rgba(212, 175, 55, 0.28) 0%, rgba(212, 175, 55, 0.06) 26%, transparent 48%),
+    linear-gradient(160deg, #15181d 0%, #22262d 58%, #2a2f36 100%);
+  color: #ffffff;
 }
 
-.welcome-hero-card__panel {
-  position: absolute;
-  inset: 0;
+.welcome-card__hero-top {
   display: flex;
-  flex-direction: column;
   align-items: center;
-  justify-content: center;
+  justify-content: space-between;
+  gap: 16px;
 }
 
-.welcome-hero-card__cube {
-  width: 78px;
-  height: 78px;
-  border-radius: 14px;
-  background: linear-gradient(145deg, #14181d 0%, #2b3138 44%, #b17d1e 100%);
-  transform: rotate(34deg) translateY(-8px);
-  box-shadow:
-    0 18px 22px rgba(0, 0, 0, 0.28),
-    0 0 0 1px rgba(255, 255, 255, 0.06);
+.welcome-card__hero-badge,
+ion-badge.welcome-card__hero-badge {
+  padding: 9px 12px;
+  border-radius: var(--app-radius-full);
+  background: rgba(255, 255, 255, 0.12);
+  color: #f7e4a7;
+  font-size: 0.72rem;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
 }
 
-.welcome-hero-card__platform {
-  margin-top: 28px;
-  width: 128px;
-  height: 24px;
-  border-radius: 999px;
-  background: linear-gradient(180deg, #ffffff 0%, #d4d4d4 100%);
-  box-shadow:
-    inset 0 -4px 8px rgba(0, 0, 0, 0.08),
-    0 10px 22px rgba(0, 0, 0, 0.18);
+.welcome-card__hero-icon {
+  width: 54px;
+  height: 54px;
+  border-radius: 18px;
+  background: linear-gradient(145deg, rgba(255, 255, 255, 0.12) 0%, rgba(212, 175, 55, 0.32) 100%);
+  display: grid;
+  place-items: center;
+  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.08);
 }
 
-.welcome-copy {
+.welcome-card__hero-icon ion-icon {
+  color: #f7e4a7;
+  font-size: 1.45rem;
+}
+
+.welcome-card__hero-bottom {
   display: grid;
   gap: 10px;
-  justify-items: center;
-  text-align: center;
 }
 
-.welcome-copy h1 {
-  max-width: 12ch;
+.welcome-card__hero-bottom .app-section-title {
+  color: rgba(255, 255, 255, 0.72);
+}
+
+.welcome-card__hero-bottom h1 {
   margin: 0;
-  color: #1a1a1a;
-  font-size: clamp(2rem, 8vw, 2.55rem);
+  color: #ffffff;
+  font-size: clamp(1.9rem, 7vw, 2.35rem);
   font-weight: 600;
   line-height: 1.1;
   letter-spacing: -0.04em;
-  opacity: 0;
-  transform: translateY(10px);
-  animation: welcome-rise-in 0.76s ease-out 0.44s forwards;
 }
 
-.welcome-copy p {
-  max-width: 31ch;
+.welcome-card__hero-bottom p {
   margin: 0;
-  color: #71717a;
-  font-size: 0.92rem;
+  color: rgba(255, 255, 255, 0.76);
+  font-size: 0.94rem;
   line-height: 1.7;
-  opacity: 0;
-  transform: translateY(10px);
-  animation: welcome-rise-in 0.76s ease-out 0.58s forwards;
+}
+
+.welcome-points {
+  display: grid;
+  gap: 12px;
+  padding: 0;
+  background: transparent;
+}
+
+.welcome-points__item {
+  --background: #ffffff;
+  --border-radius: 18px;
+  --padding-start: 14px;
+  --inner-padding-end: 16px;
+  --inner-padding-top: 8px;
+  --inner-padding-bottom: 8px;
+  border: 1px solid rgba(26, 26, 26, 0.05);
+  border-radius: 18px;
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.03);
+}
+
+.welcome-points__item ion-label {
+  color: var(--app-text);
+  font-size: 0.94rem;
+  font-weight: 500;
+  line-height: 1.45;
+}
+
+.welcome-points__marker {
+  width: 32px;
+  min-width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background: rgba(212, 175, 55, 0.16);
+  color: var(--app-gold-deep);
+  font-size: 0.82rem;
+  font-weight: 700;
+  display: grid;
+  place-items: center;
+}
+
+.welcome-privacy {
+  display: grid;
+  gap: 14px;
+  padding: 18px;
+  border-radius: 20px;
+  background: linear-gradient(180deg, #faf6e9 0%, #fdf9f1 100%);
+  border: 1px solid rgba(212, 175, 55, 0.2);
+}
+
+.welcome-privacy__copy {
+  display: grid;
+  gap: 8px;
+}
+
+.welcome-privacy__copy p {
+  margin: 0;
+  color: var(--app-text-soft);
+  font-size: 0.92rem;
+  line-height: 1.65;
+}
+
+.welcome-agreement {
+  --background: rgba(255, 255, 255, 0.72);
+  --padding-start: 14px;
+  --inner-padding-end: 14px;
+  --inner-padding-top: 6px;
+  --inner-padding-bottom: 6px;
+  border: 1px solid rgba(26, 26, 26, 0.06);
+  border-radius: 18px;
+}
+
+.welcome-agreement ion-label {
+  color: var(--app-text);
+  font-size: 0.9rem;
+  line-height: 1.5;
+}
+
+.welcome-agreement ion-checkbox {
+  --size: 22px;
+  --border-radius: 6px;
+  --border-color: rgba(26, 26, 26, 0.18);
+  --border-color-checked: var(--app-gold);
+  --checkbox-background-checked: var(--app-gold);
+  --checkmark-color: var(--app-primary);
+  --checkmark-width: 3px;
+  margin-right: 10px;
+}
+
+.welcome-dots {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+}
+
+.welcome-dots__dot {
+  width: 10px;
+  height: 10px;
+  padding: 0;
+  border: 0;
+  border-radius: 999px;
+  background: rgba(26, 26, 26, 0.14);
+  transition:
+    width 0.2s ease,
+    background 0.2s ease,
+    transform 0.2s ease;
+}
+
+.welcome-dots__dot.is-active {
+  width: 28px;
+  background: var(--app-gold);
+  transform: translateY(-1px);
 }
 
 .welcome-actions {
   display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
   gap: 12px;
-  opacity: 0;
-  transform: translateY(10px);
-  animation: welcome-rise-in 0.82s ease-out 0.78s forwards;
+}
+
+.welcome-actions--single {
+  grid-template-columns: 1fr;
 }
 
 .welcome-button-primary,
 ion-button.welcome-button-primary {
-  --background: #1a1a1a;
+  --background: var(--app-primary);
   --background-hover: #111111;
   --background-activated: #111111;
   --color: #ffffff;
-  --border-radius: 999px;
+  --border-radius: var(--app-radius-full);
   --box-shadow: 0 16px 28px rgba(0, 0, 0, 0.12);
   min-height: 56px;
-  font-size: 0.92rem;
+  font-size: 0.95rem;
   font-weight: 600;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
-}
-
-.welcome-button-primary::part(native) {
-  padding-inline: 24px;
-}
-
-.welcome-button-primary span {
-  color: #ffffff;
-}
-
-.welcome-button-primary i {
-  margin-left: 10px;
-  color: #d4af37;
-  font-style: normal;
-  font-size: 1rem;
-  line-height: 1;
 }
 
 .welcome-button-secondary,
 ion-button.welcome-button-secondary {
-  --background: rgba(255, 255, 255, 0.8);
-  --background-hover: rgba(255, 255, 255, 0.92);
-  --background-activated: rgba(255, 255, 255, 0.92);
-  --color: #1a1a1a;
-  --border-radius: 999px;
-  --border-color: rgba(26, 26, 26, 0.14);
+  --background: rgba(255, 255, 255, 0.82);
+  --background-hover: rgba(255, 255, 255, 0.96);
+  --background-activated: rgba(255, 255, 255, 0.96);
+  --color: var(--app-primary);
+  --border-color: rgba(26, 26, 26, 0.1);
   --border-style: solid;
   --border-width: 1px;
+  --border-radius: var(--app-radius-full);
   --box-shadow: none;
   min-height: 56px;
-  font-size: 0.92rem;
+  font-size: 0.95rem;
   font-weight: 600;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
+}
+
+.welcome-button-gold,
+ion-button.welcome-button-gold {
+  --background: var(--app-gold);
+  --background-hover: #c8a532;
+  --background-activated: #c8a532;
+  --color: var(--app-primary);
+  --border-radius: var(--app-radius-full);
+  --box-shadow: 0 16px 28px rgba(115, 92, 0, 0.18);
+  min-height: 56px;
+  font-size: 0.95rem;
+  font-weight: 700;
+}
+
+.welcome-button-gold[disabled],
+ion-button.welcome-button-gold[disabled] {
+  --background: rgba(212, 175, 55, 0.4);
+  --color: rgba(26, 26, 26, 0.55);
+  opacity: 1;
 }
 
 .welcome-footer {
-  color: #8c8d95;
-  font-size: 0.68rem;
+  color: var(--app-text-muted);
+  font-size: 0.72rem;
   font-weight: 500;
-  line-height: 1.5;
-  letter-spacing: 0.22em;
+  line-height: 1.6;
   text-align: center;
-  text-transform: uppercase;
-  opacity: 0;
-  animation: welcome-fade-in 0.76s ease-out 0.98s forwards;
-}
-
-
-@keyframes welcome-fade-in {
-  0% {
-    opacity: 0;
-  }
-
-  100% {
-    opacity: 1;
-  }
-}
-
-@keyframes welcome-rise-in {
-  0% {
-    opacity: 0;
-    transform: translateY(10px);
-  }
-
-  100% {
-    opacity: 1;
-    transform: translateY(0);
-  }
 }
 
 @media (min-width: 768px) {
@@ -234,7 +355,11 @@ ion-button.welcome-button-secondary {
     margin: 0 auto;
   }
 
-  .welcome-hero-card {
-    min-height: 340px;
+  .welcome-card {
+    padding: 22px;
+  }
+
+  .welcome-card__hero {
+    padding: 24px;
   }
 }
