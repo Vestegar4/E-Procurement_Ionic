@@ -29,16 +29,41 @@ export class TenderListPage implements OnInit {
   searchQuery = '';
   activeCategory: 'all' | 'infrastructure' = 'all';
 
+  loading = false;
+
   constructor(private tenderService: TenderService) {}
 
   ngOnInit() {
-    this.tenders = this.tenderService.getTenders();
+    this.loadTenders();
+  }
+
+  loadTenders() {
+    this.loading = true;
+
+    this.tenderService.getTenders().subscribe({
+      next: (res: any) => {
+        console.log('TENDERS RESPONSE:', res);
+
+        this.tenders = Array.isArray(res)
+          ? res
+          : res.data || res.tenders || [];
+
+        this.loading = false;
+      },
+      error: (err: any) => {
+        console.log('TENDERS ERROR:', err);
+
+        this.tenders = [];
+        this.loading = false;
+      }
+    });
   }
 
   get filteredTenders() {
     return this.tenders.filter(tender => {
       const matchesCategory =
         this.activeCategory === 'all' || this.isInfrastructureTender(tender);
+
       const matchesSearch = this.matchesSearch(tender);
 
       return matchesCategory && matchesSearch;
@@ -58,10 +83,12 @@ export class TenderListPage implements OnInit {
 
     const haystack = [
       tender.title,
+      tender.name,
       tender.description,
       tender.status,
       tender.start_date,
-      tender.end_date
+      tender.end_date,
+      tender.created_at
     ]
       .filter(Boolean)
       .join(' ')
@@ -71,7 +98,11 @@ export class TenderListPage implements OnInit {
   }
 
   private isInfrastructureTender(tender: any) {
-    const text = [tender.title, tender.description]
+    const text = [
+      tender.title,
+      tender.name,
+      tender.description
+    ]
       .filter(Boolean)
       .join(' ')
       .toLowerCase();

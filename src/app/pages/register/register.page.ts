@@ -76,25 +76,31 @@ export class RegisterPage {
 
     this.loading = true;
 
-    const data = {
-      company_name: this.company_name,
-      email: this.email,
-      address: this.address,
-      contact: this.contact,
-      password: this.password,
-      password_confirmation: this.password_confirmation
-    };
+    console.log('company_name:', this.company_name);
 
+const data = {
+  name: this.company_name,
+  company_name: this.company_name,
+  email: this.email,
+  address: this.address,
+  phone: this.contact,
+  password: this.password,
+  password_confirmation: this.password_confirmation
+};
+
+console.log('REGISTER DATA:', data);
     this.authService.register(data).subscribe({
-      next: () => {
+      next: (res) => {
+        console.log('REGISTER RESPONSE:', res);
         this.loading = false;
-        this.showToast('Register berhasil, silakan login', 'success');
+        this.showToast('Register berhasil', 'success');
         this.router.navigate(['/login']);
       },
       error: (err) => {
-        console.log(err);
+        console.log('REGISTER ERROR:', err);
+        console.log('REGISTER ERROR BODY:', err.error);
         this.loading = false;
-        this.showToast('Register gagal');
+        this.showToast(err.error?.message || 'Register gagal');
       }
     });
   }

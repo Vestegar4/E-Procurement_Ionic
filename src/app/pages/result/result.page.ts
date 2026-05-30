@@ -37,15 +37,32 @@ export class ResultPage implements OnInit {
   ngOnInit() {
     const id = Number(this.route.snapshot.paramMap.get('id'));
 
-    this.tender = this.tenderService.getTenderById(id);
-    this.result = this.resultService.getResultByTenderId(id);
+    this.tenderService.getTenderById(id).subscribe({
+      next: (res: any) => {
+        this.tender = res?.tender || res?.data?.tender || res?.data || res || null;
+      },
+      error: (err: any) => {
+        console.log('RESULT TENDER ERROR:', err);
+        this.tender = null;
+      }
+    });
+
+    this.resultService.getResultByTenderId(id).subscribe({
+      next: (res: any) => {
+        this.result = res?.result || res?.data?.result || res?.data || res || null;
+      },
+      error: (err: any) => {
+        console.log('RESULT DETAIL ERROR:', err);
+        this.result = null;
+      }
+    });
   }
 
   formatCurrency(value: number) {
     return new Intl.NumberFormat('id-ID', {
       style: 'currency',
       currency: 'IDR'
-    }).format(value);
+    }).format(Number(value || 0));
   }
 
 }
