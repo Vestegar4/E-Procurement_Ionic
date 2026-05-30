@@ -2,7 +2,7 @@
   <div class="app-container profile-container">
     <section class="profile-topbar">
       <div class="profile-topbar__avatar" aria-hidden="true">
-        <span>A</span>
+        <span>{{ vendorInitial }}</span>
       </div>
 
       <h1>PROCURUS</h1>
@@ -28,16 +28,16 @@
         </div>
       </div>
 
-      <h2>{{ vendor.company_name || 'Vendor Company' }}</h2>
-      <p>{{ vendor.verification_status === 'approved' ? 'Tier 1 Infrastructure Vendor' : 'Enterprise Vendor Profile' }}</p>
+      <h2>{{ profileHeadline }}</h2>
+      <p>{{ profileSubtitle }}</p>
     </section>
 
     <section class="profile-stats">
       <article class="app-card profile-score-card">
         <span class="app-section-title">Trust Score</span>
         <div class="profile-score-card__value">
-          <strong>98</strong>
-          <span>/100</span>
+          <strong>{{ displayTrustScore() }}</strong>
+          <span>{{ displayTrustScore() === '-' ? '' : '/100' }}</span>
         </div>
       </article>
 
@@ -50,7 +50,7 @@
             'app-badge--bidding': vendor.verification_status === 'pending',
             'app-badge--closed': vendor.verification_status === 'rejected'
           }">
-          {{ vendor.verification_status || 'pending' }}
+          {{ displayValue(vendor.verification_status, 'Not available') }}
         </span>
       </article>
     </section>
@@ -73,12 +73,12 @@
 
         <div class="profile-info-row">
           <span>Tax Identification</span>
-          <strong>VAT-998122045-X</strong>
+          <strong>{{ displayValue(vendor.tax_identification, 'Not available') }}</strong>
         </div>
 
         <div class="profile-info-row">
           <span>Primary Industry</span>
-          <strong>Urban Infrastructure &amp; Smart Grid Logistics</strong>
+          <strong>{{ displayValue(vendor.primary_industry, 'Not available') }}</strong>
         </div>
       </div>
     </section>
@@ -103,7 +103,7 @@
           </span>
           <div>
             <span>Official Email</span>
-            <strong>{{ vendor.email || '-' }}</strong>
+            <strong>{{ displayValue(vendor.email) }}</strong>
           </div>
         </div>
 
@@ -115,7 +115,7 @@
           </span>
           <div>
             <span>Head Office</span>
-            <strong>{{ vendor.contact || '-' }}</strong>
+            <strong>{{ displayValue(vendor.contact, 'Not available') }}</strong>
           </div>
         </div>
 
@@ -128,7 +128,7 @@
           </span>
           <div>
             <span>Global Headquarters</span>
-            <strong>{{ vendor.address || '-' }}</strong>
+            <strong>{{ displayValue(vendor.address, 'Not available') }}</strong>
           </div>
         </div>
       </div>
@@ -137,24 +137,26 @@
     <section class="profile-engagements">
       <span class="app-section-title">Ongoing Engagements</span>
 
-      <div class="profile-engagements__rail">
-        <article class="profile-project-card profile-project-card--featured">
-          <span class="profile-project-card__eyebrow">#PRO-2024-001</span>
-          <strong>Solar Grid Phase II Development</strong>
+      <div class="profile-engagements__rail" *ngIf="myTenders.length; else emptyEngagements">
+        <article
+          class="profile-project-card"
+          [ngClass]="{ 'profile-project-card--featured': i === 0 }"
+          *ngFor="let tender of myTenders; let i = index">
+          <span class="profile-project-card__eyebrow">{{ getTenderReference(tender, i) }}</span>
+          <strong>{{ getTenderTitle(tender) }}</strong>
           <div class="profile-project-card__footer">
-            <span>$4.2M Valuation</span>
+            <span>{{ getTenderValue(tender) }}</span>
             <i aria-hidden="true">→</i>
           </div>
         </article>
-
-        <article class="profile-project-card">
-          <span class="profile-project-card__eyebrow">#PRO-2024-006</span>
-          <strong>Metro Utility Hub Expansion</strong>
-          <div class="profile-project-card__footer">
-            <span>$1.8M</span>
-          </div>
-        </article>
       </div>
+
+      <ng-template #emptyEngagements>
+        <div class="app-empty-state">
+          <strong>No ongoing engagements yet</strong>
+          <span>Your active tender participation will appear here when available.</span>
+        </div>
+      </ng-template>
     </section>
 
     <section class="app-card profile-form-card">

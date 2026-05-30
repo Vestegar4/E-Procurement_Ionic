@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import {
   IonContent,
@@ -30,9 +30,9 @@ import { BiddingService } from 'src/app/services/bidding.service';
     IonBadge
   ]
 })
-export class BiddingPage implements OnInit {
+export class BiddingPage implements OnInit, OnDestroy {
 
-  tender: any;
+  tender: any = null;
 
   bidAmount = '';
 
@@ -40,34 +40,16 @@ export class BiddingPage implements OnInit {
 
   countdown = '';
 
-  endTime = new Date().getTime() + 3600000;
+  endTime = 0;
 
-  readonly currentLowestBid = '$1,240,000.00';
+  currentLowestBid = 'Rp0';
 
-  readonly activeBidCount = 8;
+  activeBidCount = 0;
 
-  readonly minimumDecrement = '$5,000.00';
+  minimumDecrement = 'Rp0';
 
-  readonly activityFeed = [
-    {
-      bidder: 'Bidder #0082',
-      time: '2 minutes ago',
-      amount: '$1,245,000',
-      status: 'Decreased'
-    },
-    {
-      bidder: 'Bidder #0145',
-      time: '5 minutes ago',
-      amount: '$1,250,000',
-      status: 'Entered'
-    },
-    {
-      bidder: 'Bidder #0031',
-      time: '8 minutes ago',
-      amount: '$1,265,000',
-      status: 'Initial Bid'
-    }
-  ];
+  activityFeed: any[] = [];
+  private countdownInterval: ReturnType<typeof setInterval> | null = null;
 
   constructor(
     private route: ActivatedRoute,
@@ -77,19 +59,23 @@ export class BiddingPage implements OnInit {
   ) {}
 
   ngOnInit() {
-
     const id = Number(this.route.snapshot.paramMap.get('id'));
+    this.loadTender(id);
+  }
 
-    this.tender = this.tenderService.getTenderById(id);
-
-    if (this.tender) {
-      this.startCountdown();
+  ngOnDestroy() {
+    if (this.countdownInterval) {
+      clearInterval(this.countdownInterval);
+      this.countdownInterval = null;
     }
   }
 
   startCountdown() {
+    if (this.countdownInterval) {
+      clearInterval(this.countdownInterval);
+    }
 
-    const interval = setInterval(() => {
+    this.countdownInterval = setInterval(() => {
 
       const now = new Date().getTime();
 
@@ -97,7 +83,10 @@ export class BiddingPage implements OnInit {
 
       if (distance <= 0) {
 
-        clearInterval(interval);
+        if (this.countdownInterval) {
+          clearInterval(this.countdownInterval);
+          this.countdownInterval = null;
+        }
 
         this.biddingActive = false;
 
@@ -167,14 +156,17 @@ export class BiddingPage implements OnInit {
       amount: this.bidAmount
     };
 
-    const result = this.biddingService.submitBid(data);
-
-    if (result.success) {
-
-      this.showToast(result.message);
-
-      this.bidAmount = '';
-    }
+    this.biddingService.submitBid(this.tender.id, data).subscribe({
+      next: (res: any) => {
+        this.showToast(res?.message || 'Bid berhasil dikirim');
+        this.bidAmount = '';
+        this.loadBidData(this.tender);
+      },
+      error: (err: any) => {
+        console.log('SUBMIT BID ERROR:', err);
+        this.showToast(err?.error?.message || 'Gagal mengirim bid', 'danger');
+      }
+    });
 
   }
 
@@ -214,6 +206,136 @@ export class BiddingPage implements OnInit {
       minutes: match[2].padStart(2, '0'),
       seconds: match[3].padStart(2, '0')
     };
+  }
+
+  private loadTender(id: number) {
+    this.tenderService.getTenderById(id).subscribe({
+      next: (res: any) => {
+        this.tender = res?.tender || res?.data?.tender || res?.data || res || null;
+
+        if (!this.tender) {
+          return;
+        }
+
+        this.endTime = this.resolveEndTime(this.tender);
+        this.biddingActive = this.resolveBiddingActive(this.tender);
+        this.minimumDecrement = this.formatCurrency(
+          this.tender?.minimum_decrement ||
+          this.tender?.minimum_bid_decrement ||
+          this.tender?.bid_decrement ||
+          0
+        );
+
+        this.loadBidData(this.tender);
+
+        if (this.biddingActive && this.endTime > Date.now()) {
+          this.startCountdown();
+        } else if (!this.biddingActive) {
+          this.countdown = 'Bidding Ditutup';
+        }
+      },
+      error: (err: any) => {
+        console.log('BIDDING TENDER ERROR:', err);
+        this.tender = null;
+        this.activityFeed = [];
+      }
+    });
+  }
+
+  private loadBidData(tender: any) {
+    const tenderBids = this.extractBidList(tender);
+
+    if (tenderBids.length) {
+      this.applyBidData(tenderBids);
+      return;
+    }
+
+    this.biddingService.getMyBids().subscribe({
+      next: (res: any) => {
+        const bids = this.extractBidList(res).filter((bid: any) => {
+          const tenderId = bid?.tender_id || bid?.tender?.id;
+          return Number(tenderId) === Number(tender?.id);
+        });
+
+        this.applyBidData(bids);
+      },
+      error: (err: any) => {
+        console.log('LOAD BIDS ERROR:', err);
+        this.applyBidData([]);
+      }
+    });
+  }
+
+  private applyBidData(bids: any[]) {
+    const amounts = bids
+      .map((bid: any) => Number(bid?.amount || bid?.bid_amount || bid?.value || 0))
+      .filter((amount: number) => Number.isFinite(amount) && amount > 0);
+
+    const lowestBid = amounts.length ? Math.min(...amounts) : 0;
+
+    this.currentLowestBid = this.formatCurrency(lowestBid);
+    this.activeBidCount = bids.length;
+    this.activityFeed = bids.slice(0, 10).map((bid: any, index: number) => ({
+      bidder:
+        bid?.vendor_name ||
+        bid?.vendor?.company_name ||
+        bid?.vendor?.name ||
+        `Bidder #${String(index + 1).padStart(4, '0')}`,
+      time: bid?.created_at || bid?.updated_at || '-',
+      amount: this.formatCurrency(
+        Number(bid?.amount || bid?.bid_amount || bid?.value || 0)
+      ),
+      status: bid?.status || 'Submitted'
+    }));
+  }
+
+  private extractBidList(source: any) {
+    if (Array.isArray(source)) {
+      return source;
+    }
+
+    if (Array.isArray(source?.bids)) {
+      return source.bids;
+    }
+
+    if (Array.isArray(source?.data?.bids)) {
+      return source.data.bids;
+    }
+
+    if (Array.isArray(source?.data)) {
+      return source.data;
+    }
+
+    return [];
+  }
+
+  private resolveEndTime(tender: any) {
+    const rawDate = tender?.end_date || tender?.closing_date || tender?.deadline;
+    const parsedDate = rawDate ? new Date(rawDate).getTime() : NaN;
+
+    if (Number.isFinite(parsedDate) && parsedDate > 0) {
+      return parsedDate;
+    }
+
+    return new Date().getTime();
+  }
+
+  private resolveBiddingActive(tender: any) {
+    const status = String(tender?.status || '').toLowerCase();
+
+    if (status) {
+      return status === 'open' || status === 'bidding';
+    }
+
+    return true;
+  }
+
+  private formatCurrency(value: number) {
+    return new Intl.NumberFormat('id-ID', {
+      style: 'currency',
+      currency: 'IDR',
+      maximumFractionDigits: 0
+    }).format(Number.isFinite(value) ? value : 0);
   }
 
 }

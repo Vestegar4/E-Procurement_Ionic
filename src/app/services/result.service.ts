@@ -1,19 +1,20 @@
 import { Injectable } from '@angular/core';
+import { HttpClient } from '@angular/common/http';
+import { environment } from 'src/environments/environment';
 
 @Injectable({
   providedIn: 'root'
 })
 export class ResultService {
+  private apiUrl = environment.apiUrl;
 
-  getResultByTenderId(tenderId: number) {
-    return {
-      tender_id: tenderId,
-      status: 'won',
-      winner_vendor: 'PT cenat cenut sejahtera',
-      winning_bid: 470000000,
-      decision_date: '2026-05-18',
-      note: 'Vendor dipilih berdasarkan harga terbaik dan dokumen lengkap.'
-    };
+  constructor(private http: HttpClient) {}
+
+  getResults() {
+    return this.http.get<any>(`${this.apiUrl}/vendor/results`);
   }
 
+  getResultByTenderId(tenderId: number) {
+    return this.http.get<any>(`${this.apiUrl}/vendor/results/${tenderId}`);
+  }
 }
