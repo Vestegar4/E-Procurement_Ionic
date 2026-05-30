@@ -5,39 +5,130 @@
         class="welcome-brand__logo"
         src="assets/logo/bg_remove_Proculus-logo.png"
         alt="Proculus Logo" />
-      
+      <div class="welcome-brand__copy">
+        <strong>PROCULUS</strong>
+        <span>Vendor E-Procurement</span>
+      </div>
     </header>
 
     <main class="welcome-main">
-      
-      <section class="welcome-copy">
-        <h1>Streamline your procurement journey.</h1>
-        <p>
-          Experience the precision of high-end institutional reliability. Manage million-dollar contracts with calm authority and effortless friction-free bidding.
-        </p>
+      <section class="welcome-progress">
+        <ion-badge class="app-badge welcome-progress__badge">
+          Slide {{ activeSlide + 1 }} / {{ slides.length }}
+        </ion-badge>
+
+        <button
+          *ngIf="!isLastSlide"
+          type="button"
+          class="welcome-progress__skip"
+          (click)="skipToPrivacy()">
+          Lewati
+        </button>
       </section>
 
-      <section class="welcome-actions">
-        <ion-button
-          expand="block"
-          class="welcome-button-primary"
-          (click)="startApp()">
-          <span>ENTER THE ECOSYSTEM</span>
-          <i aria-hidden="true">→</i>
-        </ion-button>
+      <section class="app-card welcome-card" [attr.data-slide]="activeSlide">
+        <div class="welcome-card__hero">
+          <div class="welcome-card__hero-top">
+            <ion-badge class="welcome-card__hero-badge">
+              {{ currentSlide.badge }}
+            </ion-badge>
 
+            <div class="welcome-card__hero-icon" aria-hidden="true">
+              <ion-icon [name]="currentSlide.icon"></ion-icon>
+            </div>
+          </div>
+
+          <div class="welcome-card__hero-bottom">
+            <span class="app-section-title">Onboarding Vendor</span>
+            <h1>{{ currentSlide.title }}</h1>
+            <p>{{ currentSlide.subtitle }}</p>
+          </div>
+        </div>
+
+        <ion-list lines="none" class="welcome-points">
+          <ion-item
+            *ngFor="let point of currentSlide.points; let pointIndex = index"
+            class="welcome-points__item">
+            <div class="welcome-points__marker" slot="start">
+              {{ pointIndex + 1 }}
+            </div>
+            <ion-label>{{ point }}</ion-label>
+          </ion-item>
+        </ion-list>
+
+        <section *ngIf="isLastSlide" class="welcome-privacy">
+          <div class="welcome-privacy__copy">
+            <span class="app-section-title">Persetujuan Wajib</span>
+            <p>
+              Saya menyetujui Privacy Policy Proculus untuk proses registrasi,
+              verifikasi vendor, tender, bidding, hasil tender, dan pengelolaan
+              dokumen procurement.
+            </p>
+          </div>
+
+          <ion-item lines="none" class="welcome-agreement">
+            <ion-checkbox
+              slot="start"
+              [(ngModel)]="hasAgreed"
+              name="privacyAgreement"
+              aria-label="Saya menyetujui Privacy Policy Proculus">
+            </ion-checkbox>
+            <ion-label>
+              Saya telah membaca dan menyetujui Privacy Policy Proculus.
+            </ion-label>
+          </ion-item>
+        </section>
+      </section>
+
+      <section class="welcome-dots" aria-label="Navigasi slide onboarding">
+        <button
+          *ngFor="let slide of slides; let index = index"
+          type="button"
+          class="welcome-dots__dot"
+          [class.is-active]="index === activeSlide"
+          [attr.aria-label]="'Buka slide ' + (index + 1)"
+          (click)="goToSlide(index)">
+        </button>
+      </section>
+
+      <section class="welcome-actions" [class.welcome-actions--single]="isFirstSlide && !isLastSlide">
         <ion-button
+          *ngIf="!isFirstSlide"
+          type="button"
           expand="block"
           fill="clear"
           class="welcome-button-secondary"
-          routerLink="/login">
-          VENDOR LOGIN
+          (click)="previousSlide()">
+          <ion-icon slot="start" name="chevron-back"></ion-icon>
+          Kembali
+        </ion-button>
+
+        <ion-button
+          *ngIf="!isLastSlide"
+          type="button"
+          expand="block"
+          class="welcome-button-primary"
+          (click)="nextSlide()">
+          Lanjut
+          <ion-icon slot="end" name="chevron-forward"></ion-icon>
+        </ion-button>
+
+        <ion-button
+          *ngIf="isLastSlide"
+          type="button"
+          expand="block"
+          class="welcome-button-gold"
+          [disabled]="!hasAgreed"
+          (click)="enterApp()">
+          Masuk Aplikasi
+          <ion-icon slot="end" name="arrow-forward"></ion-icon>
         </ion-button>
       </section>
     </main>
 
     <footer class="welcome-footer">
-      INSTITUTIONAL GRADE • HIGH-STAKES SECURITY
+      Vendor onboarding untuk tender, bidding, dan dokumen procurement yang
+      aman.
     </footer>
   </div>
 </ion-content>
