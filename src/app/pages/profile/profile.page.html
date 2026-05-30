@@ -45,12 +45,8 @@
         <span class="app-section-title">Status</span>
         <span
           class="app-badge"
-          [ngClass]="{
-            'app-badge--open': vendor.verification_status === 'approved',
-            'app-badge--bidding': vendor.verification_status === 'pending',
-            'app-badge--closed': vendor.verification_status === 'rejected'
-          }">
-          {{ displayValue(vendor.verification_status, 'Not available') }}
+          [ngClass]="vendorVerificationBadgeClass">
+          {{ vendorVerificationStatusLabel || 'Not available' }}
         </span>
       </article>
     </section>

@@ -69,28 +69,25 @@ export class LoginPage {
 
       console.log('LOGIN RESPONSE:', res);
 
-      const token =
-        res.token ||
-        res.access_token ||
-        res.data?.token;
+      const token = this.authService.extractToken(res);
 
       if (!token) {
         this.showToast('Token tidak ditemukan dari backend');
         return;
       }
 
-      this.authService.saveToken(token);
+      this.authService.persistSession(token, this.authService.extractVendor(res));
 
       this.showToast('Login berhasil', 'success');
 
-      this.router.navigate(['/dashboard']);
+      void this.router.navigate(['/dashboard']);
     },
     error: (err) => {
       this.loading = false;
 
       console.log('LOGIN ERROR:', err);
 
-      this.showToast('Login gagal, cek email/password atau endpoint');
+      this.showToast(err?.error?.message || 'Login gagal, cek email/password atau endpoint');
     }
   });
 }

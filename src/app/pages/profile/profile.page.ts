@@ -12,6 +12,7 @@ import {
 import { RouterModule } from '@angular/router';
 import { VendorService } from 'src/app/services/vendor.service';
 import { TenderService } from 'src/app/services/tender.service';
+import { AuthService } from 'src/app/services/auth.service';
 
 @Component({
   selector: 'app-profile',
@@ -33,6 +34,7 @@ export class ProfilePage implements OnInit {
   myTenders: any[] = [];
 
   constructor(
+    private authService: AuthService,
     private vendorService: VendorService,
     private tenderService: TenderService,
     private toastController: ToastController
@@ -46,24 +48,11 @@ export class ProfilePage implements OnInit {
   private loadProfile() {
     this.vendorService.getProfile().subscribe({
       next: (res: any) => {
-        const profile = this.extractProfile(res);
-
-        this.vendor = {
-          ...this.vendor,
-          ...profile,
-          company_name: profile?.company_name || profile?.name || '',
-          email: profile?.email || '',
-          address: profile?.address || profile?.alamat || '',
-          contact: profile?.contact || profile?.phone || profile?.phone_number || '',
-          verification_status: profile?.verification_status || profile?.status || '',
-          tax_identification: profile?.tax_identification || profile?.tax_id || profile?.npwp || '',
-          primary_industry: profile?.primary_industry || profile?.industry || '',
-          trust_score: profile?.trust_score ?? profile?.score ?? null
-        };
+        this.vendor = this.mapVendorProfile(this.extractProfile(res));
       },
       error: (err: any) => {
         console.log('PROFILE ERROR:', err);
-        this.vendor = this.createEmptyVendor();
+        this.vendor = this.mapVendorProfile(this.authService.getStoredVendorProfile());
       }
     });
   }
@@ -118,10 +107,34 @@ export class ProfilePage implements OnInit {
 
   get profileSubtitle() {
     return this.displayValue(
-      this.vendor?.verification_status ||
+      this.vendorVerificationStatusLabel ||
       this.vendor?.primary_industry ||
       this.vendor?.industry
     );
+  }
+
+  get vendorVerificationStatus() {
+    return this.authService.getVendorVerificationStatus(this.vendor);
+  }
+
+  get vendorVerificationStatusLabel() {
+    return this.authService.formatVerificationStatus(this.vendor, '');
+  }
+
+  get vendorVerificationBadgeClass() {
+    if (this.vendorVerificationStatus === 'approved') {
+      return 'app-badge--open';
+    }
+
+    if (this.vendorVerificationStatus === 'pending') {
+      return 'app-badge--bidding';
+    }
+
+    if (this.vendorVerificationStatus === 'rejected') {
+      return 'app-badge--closed';
+    }
+
+    return '';
   }
 
   displayValue(value: any, fallback: string = '-') {
@@ -205,6 +218,23 @@ export class ProfilePage implements OnInit {
     }
 
     return [];
+  }
+
+  private mapVendorProfile(profile: any) {
+    const source = profile || {};
+
+    return {
+      ...this.createEmptyVendor(),
+      ...source,
+      company_name: source?.company_name || source?.name || '',
+      email: source?.email || '',
+      address: source?.address || source?.alamat || '',
+      contact: source?.contact || source?.phone || source?.phone_number || '',
+      verification_status: this.authService.getVendorVerificationStatus(source),
+      tax_identification: source?.tax_identification || source?.tax_id || source?.npwp || '',
+      primary_industry: source?.primary_industry || source?.industry || '',
+      trust_score: source?.trust_score ?? source?.score ?? null
+    };
   }
 
   private formatCurrency(value: number) {

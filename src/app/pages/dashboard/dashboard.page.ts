@@ -67,7 +67,7 @@ export class DashboardPage implements OnInit {
       },
       error: (err) => {
         console.log('ME ERROR:', err);
-        this.vendor = null;
+        this.vendor = this.authService.getStoredVendorProfile();
         this.completeLoad();
       }
     });
@@ -163,6 +163,24 @@ export class DashboardPage implements OnInit {
     return String(value || 0).padStart(2, '0');
   }
 
+  get vendorVerificationStatus() {
+    return this.authService.getVendorVerificationStatus(this.vendor);
+  }
+
+  get vendorVerificationStatusLabel() {
+    return this.authService.formatVerificationStatus(this.vendor, '');
+  }
+
+  get vendorVerificationMessage() {
+    if (!this.vendorVerificationStatus) {
+      return '';
+    }
+
+    return this.authService.isVendorApproved(this.vendor)
+      ? 'Akun vendor telah approved dan siap mengikuti tender.'
+      : 'Akun vendor masih menunggu approval admin.';
+  }
+
   getBadgeClass(status: string) {
     const normalizedStatus = String(status || '').toLowerCase();
 
@@ -215,6 +233,24 @@ export class DashboardPage implements OnInit {
     }
 
     return res?.data || res || null;
+  }
+
+  getVerificationBadgeClass(status: string) {
+    const normalizedStatus = this.authService.normalizeVerificationStatus(status);
+
+    if (normalizedStatus === 'approved') {
+      return 'app-badge--open';
+    }
+
+    if (normalizedStatus === 'pending') {
+      return 'app-badge--bidding';
+    }
+
+    if (normalizedStatus === 'rejected') {
+      return 'app-badge--closed';
+    }
+
+    return 'app-badge--closed';
   }
 
   private completeLoad() {

@@ -26,6 +26,12 @@
       <span class="app-section-title dashboard-overview__kicker">Dashboard Overview</span>
       <h2>Welcome back{{ displayVendorName ? ', ' + displayVendorName : '' }}</h2>
       <p class="app-subtitle">Review your procurement status for today.</p>
+      <ng-container *ngIf="vendorVerificationStatus">
+        <span class="app-badge" [ngClass]="getVerificationBadgeClass(vendorVerificationStatus)">
+          {{ vendorVerificationStatusLabel }}
+        </span>
+        <p class="app-subtitle">{{ vendorVerificationMessage }}</p>
+      </ng-container>
     </section>
 
     <section class="dashboard-stats">

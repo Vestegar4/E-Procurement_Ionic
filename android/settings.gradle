@@ -1,0 +1,14 @@
+include ':app'
+
+// Check if capacitor.settings.gradle exists before applying it to avoid sync errors
+def capacitorSettingsFile = new File(settingsDir, 'capacitor.settings.gradle')
+if (capacitorSettingsFile.exists()) {
+    apply from: capacitorSettingsFile
+}
+
+// Check if the plugins directory exists before including it
+def pluginsDir = new File(settingsDir, 'capacitor-cordova-android-plugins')
+if (pluginsDir.exists()) {
+    include ':capacitor-cordova-android-plugins'
+    project(':capacitor-cordova-android-plugins').projectDir = pluginsDir
+}

@@ -14,6 +14,8 @@ import { FormsModule } from '@angular/forms';
 
 import { TenderService } from 'src/app/services/tender.service';
 import { BiddingService } from 'src/app/services/bidding.service';
+import { VendorService } from 'src/app/services/vendor.service';
+import { AuthService } from 'src/app/services/auth.service';
 
 @Component({
   selector: 'app-bidding',
@@ -49,18 +51,22 @@ export class BiddingPage implements OnInit, OnDestroy {
   minimumDecrement = 'Rp0';
 
   activityFeed: any[] = [];
+  vendorStatus = '';
   private countdownInterval: ReturnType<typeof setInterval> | null = null;
 
   constructor(
     private route: ActivatedRoute,
     private tenderService: TenderService,
     private biddingService: BiddingService,
+    private vendorService: VendorService,
+    private authService: AuthService,
     private toastController: ToastController
   ) {}
 
   ngOnInit() {
     const id = Number(this.route.snapshot.paramMap.get('id'));
     this.loadTender(id);
+    this.loadVendorProfile();
   }
 
   ngOnDestroy() {
@@ -129,6 +135,10 @@ export class BiddingPage implements OnInit, OnDestroy {
   }
 
   submitBid() {
+    if (!this.authService.isVendorApproved({ verification_status: this.vendorStatus })) {
+      this.showToast('Akun vendor belum approved untuk melakukan bidding.', 'danger');
+      return;
+    }
 
     if (!this.tender) {
 
@@ -262,6 +272,19 @@ export class BiddingPage implements OnInit, OnDestroy {
       error: (err: any) => {
         console.log('LOAD BIDS ERROR:', err);
         this.applyBidData([]);
+      }
+    });
+  }
+
+  private loadVendorProfile() {
+    this.vendorService.getProfile().subscribe({
+      next: (res: any) => {
+        const vendor = res?.vendor || res?.data?.vendor || res?.data || res;
+        this.vendorStatus = this.authService.getVendorVerificationStatus(vendor);
+      },
+      error: (err: any) => {
+        console.log('BIDDING VENDOR PROFILE ERROR:', err);
+        this.vendorStatus = this.authService.getVendorVerificationStatus();
       }
     });
   }
