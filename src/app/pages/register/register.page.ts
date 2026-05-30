@@ -93,8 +93,17 @@ console.log('REGISTER DATA:', data);
       next: (res) => {
         console.log('REGISTER RESPONSE:', res);
         this.loading = false;
-        this.showToast('Register berhasil', 'success');
-        this.router.navigate(['/login']);
+        const token = this.authService.extractToken(res);
+
+        if (token) {
+          this.authService.persistSession(token, this.authService.extractVendor(res));
+          this.showToast(res?.message || 'Register berhasil', 'success');
+          void this.router.navigate(['/dashboard']);
+          return;
+        }
+
+        this.showToast(res?.message || 'Register berhasil', 'success');
+        void this.router.navigate(['/login']);
       },
       error: (err) => {
         console.log('REGISTER ERROR:', err);

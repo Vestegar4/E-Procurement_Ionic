@@ -9,6 +9,7 @@ import {
 import { ActivatedRoute, Router, RouterModule } from '@angular/router';
 import { TenderService } from 'src/app/services/tender.service';
 import { VendorService } from 'src/app/services/vendor.service';
+import { AuthService } from 'src/app/services/auth.service';
 
 @Component({
   selector: 'app-tender-detail',
@@ -34,6 +35,7 @@ export class TenderDetailPage implements OnInit {
     private router: Router,
     private tenderService: TenderService,
     private vendorService: VendorService,
+    private authService: AuthService,
     private toastController: ToastController
   ) {}
 
@@ -55,8 +57,8 @@ export class TenderDetailPage implements OnInit {
   }
 
   joinTender() {
-    if (this.vendorStatus !== 'approved') {
-      this.showToast('Vendor belum approved', 'danger');
+    if (!this.authService.isVendorApproved({ verification_status: this.vendorStatus })) {
+      this.showToast('Akun vendor masih menunggu approval admin.', 'danger');
       return;
     }
 
@@ -106,11 +108,11 @@ export class TenderDetailPage implements OnInit {
     this.vendorService.getProfile().subscribe({
       next: (res: any) => {
         const vendor = res?.vendor || res?.data?.vendor || res?.data || res;
-        this.vendorStatus = vendor?.verification_status || vendor?.status || '';
+        this.vendorStatus = this.authService.getVendorVerificationStatus(vendor);
       },
       error: (err: any) => {
         console.log('VENDOR PROFILE ERROR:', err);
-        this.vendorStatus = '';
+        this.vendorStatus = this.authService.getVendorVerificationStatus();
       }
     });
   }

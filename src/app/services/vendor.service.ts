@@ -1,6 +1,8 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
+import { tap } from 'rxjs';
 import { environment } from 'src/environments/environment';
+import { AuthService } from './auth.service';
 
 @Injectable({
   providedIn: 'root'
@@ -8,10 +10,15 @@ import { environment } from 'src/environments/environment';
 export class VendorService {
   private apiUrl = environment.apiUrl;
 
-  constructor(private http: HttpClient) {}
+  constructor(
+    private http: HttpClient,
+    private authService: AuthService
+  ) {}
 
   getProfile() {
-    return this.http.get<any>(`${this.apiUrl}/auth/vendor/me`);
+    return this.http.get<any>(`${this.apiUrl}/auth/vendor/me`).pipe(
+      tap((res) => this.authService.persistVendorProfileFromResponse(res))
+    );
   }
 
   updateProfile(data: any) {
