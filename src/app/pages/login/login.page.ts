@@ -51,56 +51,51 @@ export class LoginPage {
   }
 
   login() {
-  if (!this.email || !this.password) {
-    this.showToast('Email dan password wajib diisi');
-    return;
-  }
-
-  this.loading = true;
-
-  const data = {
-    email: this.email,
-    password: this.password
-  };
-
-  this.authService.login(data).subscribe({
-    next: (res) => {
-  this.loading = false;
-
-  console.log('LOGIN RESPONSE:', res);
-
-  const token = res?.token;
-
-  if (!token) {
-    this.showToast('Token tidak ditemukan dari backend');
-    return;
-  }
-
-  localStorage.setItem('vendor_token', token);
-  localStorage.setItem('vendor_profile', JSON.stringify(res.vendor));
-
-  console.log('TOKEN SAVED:', localStorage.getItem('vendor_token'));
-
-  this.showToast('Login berhasil', 'success');
-
-  void this.router.navigate(['/dashboard']);
-},
-
-      this.authService.persistSession(token, this.authService.extractVendor(res));
-
-      this.showToast('Login berhasil', 'success');
-
-      void this.router.navigate(['/dashboard']);
-    },
-    error: (err) => {
-      this.loading = false;
-
-      console.log('LOGIN ERROR:', err);
-
-      this.showToast(err?.error?.message || 'Login gagal, cek email/password atau endpoint');
+    if (!this.email || !this.password) {
+      this.showToast('Email dan password wajib diisi');
+      return;
     }
-  });
-}
 
+    this.loading = true;
 
+    const data = {
+      email: this.email,
+      password: this.password
+    };
+
+    this.authService.login(data).subscribe({
+      next: (res: any) => {
+        this.loading = false;
+
+        console.log('LOGIN RESPONSE:', res);
+
+        const token = this.authService.extractToken(res);
+
+        if (!token) {
+          this.showToast('Token tidak ditemukan dari backend');
+          return;
+        }
+
+        this.authService.persistSession(
+          token,
+          this.authService.extractVendor(res)
+        );
+
+        console.log('TOKEN SAVED:', localStorage.getItem('vendor_token'));
+
+        this.showToast('Login berhasil', 'success');
+
+        void this.router.navigate(['/dashboard']);
+      },
+      error: (err: any) => {
+        this.loading = false;
+
+        console.log('LOGIN ERROR:', err);
+
+        this.showToast(
+          err?.error?.message || 'Login gagal, cek email/password atau endpoint'
+        );
+      }
+    });
+  }
 }
