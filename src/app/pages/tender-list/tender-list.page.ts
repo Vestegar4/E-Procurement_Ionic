@@ -44,10 +44,19 @@ export class TenderListPage implements OnInit {
       next: (res: any) => {
         console.log('TENDERS RESPONSE:', res);
 
-        this.tenders = Array.isArray(res)
-          ? res
-          : res.data || res.tenders || [];
+        if (Array.isArray(res)) {
+          this.tenders = res;
+        } else if (Array.isArray(res?.data?.data)) {
+          this.tenders = res.data.data;
+        } else if (Array.isArray(res?.data)) {
+          this.tenders = res.data;
+        } else if (Array.isArray(res?.tenders)) {
+          this.tenders = res.tenders;
+        } else {
+          this.tenders = [];
+        }
 
+        console.log('TENDERS ARRAY:', this.tenders);
         this.loading = false;
       },
       error: (err: any) => {
@@ -86,6 +95,7 @@ export class TenderListPage implements OnInit {
       tender.name,
       tender.description,
       tender.status,
+      tender.effective_status,
       tender.start_date,
       tender.end_date,
       tender.created_at
