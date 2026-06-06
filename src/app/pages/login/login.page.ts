@@ -65,16 +65,26 @@ export class LoginPage {
 
   this.authService.login(data).subscribe({
     next: (res) => {
-      this.loading = false;
+  this.loading = false;
 
-      console.log('LOGIN RESPONSE:', res);
+  console.log('LOGIN RESPONSE:', res);
 
-      const token = this.authService.extractToken(res);
+  const token = res?.token;
 
-      if (!token) {
-        this.showToast('Token tidak ditemukan dari backend');
-        return;
-      }
+  if (!token) {
+    this.showToast('Token tidak ditemukan dari backend');
+    return;
+  }
+
+  localStorage.setItem('vendor_token', token);
+  localStorage.setItem('vendor_profile', JSON.stringify(res.vendor));
+
+  console.log('TOKEN SAVED:', localStorage.getItem('vendor_token'));
+
+  this.showToast('Login berhasil', 'success');
+
+  void this.router.navigate(['/dashboard']);
+},
 
       this.authService.persistSession(token, this.authService.extractVendor(res));
 
