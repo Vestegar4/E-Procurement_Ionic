@@ -66,6 +66,24 @@ export class TenderListPage implements OnInit {
         this.loading = false;
       }
     });
+     this.loading = true;
+
+  this.tenderService.getTenders().subscribe({
+    next: (res: any) => {
+      console.log('TENDERS RESPONSE:', res);
+
+      this.tenders = res?.data?.data ?? [];
+
+      console.log('TENDERS ARRAY:', this.tenders);
+
+      this.loading = false;
+    },
+    error: (err: any) => {
+      console.log('TENDERS ERROR:', err);
+      this.tenders = [];
+      this.loading = false;
+    }
+  });
   }
 
   get filteredTenders() {
@@ -132,5 +150,7 @@ export class TenderListPage implements OnInit {
 
     return infrastructureKeywords.some(keyword => text.includes(keyword));
   }
+  
+ 
 
 }
