@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
+import { Observable } from 'rxjs';
 import { environment } from 'src/environments/environment';
 
 @Injectable({
@@ -10,19 +11,30 @@ export class TenderService {
 
   constructor(private http: HttpClient) {}
 
-  getTenders() {
+  getTenders(): Observable<any> {
     return this.http.get<any>(`${this.apiUrl}/vendor/tenders`);
   }
 
-  getMyTenders() {
+  getMyTenders(): Observable<any> {
     return this.http.get<any>(`${this.apiUrl}/vendor/tenders/my-tenders`);
   }
 
-  getTenderById(id: number) {
+  getTenderById(id: number): Observable<any> {
     return this.http.get<any>(`${this.apiUrl}/vendor/tenders/${id}`);
   }
 
-  joinTender(id: number) {
+  getAanwijzing(tenderId: number): Observable<any> {
+    return this.http.get<any>(`${this.apiUrl}/vendor/tenders/${tenderId}/announcements`);
+  }
+
+  submitAanwijzingQuestion(tenderId: number, data: any): Observable<any> {
+    return this.http.post<any>(
+      `${this.apiUrl}/vendor/tenders/${tenderId}/announcements/questions`,
+      data
+    );
+  }
+
+  joinTender(id: number): Observable<any> {
     return this.http.post<any>(`${this.apiUrl}/vendor/tenders/${id}/join`, {});
   }
 }

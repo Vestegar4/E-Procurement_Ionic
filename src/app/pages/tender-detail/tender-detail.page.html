@@ -1,5 +1,5 @@
 <ion-content class="detail-page app-page" [fullscreen]="true">
-  <div class="app-container detail-container" *ngIf="tender; else missingTenderState">
+  <div class="app-container detail-container" *ngIf="tender; else tenderState">
     <section class="detail-topbar">
       <button type="button" class="detail-topbar__back" routerLink="/tender-list" aria-label="Kembali ke daftar tender">
         <svg viewBox="0 0 24 24">
@@ -27,14 +27,14 @@
         <ion-badge
           class="app-badge"
           [ngClass]="{
-            'app-badge--open': tender.status === 'open',
-            'app-badge--bidding': tender.status === 'bidding',
-            'app-badge--closed': tender.status === 'closed',
-            'app-badge--finished': tender.status === 'finished'
+            'app-badge--open': tender.status_key === 'open',
+            'app-badge--bidding': tender.status_key === 'bidding',
+            'app-badge--closed': tender.status_key === 'closed',
+            'app-badge--finished': tender.status_key === 'finished'
           }">
           {{ tender.status }}
         </ion-badge>
-        <span>Ref: PRQ-2024-0{{ tender.id }}91</span>
+        <span>Ref: {{ tender.reference_number }}</span>
       </div>
 
       <h2>{{ tender.title }}</h2>
@@ -45,20 +45,18 @@
       <span class="app-section-title">Tender Summary</span>
 
       <p class="detail-summary__body">
-        {{ tender.description }} Proyek ini membutuhkan kesiapan vendor dengan
-        tata kelola implementasi yang rapi, kemampuan koordinasi lintas tim,
-        serta kepatuhan penuh terhadap standar pengadaan perusahaan.
+        {{ tender.description }}
       </p>
 
       <div class="detail-summary__stats">
         <div>
           <span>Contract Value</span>
-          <strong>$4,250,000</strong>
+          <strong>{{ tender.budget }}</strong>
         </div>
 
         <div>
           <span>Duration</span>
-          <strong>18 Months</strong>
+          <strong>{{ tender.duration }}</strong>
         </div>
       </div>
 
@@ -67,90 +65,106 @@
       <div class="detail-summary__requirements">
         <span class="app-section-title">Primary Requirements</span>
 
-        <div class="detail-requirement">
+        <div class="detail-requirement" *ngFor="let requirement of tender.requirements">
           <span class="detail-requirement__icon" aria-hidden="true">
             <svg viewBox="0 0 24 24">
               <path d="m12 3 2.1 2.1 3-.2.7 2.9 2.5 1.5-1.1 2.8 1.1 2.8-2.5 1.5-.7 2.9-3-.2L12 21l-2.1-2.1-3 .2-.7-2.9-2.5-1.5 1.1-2.8-1.1-2.8 2.5-1.5.7-2.9 3 .2Z" />
               <path d="m9.5 12 1.7 1.7 3.3-3.4" />
             </svg>
           </span>
-          <span>ISO 9001:2015 Certified Vendors</span>
+          <span>{{ requirement }}</span>
         </div>
 
-        <div class="detail-requirement">
-          <span class="detail-requirement__icon" aria-hidden="true">
-            <svg viewBox="0 0 24 24">
-              <path d="m12 3 2.1 2.1 3-.2.7 2.9 2.5 1.5-1.1 2.8 1.1 2.8-2.5 1.5-.7 2.9-3-.2L12 21l-2.1-2.1-3 .2-.7-2.9-2.5-1.5 1.1-2.8-1.1-2.8 2.5-1.5.7-2.9 3 .2Z" />
-              <path d="m9.5 12 1.7 1.7 3.3-3.4" />
-            </svg>
-          </span>
-          <span>Min. 10 years civil engineering experience</span>
-        </div>
-
-        <div class="detail-requirement">
-          <span class="detail-requirement__icon" aria-hidden="true">
-            <svg viewBox="0 0 24 24">
-              <path d="m12 3 2.1 2.1 3-.2.7 2.9 2.5 1.5-1.1 2.8 1.1 2.8-2.5 1.5-.7 2.9-3-.2L12 21l-2.1-2.1-3 .2-.7-2.9-2.5-1.5 1.1-2.8-1.1-2.8 2.5-1.5.7-2.9 3 .2Z" />
-              <path d="m9.5 12 1.7 1.7 3.3-3.4" />
-            </svg>
-          </span>
-          <span>Financial liquidity ratio &gt; 1.5</span>
-        </div>
+        <p class="detail-hero__subtitle" *ngIf="!tender.requirements.length">
+          Persyaratan belum tersedia.
+        </p>
       </div>
     </section>
 
-    <section class="detail-timeline">
-      <article class="detail-step detail-step--completed">
+    <section class="detail-timeline" *ngIf="tender.timeline.length; else emptyTimelineState">
+      <article class="detail-step" [ngClass]="item.stepClass" *ngFor="let item of tender.timeline">
         <div class="detail-step__rail" aria-hidden="true">
           <span class="detail-step__dot"></span>
         </div>
 
         <div class="detail-step__content">
           <div class="detail-step__head">
-            <h3>Aanwijzing</h3>
-            <span>Completed</span>
+            <h3>{{ item.title }}</h3>
+            <span *ngIf="item.status">{{ item.status }}</span>
           </div>
-          <p>Pre-bid meeting &amp; technical clarification session.</p>
-          <strong>{{ tender.start_date }} • 10:00 AM</strong>
+          <p *ngIf="item.description">{{ item.description }}</p>
+          <strong *ngIf="item.date">{{ item.date }}</strong>
         </div>
       </article>
+    </section>
 
-      <article class="detail-step detail-step--active">
-        <div class="detail-step__rail" aria-hidden="true">
-          <span class="detail-step__dot"></span>
-        </div>
+    <section class="app-card detail-summary">
+      <span class="app-section-title">Aanwijzing</span>
 
-        <div class="detail-step__content">
-          <div class="detail-step__head">
-            <h3>Bidding Period</h3>
-            <span>In Progress</span>
+      <p class="detail-hero__subtitle" *ngIf="aanwijzingLoading">
+        Memuat diskusi aanwijzing...
+      </p>
+
+      <p class="detail-hero__subtitle" *ngIf="!aanwijzingLoading && aanwijzingError">
+        {{ aanwijzingError }}
+      </p>
+
+      <section class="detail-timeline" *ngIf="!aanwijzingLoading && aanwijzingList.length">
+        <article class="detail-step" [ngClass]="item.stepClass" *ngFor="let item of aanwijzingList">
+          <div class="detail-step__rail" aria-hidden="true">
+            <span class="detail-step__dot"></span>
           </div>
-          <p>Electronic submission of administrative &amp; technical proposals.</p>
-          <strong>Ends: {{ tender.end_date }}</strong>
-        </div>
-      </article>
 
-      <article class="detail-step detail-step--upcoming">
-        <div class="detail-step__rail" aria-hidden="true">
-          <span class="detail-step__dot"></span>
-        </div>
-
-        <div class="detail-step__content">
-          <div class="detail-step__head">
-            <h3>Announcement</h3>
-            <span>Upcoming</span>
+          <div class="detail-step__content">
+            <div class="detail-step__head">
+              <h3>{{ item.vendorName }}</h3>
+              <span>{{ item.status }}</span>
+            </div>
+            <p>{{ item.question }}</p>
+            <strong>{{ item.answer || 'Menunggu jawaban admin' }}</strong>
+            <span class="detail-hero__subtitle">{{ item.createdAt }}</span>
           </div>
-          <p>Final evaluation and winner notification.</p>
-          <strong>Vendor Status: {{ vendorStatus || 'not available' }}</strong>
+        </article>
+      </section>
+
+      <p class="detail-hero__subtitle" *ngIf="!aanwijzingLoading && !aanwijzingError && !aanwijzingList.length">
+        Belum ada pertanyaan aanwijzing untuk tender ini.
+      </p>
+
+      <div class="detail-summary__divider"></div>
+
+      <div class="detail-summary__requirements">
+        <span class="app-section-title">Ajukan Pertanyaan</span>
+
+        <div class="app-input">
+          <ion-textarea
+            [(ngModel)]="questionText"
+            labelPlacement="stacked"
+            autoGrow="true"
+            rows="4"
+            placeholder="Tulis pertanyaan untuk admin"
+            [disabled]="aanwijzingSubmitting">
+          </ion-textarea>
         </div>
-      </article>
+
+        <button
+          type="button"
+          class="detail-join-button"
+          (click)="submitAanwijzingQuestion()"
+          [disabled]="aanwijzingSubmitting || !questionText.trim()">
+          <span>{{ aanwijzingSubmitting ? 'Mengirim Pertanyaan...' : 'Kirim Pertanyaan' }}</span>
+          <svg viewBox="0 0 24 24" aria-hidden="true">
+            <path d="M5 12h14M13 6l6 6-6 6" />
+          </svg>
+        </button>
+      </div>
     </section>
 
     <section class="detail-site-card">
       <div class="detail-site-card__image" aria-hidden="true"></div>
       <div class="detail-site-card__overlay">
         <span class="app-section-title">Project Site</span>
-        <strong>Industrial Hub Zone A, Jakarta</strong>
+        <strong>{{ tender.project_site }}</strong>
       </div>
     </section>
 
@@ -158,7 +172,7 @@
       type="button"
       class="detail-join-button"
       (click)="joinTender()"
-      [disabled]="joined || tender.status !== 'open'">
+      [disabled]="joined || tender.status_key !== 'open'">
       <span>{{ joined ? 'Sudah Mengikuti Tender' : 'Join Tender' }}</span>
       <svg viewBox="0 0 24 24" aria-hidden="true">
         <path d="M5 12h14M13 6l6 6-6 6" />
@@ -178,7 +192,24 @@
     </section>
   </div>
 
-  <ng-template #missingTenderState>
+  <ng-template #emptyTimelineState>
+    <section class="detail-timeline">
+      <article class="detail-step detail-step--upcoming">
+        <div class="detail-step__rail" aria-hidden="true">
+          <span class="detail-step__dot"></span>
+        </div>
+
+        <div class="detail-step__content">
+          <div class="detail-step__head">
+            <h3>Timeline</h3>
+          </div>
+          <p>Timeline tender belum tersedia.</p>
+        </div>
+      </article>
+    </section>
+  </ng-template>
+
+  <ng-template #tenderState>
     <div class="app-container detail-container">
       <section class="detail-topbar">
         <button type="button" class="detail-topbar__back" routerLink="/tender-list" aria-label="Kembali ke daftar tender">
@@ -198,11 +229,11 @@
 
       <section class="app-card detail-summary">
         <span class="app-section-title">Tender Detail</span>
-        <h2 class="detail-missing__title">Tender tidak ditemukan</h2>
+        <h2 class="detail-missing__title">{{ loading ? 'Memuat detail tender...' : 'Tender tidak ditemukan' }}</h2>
         <p class="detail-hero__subtitle">
-          Data tender untuk halaman ini belum tersedia atau ID tender tidak valid.
+          {{ loading ? 'Mohon tunggu, data tender sedang diambil dari server.' : (errorMessage || 'Data tender untuk halaman ini belum tersedia atau ID tender tidak valid.') }}
         </p>
-        <button type="button" class="detail-join-button" routerLink="/tender-list">
+        <button type="button" class="detail-join-button" routerLink="/tender-list" *ngIf="!loading">
           <span>Kembali ke Daftar Tender</span>
           <svg viewBox="0 0 24 24" aria-hidden="true">
             <path d="M5 12h14M13 6l6 6-6 6" />

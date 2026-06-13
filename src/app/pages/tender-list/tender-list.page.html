@@ -48,10 +48,10 @@
 
     <section
       class="tender-featured"
-      *ngIf="filteredTenders.length"
-      [routerLink]="['/tender-detail', filteredTenders[0].id]">
+      *ngIf="featuredTender"
+      [routerLink]="['/tender-detail', featuredTender.id]">
       <div class="tender-featured__head">
-        <span class="tender-featured__tag">Premium Opportunity</span>
+        <span class="tender-featured__tag">{{ getDisplayValue(featuredTender.status) }}</span>
         <span class="tender-featured__mark" aria-hidden="true">
           <svg viewBox="0 0 24 24">
             <path d="m12 3 2.2 4.45 4.91.72-3.55 3.46.84 4.87L12 15.2 7.6 17.5l.84-4.87-3.55-3.46 4.91-.72Z" />
@@ -65,16 +65,13 @@
         </svg>
       </div>
 
-      <h2>National Smart City Digital Spine Implementation</h2>
-      <p>
-        High-priority government contract for architectural oversight of urban
-        connectivity nodes across 12 zones.
-      </p>
+      <h2>{{ getDisplayValue(featuredTender.title) }}</h2>
+      <p>{{ getDisplayValue(featuredTender.description) }}</p>
 
       <div class="tender-featured__footer">
         <div>
-          <span>Budget Range</span>
-          <strong>$4.2M - $6.5M</strong>
+          <span>{{ getDisplayValue(featuredTender.status) }}</span>
+          <strong>{{ getBudgetValue(featuredTender) }}</strong>
         </div>
 
         <span class="tender-featured__cta">Bid Now</span>
@@ -100,10 +97,10 @@
             <span
               class="app-badge"
               [ngClass]="{
-                'app-badge--open': tender.status === 'open',
-                'app-badge--bidding': tender.status === 'bidding',
-                'app-badge--closed': tender.status === 'closed',
-                'app-badge--finished': tender.status === 'finished'
+                'app-badge--open': tender.status_key === 'open',
+                'app-badge--bidding': tender.status_key === 'bidding',
+                'app-badge--closed': tender.status_key === 'closed',
+                'app-badge--finished': tender.status_key === 'finished'
               }">
               {{ tender.status }}
             </span>
@@ -121,16 +118,16 @@
 
           <div class="tender-item__meta">
             <div>
-              <span>{{ tender.status === 'closed' ? 'Status' : 'Closing Date' }}</span>
+              <span>Closing Date</span>
               <strong>
-                {{ tender.status === 'open' ? 'Oct 24, 2023' : tender.status === 'bidding' ? 'In 48 Hours' : 'Under Evaluation' }}
+                {{ getClosingDateValue(tender) }}
               </strong>
             </div>
 
             <div>
-              <span>{{ tender.status === 'closed' ? 'Award Date' : tender.status === 'bidding' ? 'Total Bids' : 'Est. Budget' }}</span>
+              <span>Est. Budget</span>
               <strong>
-                {{ tender.status === 'open' ? '$850k - $1.2M' : tender.status === 'bidding' ? '14 Registered' : 'Nov 02, 2023' }}
+                {{ getBudgetValue(tender) }}
               </strong>
             </div>
           </div>
