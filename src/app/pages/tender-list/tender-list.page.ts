@@ -3,8 +3,7 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import {
   IonContent,
-  IonBadge,
-  IonButton
+  IonBadge
 } from '@ionic/angular/standalone';
 import { RouterModule } from '@angular/router';
 import { TenderService } from 'src/app/services/tender.service';
@@ -19,16 +18,13 @@ import { TenderService } from 'src/app/services/tender.service';
     FormsModule,
     RouterModule,
     IonContent,
-    IonBadge,
-    IonButton
+    IonBadge
   ]
 })
 export class TenderListPage implements OnInit {
-
   tenders: any[] = [];
   searchQuery = '';
   activeCategory: 'all' | 'infrastructure' = 'all';
-
   loading = false;
 
   constructor(private tenderService: TenderService) {}
@@ -44,46 +40,31 @@ export class TenderListPage implements OnInit {
       next: (res: any) => {
         console.log('TENDERS RESPONSE:', res);
 
-        if (Array.isArray(res)) {
-          this.tenders = res;
-        } else if (Array.isArray(res?.data?.data)) {
-          this.tenders = res.data.data;
-        } else if (Array.isArray(res?.data)) {
-          this.tenders = res.data;
-        } else if (Array.isArray(res?.tenders)) {
-          this.tenders = res.tenders;
-        } else {
-          this.tenders = [];
-        }
+        this.tenders = (res?.data?.data ?? []).map((tender: any) => ({
+          ...tender,
+          title: tender?.title || tender?.name || '-',
+          description: tender?.description || tender?.summary || '-',
+          status: tender?.effective_status || tender?.status || '-',
+          status_key: String(tender?.effective_status || tender?.status || '')
+            .toLowerCase()
+            .trim()
+        }));
 
         console.log('TENDERS ARRAY:', this.tenders);
+        console.log('TENDER COUNT:', this.tenders.length);
+
         this.loading = false;
       },
       error: (err: any) => {
         console.log('TENDERS ERROR:', err);
-
         this.tenders = [];
         this.loading = false;
       }
     });
-     this.loading = true;
+  }
 
-  this.tenderService.getTenders().subscribe({
-    next: (res: any) => {
-      console.log('TENDERS RESPONSE:', res);
-
-      this.tenders = res?.data?.data ?? [];
-
-      console.log('TENDERS ARRAY:', this.tenders);
-
-      this.loading = false;
-    },
-    error: (err: any) => {
-      console.log('TENDERS ERROR:', err);
-      this.tenders = [];
-      this.loading = false;
-    }
-  });
+  get featuredTender() {
+    return this.filteredTenders.length ? this.filteredTenders[0] : null;
   }
 
   get filteredTenders() {
@@ -99,6 +80,66 @@ export class TenderListPage implements OnInit {
 
   setCategory(category: 'all' | 'infrastructure') {
     this.activeCategory = category;
+  }
+
+  getDisplayValue(value: any, fallback: string = '-') {
+    if (value === undefined || value === null || value === '') {
+      return fallback;
+    }
+
+    return String(value);
+  }
+
+  getBudgetValue(tender: any) {
+    const value =
+      tender?.budget ||
+      tender?.estimated_budget ||
+      tender?.est_budget ||
+      tender?.price ||
+      tender?.project_value ||
+      tender?.value;
+
+    if (!value) {
+      return '-';
+    }
+
+    const numberValue = Number(String(value).replace(/[^0-9.-]/g, ''));
+
+    if (!Number.isFinite(numberValue) || numberValue <= 0) {
+      return '-';
+    }
+
+    return new Intl.NumberFormat('id-ID', {
+      style: 'currency',
+      currency: 'IDR',
+      maximumFractionDigits: 0
+    }).format(numberValue);
+  }
+
+  getClosingDateValue(tender: any) {
+    const rawDate =
+      tender?.timeline?.bidding_end ||
+      tender?.timeline?.registration_end ||
+      tender?.closing_date ||
+      tender?.end_date ||
+      tender?.deadline ||
+      tender?.created_at;
+
+    if (!rawDate) {
+      return '-';
+    }
+
+    const date = new Date(rawDate);
+
+    if (Number.isNaN(date.getTime())) {
+      return '-';
+    }
+
+    return date.toLocaleDateString('id-ID', {
+      day: '2-digit',
+      month: 'short',
+      year: 'numeric'
+    });
   }
 
   private matchesSearch(tender: any) {
@@ -145,12 +186,11 @@ export class TenderListPage implements OnInit {
       'digital',
       'server',
       'smart city',
-      'it'
+      'it',
+      'mbg',
+      'dapur'
     ];
 
     return infrastructureKeywords.some(keyword => text.includes(keyword));
   }
-  
- 
-
 }
