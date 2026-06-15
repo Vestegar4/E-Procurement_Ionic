@@ -1,35 +1,39 @@
 import { Injectable } from '@angular/core';
+import { HttpClient } from '@angular/common/http';
+import { tap } from 'rxjs';
+import { environment } from 'src/environments/environment';
+import { AuthService } from './auth.service';
 
 @Injectable({
   providedIn: 'root'
 })
 export class VendorService {
+  private apiUrl = environment.apiUrl;
+
+  constructor(
+    private http: HttpClient,
+    private authService: AuthService
+  ) {}
 
   getProfile() {
-    return {
-      company_name: 'PT cenat cenut sejahtera',
-      email: 'vendor@mail.com',
-      address: 'Karawang tengah, Jawa Barat',
-      contact: '081234567890',
-      verification_status: 'approved'
-    };
+    return this.http.get<any>(`${this.apiUrl}/auth/vendor/me`).pipe(
+      tap((res) => this.authService.persistVendorProfileFromResponse(res))
+    );
   }
 
   updateProfile(data: any) {
-    console.log('Profile updated:', data);
-
-    return {
-      success: true,
-      message: 'Profile berhasil diperbarui'
-    };
+    return this.http.put<any>(`${this.apiUrl}/vendor/profile`, data);
   }
+
   uploadDocument(data: any) {
-  console.log('Document uploaded:', data);
+    const formData = new FormData();
 
-  return {
-    success: true,
-    message: 'Dokumen berhasil diupload'
-  };
-}
+    Object.entries(data || {}).forEach(([key, value]) => {
+      if (value !== undefined && value !== null) {
+        formData.append(key, value as Blob | string);
+      }
+    });
 
+    return this.http.post<any>(`${this.apiUrl}/vendor/documents`, formData);
+  }
 }

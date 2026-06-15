@@ -3,11 +3,11 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import {
   IonContent,
-  IonBadge,
-  IonButton
+  IonBadge
 } from '@ionic/angular/standalone';
 import { RouterModule } from '@angular/router';
 import { TenderService } from 'src/app/services/tender.service';
+import { AuthService } from 'src/app/services/auth.service';
 
 @Component({
   selector: 'app-tender-list',
@@ -19,26 +19,90 @@ import { TenderService } from 'src/app/services/tender.service';
     FormsModule,
     RouterModule,
     IonContent,
-    IonBadge,
-    IonButton
+    IonBadge
   ]
 })
 export class TenderListPage implements OnInit {
-
   tenders: any[] = [];
   searchQuery = '';
   activeCategory: 'all' | 'infrastructure' = 'all';
+  loading = false;
+  
+  // Variabel untuk inisial profil
+  vendorInitial = 'V';
 
-  constructor(private tenderService: TenderService) {}
+  constructor(
+    private tenderService: TenderService,
+    private authService: AuthService
+  ) {}
 
   ngOnInit() {
-    this.tenders = this.tenderService.getTenders();
+    this.loadTenders();
+    this.loadProfile();
+  }
+
+  // Fungsi untuk memuat inisial profil vendor
+  loadProfile() {
+    this.authService.me().subscribe({
+      next: (res: any) => {
+        const vendor = res?.data?.vendor || res?.vendor || res?.data || res;
+        const name = vendor?.company_name || vendor?.name || 'Vendor';
+        this.vendorInitial = name.charAt(0).toUpperCase();
+      },
+      error: () => {
+        const vendor: any = this.authService.getStoredVendorProfile();
+        const name = vendor?.company_name || vendor?.name || 'V';
+        this.vendorInitial = name.charAt(0).toUpperCase();
+      }
+    });
+  }
+
+  loadTenders() {
+    this.loading = true;
+
+    this.tenderService.getTenders().subscribe({
+      next: (res: any) => {
+        console.log('TENDERS RESPONSE:', res);
+
+        // Perbaikan deteksi array data dari API
+        let rawData = [];
+        if (Array.isArray(res?.data?.data)) {
+          rawData = res.data.data;
+        } else if (Array.isArray(res?.data)) {
+          rawData = res.data;
+        } else if (Array.isArray(res)) {
+          rawData = res;
+        }
+
+        this.tenders = rawData.map((tender: any) => ({
+          ...tender,
+          title: tender?.title || tender?.name || '-',
+          description: tender?.description || tender?.summary || '-',
+          status: tender?.effective_status || tender?.status || '-',
+          status_key: String(tender?.effective_status || tender?.status || '')
+            .toLowerCase()
+            .trim()
+        }));
+
+        this.loading = false;
+      },
+      error: (err: any) => {
+        console.log('TENDERS ERROR:', err);
+        this.tenders = [];
+        this.loading = false;
+      }
+    });
+  }
+
+  get featuredTender() {
+    return this.filteredTenders.length ? this.filteredTenders[0] : null;
   }
 
   get filteredTenders() {
     return this.tenders.filter(tender => {
       const matchesCategory =
         this.activeCategory === 'all' || this.isInfrastructureTender(tender);
+
       const matchesSearch = this.matchesSearch(tender);
 
       return matchesCategory && matchesSearch;
@@ -47,6 +111,66 @@ export class TenderListPage implements OnInit {
 
   setCategory(category: 'all' | 'infrastructure') {
     this.activeCategory = category;
+  }
+
+  getDisplayValue(value: any, fallback: string = '-') {
+    if (value === undefined || value === null || value === '') {
+      return fallback;
+    }
+
+    return String(value);
+  }
+
+  getBudgetValue(tender: any) {
+    const value =
+      tender?.budget ||
+      tender?.estimated_budget ||
+      tender?.est_budget ||
+      tender?.price ||
+      tender?.project_value ||
+      tender?.value;
+
+    if (!value) {
+      return '-';
+    }
+
+    const numberValue = Number(String(value).replace(/[^0-9.-]/g, ''));
+
+    if (!Number.isFinite(numberValue) || numberValue <= 0) {
+      return '-';
+    }
+
+    return new Intl.NumberFormat('id-ID', {
+      style: 'currency',
+      currency: 'IDR',
+      maximumFractionDigits: 0
+    }).format(numberValue);
+  }
+
+  getClosingDateValue(tender: any) {
+    const rawDate =
+      tender?.timeline?.bidding_end ||
+      tender?.timeline?.registration_end ||
+      tender?.closing_date ||
+      tender?.end_date ||
+      tender?.deadline ||
+      tender?.created_at;
+
+    if (!rawDate) {
+      return '-';
+    }
+
+    const date = new Date(rawDate);
+
+    if (Number.isNaN(date.getTime())) {
+      return '-';
+    }
+
+    return date.toLocaleDateString('id-ID', {
+      day: '2-digit',
+      month: 'short',
+      year: 'numeric'
+    });
   }
 
   private matchesSearch(tender: any) {
@@ -58,10 +182,13 @@ export class TenderListPage implements OnInit {
 
     const haystack = [
       tender.title,
+      tender.name,
       tender.description,
       tender.status,
+      tender.effective_status,
       tender.start_date,
-      tender.end_date
+      tender.end_date,
+      tender.created_at
     ]
       .filter(Boolean)
       .join(' ')
@@ -71,7 +198,11 @@ export class TenderListPage implements OnInit {
   }
 
   private isInfrastructureTender(tender: any) {
-    const text = [tender.title, tender.description]
+    const text = [
+      tender.title,
+      tender.name,
+      tender.description
+    ]
       .filter(Boolean)
       .join(' ')
       .toLowerCase();
@@ -86,10 +217,11 @@ export class TenderListPage implements OnInit {
       'digital',
       'server',
       'smart city',
-      'it'
+      'it',
+      'mbg',
+      'dapur'
     ];
 
     return infrastructureKeywords.some(keyword => text.includes(keyword));
   }
-
 }

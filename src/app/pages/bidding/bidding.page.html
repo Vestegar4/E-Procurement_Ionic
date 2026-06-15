@@ -11,7 +11,7 @@
         </svg>
       </button>
 
-      <h1>PROCURUS</h1>
+      <h1>PROCULUS</h1>
 
       <button type="button" class="bidding-topbar__icon" aria-label="Notifikasi">
         <svg viewBox="0 0 24 24">
@@ -22,8 +22,8 @@
 
     <section class="app-card bidding-empty" *ngIf="!tender">
       <span class="app-section-title">Bidding Room</span>
-      <h2>Tender tidak ditemukan</h2>
-      <p>Data tender untuk halaman bidding ini belum tersedia atau ID tender tidak valid.</p>
+      <h2>{{ loading ? 'Memuat data bidding...' : 'Tender tidak ditemukan' }}</h2>
+      <p>{{ loading ? 'Mohon tunggu, detail bidding sedang diambil dari server.' : (pageError || 'Data tender untuk halaman bidding ini belum tersedia atau ID tender tidak valid.') }}</p>
     </section>
 
     <ng-container *ngIf="tender">
@@ -75,7 +75,7 @@
               type="number"
               inputmode="numeric"
               [(ngModel)]="bidAmount"
-              [disabled]="!biddingActive"
+              [disabled]="!biddingActive || submitting"
               placeholder="1,230,000" />
           </div>
 
@@ -122,9 +122,7 @@
         </span>
 
         <p>
-          By submitting this bid, you agree to the
-          <strong>Contractual Engagement Terms</strong>
-          and certify that all provided documentation remains valid for the duration of this tender process.
+          {{ biddingTermsText }}
         </p>
       </section>
 
@@ -132,7 +130,7 @@
         expand="block"
         class="app-button-gold bidding-submit"
         (click)="submitBid()"
-        [disabled]="!biddingActive">
+        [disabled]="!biddingActive || submitting || loading">
         Submit Bid
       </ion-button>
     </ng-container>

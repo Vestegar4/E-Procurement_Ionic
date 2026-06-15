@@ -2,11 +2,11 @@
   <div class="app-container dashboard-container">
     <section class="dashboard-topbar">
       <div class="dashboard-avatar" aria-hidden="true">
-        <span>A</span>
+        <span>{{ vendorInitial }}</span>
       </div>
 
       <div class="dashboard-brand">
-        <h1>PROCURUS</h1>
+        <h1>PROCULUS</h1>
       </div>
 
       <ion-button
@@ -24,8 +24,14 @@
 
     <section class="dashboard-overview">
       <span class="app-section-title dashboard-overview__kicker">Dashboard Overview</span>
-      <h2>Welcome back, Anderson</h2>
-      <p class="app-subtitle">Review your procurement status for today.</p>
+      <h2>Selamat datang {{ displayVendorName ? ', ' + displayVendorName : '' }}</h2>
+      <p class="app-subtitle">Periksa status pengadaan Anda hari ini.</p>
+      <ng-container *ngIf="vendorVerificationStatus">
+        <span class="app-badge" [ngClass]="getVerificationBadgeClass(vendorVerificationStatus)">
+          {{ vendorVerificationStatusLabel }}
+        </span>
+        <p class="app-subtitle">{{ vendorVerificationMessage }}</p>
+      </ng-container>
     </section>
 
     <section class="dashboard-stats">
@@ -35,18 +41,18 @@
             <path d="m7 17 10-10M9 7h8v8M6 12l6 6" />
           </svg>
         </div>
-        <strong>12</strong>
+        <strong>{{ formatStatCount(activeBids) }}</strong>
         <span>Active Bids</span>
       </div>
 
-      <div class="app-card dashboard-stat dashboard-stat--dark" routerLink="/result/1">
+      <div class="app-card dashboard-stat dashboard-stat--dark" [routerLink]="latestWonResultLink">
         <div class="dashboard-stat__icon dashboard-stat__icon--gold">
           <svg viewBox="0 0 24 24">
             <path d="m12 4 2.2 4.45 4.91.72-3.55 3.46.84 4.87L12 15.2 7.6 17.5l.84-4.87-3.55-3.46 4.91-.72Z" />
             <path d="M12 9.5a2.5 2.5 0 1 0 0 5 2.5 2.5 0 0 0 0-5Z" />
           </svg>
         </div>
-        <strong>08</strong>
+        <strong>{{ formatStatCount(totalWon) }}</strong>
         <span>Total Won</span>
       </div>
     </section>
@@ -86,28 +92,16 @@
       </div>
 
       <div class="dashboard-activity">
-        <article class="app-card dashboard-activity-card" routerLink="/tender-list">
+        <article
+          class="app-card dashboard-activity-card"
+          *ngFor="let activity of recentActivities"
+          [routerLink]="activity.routeLink">
           <div class="dashboard-activity-card__icon">
-            <svg viewBox="0 0 24 24">
-              <path d="M7 3h7l5 5v13H7z" />
-              <path d="M14 3v5h5M10 12h4M10 16h4" />
+            <svg viewBox="0 0 24 24" *ngIf="activity.type === 'bid'">
+              <path d="M4 12a8 8 0 1 0 2.34-5.66" />
+              <path d="M4 4v5h5M12 8v4l3 2" />
             </svg>
-          </div>
-
-          <div class="dashboard-activity-card__body">
-            <div class="dashboard-activity-card__head">
-              <strong>Logistics Framework 2024</strong>
-              <span class="app-badge app-badge--open">Open</span>
-            </div>
-
-            <p>Price clarification requested by procurement board.</p>
-            <small>2 hours ago</small>
-          </div>
-        </article>
-
-        <article class="app-card dashboard-activity-card" routerLink="/result/1">
-          <div class="dashboard-activity-card__icon">
-            <svg viewBox="0 0 24 24">
+            <svg viewBox="0 0 24 24" *ngIf="activity.type === 'result'">
               <path d="m12 3 2.2 1.5 2.65-.18 1.37 2.27 2.4 1.12-.47 2.62 1.18 2.38-1.88 1.88-.08 2.65-2.38 1.18-1.12 2.4-2.62-.47L12 21l-2.2-1.5-2.65.18-1.37-2.27-2.4-1.12.47-2.62L2.67 11.3l1.88-1.88.08-2.65 2.38-1.18 1.12-2.4 2.62.47Z" />
               <path d="m9.5 12 1.5 1.5 3.5-3.5" />
             </svg>
@@ -115,33 +109,21 @@
 
           <div class="dashboard-activity-card__body">
             <div class="dashboard-activity-card__head">
-              <strong>Solar Grid Infrastructure</strong>
-              <span class="app-badge app-badge--finished">Finished</span>
+              <strong>{{ activity.title || '-' }}</strong>
+              <span class="app-badge" [ngClass]="getBadgeClass(activity.status)">
+                {{ activity.status || '-' }}
+              </span>
             </div>
 
-            <p>Contract awarded. Documentation package is being prepared.</p>
-            <small>Yesterday, 4:15 PM</small>
+            <p>{{ activity.description || '-' }}</p>
+            <small>{{ activity.timestamp || '-' }}</small>
           </div>
         </article>
 
-        <article class="app-card dashboard-activity-card" routerLink="/bidding/1">
-          <div class="dashboard-activity-card__icon">
-            <svg viewBox="0 0 24 24">
-              <path d="M4 12a8 8 0 1 0 2.34-5.66" />
-              <path d="M4 4v5h5M12 8v4l3 2" />
-            </svg>
-          </div>
-
-          <div class="dashboard-activity-card__body">
-            <div class="dashboard-activity-card__head">
-              <strong>Fleet Maintenance RFQ</strong>
-              <span class="app-badge app-badge--bidding">Bidding</span>
-            </div>
-
-            <p>Initial bid submission received successfully.</p>
-            <small>Oct 24, 2023</small>
-          </div>
-        </article>
+        <div class="app-empty-state" *ngIf="!recentActivities.length">
+          <strong>Belum ada aktivitas terbaru</strong>
+          <span>Aktivitas bidding dan hasil tender akan tampil di sini saat data tersedia.</span>
+        </div>
       </div>
     </section>
   </div>

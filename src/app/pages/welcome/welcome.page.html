@@ -5,39 +5,307 @@
         class="welcome-brand__logo"
         src="assets/logo/bg_remove_Proculus-logo.png"
         alt="Proculus Logo" />
-      
+      <div class="welcome-brand__copy">
+        <strong>PROCULUS</strong>
+        <span>Vendor E-Procurement</span>
+      </div>
     </header>
 
     <main class="welcome-main">
-      
-      <section class="welcome-copy">
-        <h1>Streamline your procurement journey.</h1>
-        <p>
-          Experience the precision of high-end institutional reliability. Manage million-dollar contracts with calm authority and effortless friction-free bidding.
-        </p>
+      <section class="welcome-progress">
+        <ion-badge class="app-badge welcome-progress__badge">
+          Slide {{ activeSlide + 1 }} / {{ slides.length }}
+        </ion-badge>
+
+        <button
+          *ngIf="!isLastSlide"
+          type="button"
+          class="welcome-progress__skip"
+          (click)="skipToPrivacy()">
+          Lewati
+        </button>
       </section>
 
-      <section class="welcome-actions">
-        <ion-button
-          expand="block"
-          class="welcome-button-primary"
-          (click)="startApp()">
-          <span>ENTER THE ECOSYSTEM</span>
-          <i aria-hidden="true">→</i>
-        </ion-button>
+      <section class="app-card welcome-card" [attr.data-slide]="activeSlide">
+        <div class="welcome-card__hero">
+          <div class="welcome-card__hero-top">
+            <ion-badge class="welcome-card__hero-badge">
+              {{ currentSlide.badge }}
+            </ion-badge>
 
+            <div class="welcome-card__hero-icon" aria-hidden="true">
+              <ion-icon [name]="currentSlide.icon"></ion-icon>
+            </div>
+          </div>
+
+          <div class="welcome-card__hero-bottom">
+            <span class="app-section-title">Onboarding Vendor</span>
+            <h1>{{ currentSlide.title }}</h1>
+            <p>{{ currentSlide.subtitle }}</p>
+          </div>
+        </div>
+
+        <ion-list lines="none" class="welcome-points">
+          <ion-item
+            *ngFor="let point of currentSlide.points; let pointIndex = index"
+            class="welcome-points__item">
+            <div class="welcome-points__marker" slot="start">
+              {{ pointIndex + 1 }}
+            </div>
+            <ion-label>{{ point }}</ion-label>
+          </ion-item>
+        </ion-list>
+
+        <section *ngIf="isLastSlide" class="welcome-privacy">
+          <div class="welcome-privacy__copy">
+            <span class="app-section-title">Persetujuan Wajib</span>
+
+            <div class="privacy-scroll">
+              <h2>Privacy Policy Proculus</h2>
+              <p class="privacy-updated">Last Updated: June 2026</p>
+
+              <section>
+                <h3>About Proculus</h3>
+                <p>
+                  Proculus is an e-Procurement platform designed to support
+                  digital procurement processes. Through this application,
+                  vendors can register accounts, manage company profiles, upload
+                  supporting documents, access tender information, participate in
+                  bidding processes, and monitor procurement results efficiently
+                  and transparently.
+                </p>
+                <p>
+                  By using Proculus, you agree to the collection and use of
+                  information in accordance with this Privacy Policy.
+                </p>
+              </section>
+
+              <section>
+                <h3>1. Information We Collect</h3>
+                <p>We may collect the following information:</p>
+
+                <h4>Account Information</h4>
+                <ul>
+                  <li>Full Name</li>
+                  <li>Email Address</li>
+                  <li>Phone Number</li>
+                  <li>Encrypted Password</li>
+                </ul>
+
+                <h4>Vendor Information</h4>
+                <ul>
+                  <li>Company Name</li>
+                  <li>Company Address</li>
+                  <li>Business Documents</li>
+                  <li>Tax Information, if required</li>
+                  <li>Vendor Verification Data</li>
+                </ul>
+
+                <h4>Tender and Bidding Information</h4>
+                <ul>
+                  <li>Tender Participation Records</li>
+                  <li>Bid Submissions</li>
+                  <li>Tender Activity History</li>
+                  <li>Procurement Related Information</li>
+                </ul>
+
+                <h4>Technical Information</h4>
+                <ul>
+                  <li>Device Information</li>
+                  <li>Operating System</li>
+                  <li>IP Address</li>
+                  <li>Login Activity</li>
+                  <li>Application Usage Logs</li>
+                </ul>
+              </section>
+
+              <section>
+                <h3>2. How We Use Your Information</h3>
+                <p>The collected information is used to:</p>
+                <ul>
+                  <li>Create and manage vendor accounts</li>
+                  <li>Verify vendor identity and eligibility</li>
+                  <li>Process tender participation</li>
+                  <li>Process bid submissions</li>
+                  <li>Manage procurement activities</li>
+                  <li>Improve platform functionality</li>
+                  <li>Ensure security and fraud prevention</li>
+                  <li>Comply with legal obligations</li>
+                </ul>
+                <p>We do not sell users' personal information to third parties.</p>
+              </section>
+
+              <section>
+                <h3>3. Document Uploads</h3>
+                <p>Documents uploaded by vendors may be used for:</p>
+                <ul>
+                  <li>Vendor verification</li>
+                  <li>Tender requirements</li>
+                  <li>Administrative evaluation</li>
+                  <li>Procurement processes</li>
+                </ul>
+                <p>
+                  Uploaded documents are only accessible to authorized
+                  personnel involved in procurement activities.
+                </p>
+              </section>
+
+              <section>
+                <h3>4. Data Security</h3>
+                <p>
+                  We implement reasonable security measures to protect user
+                  information, including password encryption, secure
+                  authentication, access control mechanisms, protected databases
+                  and servers, security monitoring, and logging.
+                </p>
+                <p>
+                  However, no internet-based system can guarantee absolute
+                  security.
+                </p>
+              </section>
+
+              <section>
+                <h3>5. Data Retention</h3>
+                <p>
+                  User information is retained only as long as necessary to
+                  provide application services, maintain procurement records,
+                  fulfill legal obligations, and resolve disputes or security
+                  issues.
+                </p>
+              </section>
+
+              <section>
+                <h3>6. Account Deletion</h3>
+                <p>
+                  Users may request account deletion through the support
+                  channels provided by Proculus.
+                </p>
+                <p>When an account deletion request is approved:</p>
+                <ul>
+                  <li>Personal account information may be removed.</li>
+                  <li>
+                    Certain procurement records may be retained where required
+                    by law, auditing requirements, dispute resolution, or
+                    security purposes.
+                  </li>
+                </ul>
+                <p>
+                  Account deletion requests are generally processed within 30
+                  days.
+                </p>
+              </section>
+
+              <section>
+                <h3>7. User Rights</h3>
+                <p>Users have the right to:</p>
+                <ul>
+                  <li>Access their information</li>
+                  <li>Update profile information</li>
+                  <li>Correct inaccurate information</li>
+                  <li>Request account deletion</li>
+                  <li>Contact support regarding privacy concerns</li>
+                </ul>
+              </section>
+
+              <section>
+                <h3>8. Local Storage and Authentication</h3>
+                <p>Proculus may use secure local device storage to:</p>
+                <ul>
+                  <li>Maintain login sessions</li>
+                  <li>Store authentication tokens</li>
+                  <li>Improve user experience</li>
+                </ul>
+                <p>These mechanisms are required for application functionality.</p>
+              </section>
+
+              <section>
+                <h3>9. Changes to This Policy</h3>
+                <p>
+                  This Privacy Policy may be updated periodically to reflect
+                  changes in services, legal requirements, or security
+                  practices. Any updates will be published within the
+                  application.
+                </p>
+              </section>
+
+              <section>
+                <h3>10. Contact Us</h3>
+                <p>
+                  If you have questions regarding this Privacy Policy, please
+                  contact the Proculus support team through the support channels
+                  available within the application.
+                </p>
+                <p>
+                  By creating an account or using Proculus, you acknowledge that
+                  you have read, understood, and agreed to this Privacy Policy.
+                </p>
+              </section>
+            </div>
+          </div>
+
+          <ion-item lines="none" class="welcome-agreement">
+            <ion-checkbox
+              slot="start"
+              [(ngModel)]="hasAgreed"
+              name="privacyAgreement"
+              aria-label="Saya menyetujui Privacy Policy Proculus">
+            </ion-checkbox>
+            <ion-label>
+              Saya telah membaca dan menyetujui Privacy Policy Proculus.
+            </ion-label>
+          </ion-item>
+        </section>
+
+      <section class="welcome-dots" aria-label="Navigasi slide onboarding">
+        <button
+          *ngFor="let slide of slides; let index = index"
+          type="button"
+          class="welcome-dots__dot"
+          [class.is-active]="index === activeSlide"
+          [attr.aria-label]="'Buka slide ' + (index + 1)"
+          (click)="goToSlide(index)">
+        </button>
+      </section>
+
+      <section class="welcome-actions" [class.welcome-actions--single]="isFirstSlide && !isLastSlide">
         <ion-button
+          *ngIf="!isFirstSlide"
+          type="button"
           expand="block"
           fill="clear"
           class="welcome-button-secondary"
-          routerLink="/login">
-          VENDOR LOGIN
+          (click)="previousSlide()">
+          <ion-icon slot="start" name="chevron-back"></ion-icon>
+          Kembali
         </ion-button>
+
+        <ion-button
+          *ngIf="!isLastSlide"
+          type="button"
+          expand="block"
+          class="welcome-button-primary"
+          (click)="nextSlide()">
+          Lanjut
+          <ion-icon slot="end" name="chevron-forward"></ion-icon>
+        </ion-button>
+
+        <ion-button
+          *ngIf="isLastSlide"
+          type="button"
+          expand="block"
+          class="welcome-button-gold"
+          [disabled]="!hasAgreed"
+          (click)="enterApp()">
+          Masuk Aplikasi
+          <ion-icon slot="end" name="arrow-forward"></ion-icon>
+        </ion-button>
+      </section>
       </section>
     </main>
 
     <footer class="welcome-footer">
-      INSTITUTIONAL GRADE • HIGH-STAKES SECURITY
+      Vendor onboarding untuk tender, bidding, dan dokumen procurement yang
+      aman.
     </footer>
   </div>
 </ion-content>

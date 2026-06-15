@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { IonContent } from '@ionic/angular/standalone';
 import { Router } from '@angular/router';
+import { AuthService } from 'src/app/services/auth.service';
 
 @Component({
   selector: 'app-splash',
@@ -15,18 +16,27 @@ import { Router } from '@angular/router';
 })
 export class SplashPage implements OnInit {
 
-  constructor(private router: Router) {}
+  constructor(
+    private router: Router,
+    private authService: AuthService
+  ) {}
 
   ngOnInit() {
-  setTimeout(() => {
-    const hasSeenWelcome = localStorage.getItem('has_seen_welcome');
+    setTimeout(() => {
+      const hasPrivacyAgreement = localStorage.getItem('proculus_privacy_agreed') === 'true';
 
-    if (hasSeenWelcome) {
-      this.router.navigate(['/login']);
-    } else {
-      this.router.navigate(['/welcome']);
-    }
-  }, 2000);
-}
+      if (this.authService.getToken()) {
+        void this.router.navigate(['/dashboard']);
+        return;
+      }
+
+      if (hasPrivacyAgreement) {
+        void this.router.navigate(['/login']);
+        return;
+      }
+
+      void this.router.navigate(['/welcome']);
+    }, 2000);
+  }
 
 }
