@@ -24,8 +24,8 @@
 
     <section class="dashboard-overview">
       <span class="app-section-title dashboard-overview__kicker">Dashboard Overview</span>
-      <h2>Welcome back{{ displayVendorName ? ', ' + displayVendorName : '' }}</h2>
-      <p class="app-subtitle">Review your procurement status for today.</p>
+      <h2>Selamat datang {{ displayVendorName ? ', ' + displayVendorName : '' }}</h2>
+      <p class="app-subtitle">Periksa status pengadaan Anda hari ini.</p>
       <ng-container *ngIf="vendorVerificationStatus">
         <span class="app-badge" [ngClass]="getVerificationBadgeClass(vendorVerificationStatus)">
           {{ vendorVerificationStatusLabel }}

@@ -39,6 +39,7 @@ export class TenderDetailPage implements OnInit {
   aanwijzingSubmitting = false;
   aanwijzingError = '';
   private tenderId = 0;
+  vendorInitial = 'V';
 
   constructor(
     private route: ActivatedRoute,
@@ -178,10 +179,17 @@ export class TenderDetailPage implements OnInit {
       next: (res: any) => {
         const vendor = res?.vendor || res?.data?.vendor || res?.data || res;
         this.vendorStatus = this.authService.getVendorVerificationStatus(vendor);
+        
+        const name = vendor?.company_name || vendor?.name || 'Vendor';
+        this.vendorInitial = name.charAt(0).toUpperCase();
       },
       error: (err: any) => {
         console.log('VENDOR PROFILE ERROR:', err);
         this.vendorStatus = this.authService.getVendorVerificationStatus();
+        
+        const vendor: any = this.authService.getStoredVendorProfile();
+        const name = vendor?.company_name || vendor?.name || 'V';
+        this.vendorInitial = name.charAt(0).toUpperCase();
       }
     });
   }
@@ -379,9 +387,10 @@ export class TenderDetailPage implements OnInit {
 
     const vendorName = this.displayValue(
       this.pickFirst(
-        item?.vendor_name,
         item?.vendor?.company_name,
-        item?.vendor?.name,
+        item?.company_name,         
+        item?.vendor_name,          
+        item?.vendor?.name,         
         item?.user?.name
       ),
       'Vendor'

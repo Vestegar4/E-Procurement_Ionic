@@ -7,6 +7,7 @@ import {
 } from '@ionic/angular/standalone';
 import { RouterModule } from '@angular/router';
 import { TenderService } from 'src/app/services/tender.service';
+import { AuthService } from 'src/app/services/auth.service';
 
 @Component({
   selector: 'app-tender-list',
@@ -26,11 +27,34 @@ export class TenderListPage implements OnInit {
   searchQuery = '';
   activeCategory: 'all' | 'infrastructure' = 'all';
   loading = false;
+  
+  // Variabel untuk inisial profil
+  vendorInitial = 'V';
 
-  constructor(private tenderService: TenderService) {}
+  constructor(
+    private tenderService: TenderService,
+    private authService: AuthService
+  ) {}
 
   ngOnInit() {
     this.loadTenders();
+    this.loadProfile();
+  }
+
+  // Fungsi untuk memuat inisial profil vendor
+  loadProfile() {
+    this.authService.me().subscribe({
+      next: (res: any) => {
+        const vendor = res?.data?.vendor || res?.vendor || res?.data || res;
+        const name = vendor?.company_name || vendor?.name || 'Vendor';
+        this.vendorInitial = name.charAt(0).toUpperCase();
+      },
+      error: () => {
+        const vendor: any = this.authService.getStoredVendorProfile();
+        const name = vendor?.company_name || vendor?.name || 'V';
+        this.vendorInitial = name.charAt(0).toUpperCase();
+      }
+    });
   }
 
   loadTenders() {
@@ -40,7 +64,17 @@ export class TenderListPage implements OnInit {
       next: (res: any) => {
         console.log('TENDERS RESPONSE:', res);
 
-        this.tenders = (res?.data?.data ?? []).map((tender: any) => ({
+        // Perbaikan deteksi array data dari API
+        let rawData = [];
+        if (Array.isArray(res?.data?.data)) {
+          rawData = res.data.data;
+        } else if (Array.isArray(res?.data)) {
+          rawData = res.data;
+        } else if (Array.isArray(res)) {
+          rawData = res;
+        }
+
+        this.tenders = rawData.map((tender: any) => ({
           ...tender,
           title: tender?.title || tender?.name || '-',
           description: tender?.description || tender?.summary || '-',
@@ -49,9 +83,6 @@ export class TenderListPage implements OnInit {
             .toLowerCase()
             .trim()
         }));
-
-        console.log('TENDERS ARRAY:', this.tenders);
-        console.log('TENDER COUNT:', this.tenders.length);
 
         this.loading = false;
       },

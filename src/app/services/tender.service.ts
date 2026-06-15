@@ -24,12 +24,12 @@ export class TenderService {
   }
 
   getAanwijzing(tenderId: number): Observable<any> {
-    return this.http.get<any>(`${this.apiUrl}/vendor/tenders/${tenderId}/announcements`);
+    return this.http.get<any>(`${this.apiUrl}/vendor/tenders/${tenderId}/aanwijzing`);
   }
 
   submitAanwijzingQuestion(tenderId: number, data: any): Observable<any> {
     return this.http.post<any>(
-      `${this.apiUrl}/vendor/tenders/${tenderId}/announcements/questions`,
+      `${this.apiUrl}/vendor/tenders/${tenderId}/aanwijzing`,
       data
     );
   }

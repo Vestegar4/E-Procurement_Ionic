@@ -312,11 +312,15 @@ export class DashboardPage implements OnInit {
     }
 
     const tenderId = this.extractTenderId(source);
+    if (tenderId && this.tenders.length === 0 && this.myTenders.length === 0 && this.loading) {
+       return 'Memuat judul tender...'; 
+    }
+
     const matchedTender = [...this.myTenders, ...this.tenders].find((tender) =>
       Number(tender?.id) === Number(tenderId)
     );
 
-    return matchedTender?.title || matchedTender?.name || '';
+    return matchedTender?.title || matchedTender?.name || `Tender #${tenderId}`;
   }
 
   private extractTenderId(source: any) {
