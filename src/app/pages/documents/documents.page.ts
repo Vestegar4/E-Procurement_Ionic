@@ -1,7 +1,11 @@
 import { CommonModule } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { RouterModule } from '@angular/router';
-import { IonBadge, IonButton, IonContent } from '@ionic/angular/standalone';
+import {
+  IonContent,
+  IonSpinner,
+  ToastController
+} from '@ionic/angular/standalone';
 import { AuthService } from 'src/app/services/auth.service';
 import { VendorService } from 'src/app/services/vendor.service';
 
@@ -11,6 +15,9 @@ interface DocumentOverviewItem {
   description: string;
   status: 'uploaded' | 'pending' | 'missing';
   fileName: string;
+  file: File | null;
+  uploading: boolean;
+  lastUploadedDate: string | null;
 }
 
 @Component({
@@ -22,8 +29,7 @@ interface DocumentOverviewItem {
     CommonModule,
     RouterModule,
     IonContent,
-    IonButton,
-    IonBadge
+    IonSpinner
   ]
 })
 export class DocumentsPage implements OnInit {
@@ -32,7 +38,8 @@ export class DocumentsPage implements OnInit {
 
   constructor(
     private vendorService: VendorService,
-    private authService: AuthService
+    private authService: AuthService,
+    private toastController: ToastController
   ) {}
 
   ngOnInit() {
@@ -53,8 +60,78 @@ export class DocumentsPage implements OnInit {
     });
   }
 
-  get vendorName() {
-    return this.vendor?.company_name || this.vendor?.name || 'Vendor';
+  async showToast(message: string, color: string = 'success') {
+    const toast = await this.toastController.create({
+      message,
+      duration: 2000,
+      color
+    });
+    await toast.present();
+  }
+
+  onDocumentSelected(documentKey: string, event: Event) {
+    const target = event.target as HTMLInputElement;
+    const selectedFile = target?.files?.[0] || null;
+
+    this.documentItems = this.documentItems.map((item) =>
+      item.key === documentKey
+        ? {
+            ...item,
+            file: selectedFile,
+            fileName: selectedFile ? selectedFile.name : item.fileName
+          }
+        : item
+    );
+  }
+
+  uploadDocument(documentKey: string) {
+    const targetItem = this.documentItems.find((item) => item.key === documentKey);
+
+    if (!targetItem?.file) {
+      this.showToast('Silakan pilih file terlebih dahulu', 'danger');
+      return;
+    }
+
+    this.documentItems = this.documentItems.map((item) =>
+      item.key === documentKey
+        ? {
+            ...item,
+            uploading: true
+          }
+        : item
+    );
+
+    this.vendorService.uploadDocument({
+      type: documentKey,
+      file: targetItem.file
+    }).subscribe({
+      next: (res: any) => {
+        this.showToast(res?.message || 'Dokumen berhasil diunggah');
+        this.loadProfile();
+      },
+      error: (err: any) => {
+        console.log('UPLOAD DOCUMENT ERROR:', err);
+        this.documentItems = this.documentItems.map((item) =>
+          item.key === documentKey
+            ? {
+                ...item,
+                uploading: false
+              }
+            : item
+        );
+        this.showToast(err?.error?.message || 'Gagal mengunggah dokumen', 'danger');
+      }
+    });
+  }
+
+  getStatusLabel(status: string): string {
+    if (status === 'uploaded') {
+      return '✓ Uploaded';
+    }
+    if (status === 'pending') {
+      return '⏳ Pending Verification';
+    }
+    return '⚠ Belum Upload';
   }
 
   getDocumentBadgeClass(status: DocumentOverviewItem['status']) {
@@ -69,16 +146,19 @@ export class DocumentsPage implements OnInit {
     return 'app-badge--closed';
   }
 
-  getDocumentStatusLabel(status: DocumentOverviewItem['status']) {
-    if (status === 'uploaded') {
-      return 'Uploaded';
+  formatLastUploadedDate(dateString: string | null): string {
+    if (!dateString) {
+      return 'Belum diunggah';
     }
-
-    if (status === 'pending') {
-      return 'Pending';
+    const date = new Date(dateString);
+    if (Number.isNaN(date.getTime())) {
+      return dateString;
     }
-
-    return 'Missing';
+    return date.toLocaleDateString('id-ID', {
+      day: '2-digit',
+      month: 'long',
+      year: 'numeric'
+    });
   }
 
   private extractProfile(res: any) {
@@ -103,7 +183,10 @@ export class DocumentsPage implements OnInit {
       return {
         ...item,
         status,
-        fileName: this.resolveFileName(profile, item.key, source, status)
+        fileName: this.resolveFileName(profile, item.key, source, status),
+        lastUploadedDate: source?.updated_at || source?.created_at || null,
+        file: null,
+        uploading: false
       };
     });
   }
@@ -115,28 +198,40 @@ export class DocumentsPage implements OnInit {
         label: 'NIB',
         description: 'Nomor Induk Berusaha',
         status: 'missing',
-        fileName: 'Belum diunggah'
+        fileName: 'Belum diunggah',
+        file: null,
+        uploading: false,
+        lastUploadedDate: null
       },
       {
         key: 'npwp',
         label: 'NPWP',
         description: 'Dokumen pajak perusahaan',
         status: 'missing',
-        fileName: 'Belum diunggah'
+        fileName: 'Belum diunggah',
+        file: null,
+        uploading: false,
+        lastUploadedDate: null
       },
       {
         key: 'company_profile',
         label: 'Company Profile',
         description: 'Profil perusahaan vendor',
         status: 'missing',
-        fileName: 'Belum diunggah'
+        fileName: 'Belum diunggah',
+        file: null,
+        uploading: false,
+        lastUploadedDate: null
       },
       {
         key: 'supporting_documents',
-        label: 'Supporting Documents',
+        label: 'Dokumen Pendukung',
         description: 'Dokumen pendukung lainnya',
         status: 'missing',
-        fileName: 'Belum diunggah'
+        fileName: 'Belum diunggah',
+        file: null,
+        uploading: false,
+        lastUploadedDate: null
       }
     ];
   }

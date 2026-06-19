@@ -1,43 +1,70 @@
 <ion-content class="documents-page app-page" [fullscreen]="true">
   <div class="app-container documents-container">
-    <section class="app-card documents-hero">
-      <span class="app-section-title">Dokumen Vendor</span>
-      <h1 class="app-title">Pantau status dokumen vendor tanpa meninggalkan alur profile Anda.</h1>
-      <p class="app-subtitle">Pengunggahan NIB, NPWP, company profile, dan supporting documents dikelola dari halaman Profil.</p>
-      <ion-button
-        expand="block"
-        class="app-button-primary documents-hero__action"
-        routerLink="/profile">
-        Kelola Dokumen di Profil
-      </ion-button>
+    <!-- Header/Topbar -->
+    <header class="documents-topbar">
+      <a class="documents-topbar__back" routerLink="/profile" aria-label="Kembali ke profil">
+        <svg viewBox="0 0 24 24">
+          <polyline points="15 18 9 12 15 6" />
+        </svg>
+      </a>
+      <h1>Kelola Dokumen Vendor</h1>
+      <div class="documents-topbar__spacer"></div>
+    </header>
+
+    <section class="documents-info">
+      <p class="app-subtitle">Lengkapi legalitas dokumen Anda untuk mempercepat proses verifikasi oleh tim kurasi Proculus.</p>
     </section>
 
+    <!-- Documents Cards List -->
     <section class="documents-list">
-      <div class="documents-list__head">
-        <span class="app-section-title">Ringkasan Status</span>
-        <p class="app-subtitle">Empat dokumen utama vendor ditampilkan berikut status terakhirnya.</p>
-      </div>
-
-      <div class="documents-list__items">
-        <article
-          class="app-list-item documents-item"
-          *ngFor="let document of documentItems">
-          <div>
-            <strong>{{ document.label }}</strong>
-            <p>{{ document.description }}</p>
-            <small>{{ document.fileName }}</small>
-          </div>
-
+      <article
+        class="app-card document-card"
+        *ngFor="let document of documentItems">
+        <div class="document-card__header">
+          <h2>{{ document.label }}</h2>
           <span class="app-badge" [ngClass]="getDocumentBadgeClass(document.status)">
-            {{ getDocumentStatusLabel(document.status) }}
+            {{ getStatusLabel(document.status) }}
           </span>
-        </article>
-      </div>
-    </section>
+        </div>
 
-    <section class="app-card documents-note">
-      <span class="app-section-title">Alur Baru</span>
-      <p class="app-subtitle">Agar pengalaman lebih rapi, upload dokumen dipusatkan di Profil sehingga navigasi dokumen tetap sederhana dan konsisten.</p>
+        <p class="document-card__description">{{ document.description }}</p>
+
+        <div class="document-card__meta">
+          <span class="meta-label">File Dokumen:</span>
+          <strong class="meta-value">{{ document.file ? document.file.name : document.fileName }}</strong>
+        </div>
+
+        <div class="document-card__meta">
+          <span class="meta-label">Terakhir diperbarui:</span>
+          <strong class="meta-value">{{ formatLastUploadedDate(document.lastUploadedDate) }}</strong>
+        </div>
+
+        <div class="document-card__actions">
+          <!-- File selection button (Upload or Ganti Dokumen) -->
+          <label *ngIf="!document.file && !document.uploading" class="document-action-btn document-action-btn--ghost">
+            <span>{{ document.status === 'missing' ? 'Upload' : 'Ganti Dokumen' }}</span>
+            <input
+              type="file"
+              accept=".pdf,.jpg,.jpeg,.png"
+              (change)="onDocumentSelected(document.key, $event)" />
+          </label>
+
+          <!-- Upload confirmation button when file is selected -->
+          <button
+            *ngIf="document.file && !document.uploading"
+            type="button"
+            class="document-action-btn document-action-btn--primary"
+            (click)="uploadDocument(document.key)">
+            Unggah Dokumen
+          </button>
+
+          <!-- Loading spinner -->
+          <div *ngIf="document.uploading" class="document-loading">
+            <ion-spinner name="crescent"></ion-spinner>
+            <span>Mengunggah...</span>
+          </div>
+        </div>
+      </article>
     </section>
   </div>
 </ion-content>
