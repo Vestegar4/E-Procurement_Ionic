@@ -133,10 +133,6 @@ export class DashboardPage implements OnInit {
     });
   }
 
-  logout() {
-    this.authService.logout();
-  }
-
   get displayVendorName() {
     return (
       this.vendor?.company_name ||
@@ -149,7 +145,7 @@ export class DashboardPage implements OnInit {
   get vendorInitial() {
     return this.displayVendorName
       ? this.displayVendorName.charAt(0).toUpperCase()
-      : '';
+      : 'V';
   }
 
   get latestWonResultLink() {
@@ -177,7 +173,7 @@ export class DashboardPage implements OnInit {
     }
 
     return this.authService.isVendorApproved(this.vendor)
-      ? 'Akun vendor telah approved dan siap mengikuti tender.'
+      ? 'Vendor Anda siap mengikuti tender aktif hari ini.'
       : 'Akun vendor masih menunggu approval admin.';
   }
 
@@ -202,6 +198,62 @@ export class DashboardPage implements OnInit {
     }
 
     return 'app-badge--closed';
+  }
+
+  get activeTenderCount() {
+    return this.tenders.filter((tender) => this.isActiveTender(tender)).length;
+  }
+
+  get potentialValue() {
+    const totalValue = this.tenders
+      .filter((tender) => this.isActiveTender(tender))
+      .reduce((sum, tender) => sum + this.extractTenderValue(tender), 0);
+
+    return totalValue;
+  }
+
+  get nearestDeadlineTender() {
+    const activeTenders = this.tenders
+      .filter((tender) => this.isActiveTender(tender))
+      .map((tender) => ({
+        tender,
+        deadline: this.extractTenderDeadline(tender)
+      }))
+      .filter((entry) => entry.deadline !== null)
+      .sort((first, second) => first.deadline!.getTime() - second.deadline!.getTime());
+
+    return activeTenders.length ? activeTenders[0] : null;
+  }
+
+  get nearestDeadlineLabel() {
+    if (!this.nearestDeadlineTender) {
+      return 'Tidak tersedia';
+    }
+
+    return this.formatDate(this.nearestDeadlineTender.deadline);
+  }
+
+  get nearestDeadlineTitle() {
+    return this.nearestDeadlineTender
+      ? this.resolveTenderTitle(this.nearestDeadlineTender.tender)
+      : 'Belum ada tender aktif';
+  }
+
+  async openHelpCenter() {
+    const targetUrl = 'https://proculus.dartd.my.id';
+    const capacitor = (window as any).Capacitor;
+    const browser = capacitor?.Plugins?.Browser || capacitor?.Browser;
+
+    if (browser?.open) {
+      try {
+        await browser.open({ url: targetUrl });
+        return;
+      } catch (error) {
+        console.log('BROWSER OPEN ERROR:', error);
+      }
+    }
+
+    window.open(targetUrl, '_system');
   }
 
   private extractList(res: any, keys: string[]) {
@@ -256,6 +308,48 @@ export class DashboardPage implements OnInit {
   private completeLoad() {
     this.pendingLoads = Math.max(this.pendingLoads - 1, 0);
     this.loading = this.pendingLoads > 0;
+  }
+
+  private isActiveTender(tender: any) {
+    const status = String(
+      tender?.effective_status ||
+      tender?.status ||
+      tender?.status_key ||
+      ''
+    ).toLowerCase();
+
+    return ['open', 'bidding', 'active', 'pending'].includes(status);
+  }
+
+  private extractTenderValue(tender: any) {
+    const rawValue =
+      tender?.budget ||
+      tender?.estimated_budget ||
+      tender?.budget_value ||
+      tender?.project_value ||
+      tender?.value ||
+      tender?.estimated_value;
+
+    const numericValue = Number(String(rawValue || '').replace(/[^0-9.-]/g, ''));
+
+    return Number.isFinite(numericValue) && numericValue > 0 ? numericValue : 0;
+  }
+
+  private extractTenderDeadline(tender: any) {
+    const rawDate =
+      tender?.timeline?.bidding_end ||
+      tender?.timeline?.registration_end ||
+      tender?.closing_date ||
+      tender?.end_date ||
+      tender?.deadline ||
+      tender?.due_date;
+
+    if (!rawDate) {
+      return null;
+    }
+
+    const parsedDate = new Date(rawDate);
+    return Number.isNaN(parsedDate.getTime()) ? null : parsedDate;
   }
 
   private buildRecentActivities() {
@@ -368,5 +462,17 @@ export class DashboardPage implements OnInit {
       currency: 'IDR',
       maximumFractionDigits: 0
     }).format(value);
+  }
+
+  private formatDate(date: Date | null) {
+    if (!date) {
+      return '-';
+    }
+
+    return date.toLocaleDateString('id-ID', {
+      day: '2-digit',
+      month: 'short',
+      year: 'numeric'
+    });
   }
 }

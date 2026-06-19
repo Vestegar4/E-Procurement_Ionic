@@ -9,86 +9,104 @@
         <h1>PROCULUS</h1>
       </div>
 
-      <ion-button
-        fill="clear"
-        class="dashboard-logout"
-        (click)="logout()"
-        aria-label="Logout">
-        <span class="dashboard-bell" aria-hidden="true">
+      <a
+        class="dashboard-topbar__action"
+        routerLink="/notifications"
+        aria-label="Buka notifikasi">
+        <span class="dashboard-topbar__icon" aria-hidden="true">
           <svg viewBox="0 0 24 24">
             <path d="M12 4a4 4 0 0 0-4 4v2.2c0 .8-.24 1.58-.68 2.24L6 14.5V16h12v-1.5l-1.32-2.06A4.2 4.2 0 0 1 16 10.2V8a4 4 0 0 0-4-4Zm-2 14a2 2 0 0 0 4 0" />
           </svg>
         </span>
-      </ion-button>
+      </a>
     </section>
 
     <section class="dashboard-overview">
-      <span class="app-section-title dashboard-overview__kicker">Dashboard Overview</span>
-      <h2>Selamat datang {{ displayVendorName ? ', ' + displayVendorName : '' }}</h2>
-      <p class="app-subtitle">Periksa status pengadaan Anda hari ini.</p>
-      <ng-container *ngIf="vendorVerificationStatus">
-        <span class="app-badge" [ngClass]="getVerificationBadgeClass(vendorVerificationStatus)">
-          {{ vendorVerificationStatusLabel }}
+      <span class="app-section-title dashboard-overview__kicker">Dashboard</span>
+
+      <div class="dashboard-overview__title-row">
+        <h2>{{ displayVendorName || 'Vendor' }}</h2>
+        <span
+          *ngIf="vendorVerificationStatus === 'approved'"
+          class="dashboard-overview__check"
+          aria-label="Vendor terverifikasi">
+          <svg viewBox="0 0 24 24">
+            <path d="m9.5 12 2 2 4.5-5" />
+            <path d="M20 12a8 8 0 1 1-8-8" />
+          </svg>
         </span>
-        <p class="app-subtitle">{{ vendorVerificationMessage }}</p>
-      </ng-container>
+      </div>
+
+      <p class="app-subtitle">Ringkasan tender aktif, status vendor, dan aktivitas terbaru Anda.</p>
+      <p class="dashboard-overview__note">{{ vendorVerificationMessage }}</p>
     </section>
 
-    <section class="dashboard-stats">
-      <div class="app-card dashboard-stat dashboard-stat--light" routerLink="/tender-list">
-        <div class="dashboard-stat__icon">
-          <svg viewBox="0 0 24 24">
-            <path d="m7 17 10-10M9 7h8v8M6 12l6 6" />
-          </svg>
-        </div>
-        <strong>{{ formatStatCount(activeBids) }}</strong>
-        <span>Active Bids</span>
-      </div>
+    <section class="dashboard-insights">
+      <article class="app-card dashboard-insight dashboard-insight--feature">
+        <span class="app-section-title">Nilai Potensial</span>
+        <strong>{{ formatCurrency(potentialValue || 0) }}</strong>
+        <p>Estimasi total peluang dari tender aktif yang sedang terbuka.</p>
+      </article>
 
-      <div class="app-card dashboard-stat dashboard-stat--dark" [routerLink]="latestWonResultLink">
-        <div class="dashboard-stat__icon dashboard-stat__icon--gold">
-          <svg viewBox="0 0 24 24">
-            <path d="m12 4 2.2 4.45 4.91.72-3.55 3.46.84 4.87L12 15.2 7.6 17.5l.84-4.87-3.55-3.46 4.91-.72Z" />
-            <path d="M12 9.5a2.5 2.5 0 1 0 0 5 2.5 2.5 0 0 0 0-5Z" />
-          </svg>
-        </div>
-        <strong>{{ formatStatCount(totalWon) }}</strong>
-        <span>Total Won</span>
-      </div>
+      <article class="app-card dashboard-insight">
+        <span class="app-section-title">Total Tender Aktif</span>
+        <strong>{{ formatStatCount(activeTenderCount) }}</strong>
+        <p>Tender yang masih dapat diikuti atau dipantau.</p>
+      </article>
+
+      <article class="app-card dashboard-insight">
+        <span class="app-section-title">Tender Deadline Terdekat</span>
+        <strong>{{ nearestDeadlineLabel }}</strong>
+        <p>{{ nearestDeadlineTitle }}</p>
+      </article>
     </section>
 
     <section class="dashboard-section">
       <div class="dashboard-section__bar">
-        <h3>Quick Actions</h3>
-        <span>Scroll Left</span>
+        <h3>Aksi Cepat</h3>
       </div>
 
       <div class="dashboard-actions">
-        <div class="dashboard-pill-action" routerLink="/tender-list">
-          <span class="dashboard-pill-action__icon">
+        <button type="button" class="dashboard-action-card app-card" routerLink="/tender-list">
+          <span class="dashboard-action-card__icon">
             <svg viewBox="0 0 24 24">
               <path d="M11 18a7 7 0 1 1 4.95-2.05L21 21" />
             </svg>
           </span>
-          <strong>Find Tenders</strong>
-        </div>
+          <strong>Tender Aktif</strong>
+          <p>Lihat tender terbuka dan peluang terbaru.</p>
+        </button>
 
-        <div class="dashboard-pill-action" routerLink="/documents">
-          <span class="dashboard-pill-action__icon">
+        <button type="button" class="dashboard-action-card app-card" routerLink="/profile">
+          <span class="dashboard-action-card__icon">
             <svg viewBox="0 0 24 24">
-              <path d="M7 17a4 4 0 0 1 .4-8A5.5 5.5 0 0 1 18 10a3.5 3.5 0 1 1 0 7h-3" />
-              <path d="M12 11v9M8.5 14.5 12 11l3.5 3.5" />
+              <path d="M14 3H7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8z" />
+              <path d="M14 3v5h5" />
+              <path d="M12 11v6M9 14h6" />
             </svg>
           </span>
-          <strong>Upload Docs</strong>
-        </div>
+          <strong>Dokumen Vendor</strong>
+          <p>Unggah NIB, NPWP, dan dokumen pendukung.</p>
+        </button>
+
+        <button type="button" class="dashboard-action-card app-card" (click)="openHelpCenter()">
+          <span class="dashboard-action-card__icon">
+            <svg viewBox="0 0 24 24">
+              <path d="M12 18h.01" />
+              <path d="M9.1 9a3 3 0 1 1 4.9 2.4c-.9.7-1.5 1.2-1.5 2.6" />
+              <path d="M12 4a8 8 0 1 1-8 8" />
+            </svg>
+          </span>
+          <strong>Bantuan</strong>
+          <p>Buka pusat bantuan Proculus secara cepat.</p>
+        </button>
       </div>
     </section>
 
     <section class="dashboard-section">
       <div class="dashboard-section__bar">
-        <h3>Recent Activity</h3>
-        <span routerLink="/tender-list">View All</span>
+        <h3>Aktivitas Terbaru</h3>
+        <span routerLink="/tender-list">Lihat Semua</span>
       </div>
 
       <div class="dashboard-activity">

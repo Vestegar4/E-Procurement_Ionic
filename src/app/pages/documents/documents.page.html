@@ -1,83 +1,43 @@
 <ion-content class="documents-page app-page" [fullscreen]="true">
   <div class="app-container documents-container">
     <section class="app-card documents-hero">
-      <span class="app-section-title">Document Management</span>
-      <h1 class="app-title">Kelola dokumen vendor dengan pengalaman yang rapi, premium, dan siap audit.</h1>
-      <p class="app-subtitle">Upload legalitas dan dokumen pendukung lalu pantau statusnya dari satu alur yang bersih.</p>
-    </section>
-
-    <section class="app-card documents-upload">
-      <div class="documents-upload__head">
-        <span class="app-section-title">Upload Document</span>
-        <h2>Tambah dokumen baru</h2>
-      </div>
-
-      <div class="field-group">
-        <label for="documentType">Jenis Dokumen</label>
-        <div class="app-input app-input--select">
-          <ion-select
-            id="documentType"
-            placeholder="Pilih jenis dokumen"
-            [(ngModel)]="documentType">
-            <ion-select-option value="Legalitas">
-              Legalitas
-            </ion-select-option>
-
-            <ion-select-option value="Izin Usaha">
-              Izin Usaha
-            </ion-select-option>
-
-            <ion-select-option value="Dokumen Pendukung">
-              Dokumen Pendukung
-            </ion-select-option>
-          </ion-select>
-        </div>
-      </div>
-
-      <div class="field-group">
-        <label>Pilih File</label>
-        <label class="documents-file">
-          <input
-            type="file"
-            accept=".pdf,.jpg,.jpeg,.png"
-            (change)="onFileSelected($event)" />
-          <span>{{ selectedFile ? selectedFile.name : 'Pilih file dokumen' }}</span>
-        </label>
-      </div>
-
+      <span class="app-section-title">Dokumen Vendor</span>
+      <h1 class="app-title">Pantau status dokumen vendor tanpa meninggalkan alur profile Anda.</h1>
+      <p class="app-subtitle">Pengunggahan NIB, NPWP, company profile, dan supporting documents dikelola dari halaman Profil.</p>
       <ion-button
         expand="block"
-        class="app-button-secondary"
-        (click)="uploadDocument()">
-        Upload Dokumen
+        class="app-button-primary documents-hero__action"
+        routerLink="/profile">
+        Kelola Dokumen di Profil
       </ion-button>
     </section>
 
     <section class="documents-list">
       <div class="documents-list__head">
-        <span class="app-section-title">Uploaded Files</span>
-        <p class="app-subtitle">Daftar file vendor yang sudah masuk ke sistem.</p>
+        <span class="app-section-title">Ringkasan Status</span>
+        <p class="app-subtitle">Empat dokumen utama vendor ditampilkan berikut status terakhirnya.</p>
       </div>
 
-      <div *ngIf="uploadedDocuments.length; else emptyDocuments" class="documents-list__items">
-        <div
+      <div class="documents-list__items">
+        <article
           class="app-list-item documents-item"
-          *ngFor="let doc of uploadedDocuments">
+          *ngFor="let document of documentItems">
           <div>
-            <strong>{{ doc.type }}</strong>
-            <p>{{ doc.filename }}</p>
+            <strong>{{ document.label }}</strong>
+            <p>{{ document.description }}</p>
+            <small>{{ document.fileName }}</small>
           </div>
 
-          <span class="app-badge app-badge--open">{{ doc.status }}</span>
-        </div>
+          <span class="app-badge" [ngClass]="getDocumentBadgeClass(document.status)">
+            {{ getDocumentStatusLabel(document.status) }}
+          </span>
+        </article>
       </div>
+    </section>
 
-      <ng-template #emptyDocuments>
-        <div class="app-empty-state">
-          <strong>Belum ada dokumen terupload</strong>
-          <span>Unggah file pertama Anda untuk mulai melengkapi persyaratan vendor.</span>
-        </div>
-      </ng-template>
+    <section class="app-card documents-note">
+      <span class="app-section-title">Alur Baru</span>
+      <p class="app-subtitle">Agar pengalaman lebih rapi, upload dokumen dipusatkan di Profil sehingga navigasi dokumen tetap sederhana dan konsisten.</p>
     </section>
   </div>
 </ion-content>

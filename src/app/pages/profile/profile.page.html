@@ -33,21 +33,19 @@
     </section>
 
     <section class="profile-stats">
-      
-
       <article class="profile-status-card">
-        <span class="app-section-title">Status</span>
+        <span class="app-section-title">Status Vendor</span>
         <span
           class="app-badge"
           [ngClass]="vendorVerificationBadgeClass">
-          {{ vendorVerificationStatusLabel || 'Not available' }}
+          {{ vendorVerificationStatusLabel || 'Tidak tersedia' }}
         </span>
       </article>
     </section>
 
     <section class="app-card profile-info-card">
       <div class="profile-card-head">
-        <span class="app-section-title">Company Info</span>
+        <span class="app-section-title">Informasi Perusahaan</span>
         <span class="profile-card-head__icon" aria-hidden="true">
           <svg viewBox="0 0 24 24">
             <path d="M12 16v-4M12 8h.01M12 3a9 9 0 1 1-9 9 9 9 0 0 1 9-9Z" />
@@ -57,25 +55,25 @@
 
       <div class="profile-info-grid">
         <div class="profile-info-row">
-          <span>Legal Entity Name</span>
+          <span>Nama Legal Perusahaan</span>
           <strong>{{ vendor.company_name || '-' }}</strong>
         </div>
 
         <div class="profile-info-row">
-          <span>Tax Identification</span>
-          <strong>{{ displayValue(vendor.tax_identification, 'Not available') }}</strong>
+          <span>Nomor Pajak</span>
+          <strong>{{ displayValue(vendor.tax_identification, 'Tidak tersedia') }}</strong>
         </div>
 
         <div class="profile-info-row">
-          <span>Primary Industry</span>
-          <strong>{{ displayValue(vendor.primary_industry, 'Not available') }}</strong>
+          <span>Industri Utama</span>
+          <strong>{{ displayValue(vendor.primary_industry, 'Tidak tersedia') }}</strong>
         </div>
       </div>
     </section>
 
     <section class="app-card profile-contact-card">
       <div class="profile-card-head">
-        <span class="app-section-title">Contact Details</span>
+        <span class="app-section-title">Detail Kontak</span>
         <span class="profile-card-head__icon" aria-hidden="true">
           <svg viewBox="0 0 24 24">
             <path d="M17 7h.01M7 7h5a4 4 0 0 1 0 8H7m10 0H12a4 4 0 0 1 0-8h5" />
@@ -92,7 +90,7 @@
             </svg>
           </span>
           <div>
-            <span>Official Email</span>
+            <span>Email Resmi</span>
             <strong>{{ displayValue(vendor.email) }}</strong>
           </div>
         </div>
@@ -104,8 +102,8 @@
             </svg>
           </span>
           <div>
-            <span>Head Office</span>
-            <strong>{{ displayValue(vendor.contact, 'Not available') }}</strong>
+            <span>Kantor Pusat</span>
+            <strong>{{ displayValue(vendor.contact, 'Tidak tersedia') }}</strong>
           </div>
         </div>
 
@@ -117,15 +115,63 @@
             </svg>
           </span>
           <div>
-            <span>Global Headquarters</span>
-            <strong>{{ displayValue(vendor.address, 'Not available') }}</strong>
+            <span>Alamat Perusahaan</span>
+            <strong>{{ displayValue(vendor.address, 'Tidak tersedia') }}</strong>
           </div>
         </div>
       </div>
     </section>
 
+    <section class="profile-document-section">
+      <div class="profile-card-head">
+        <span class="app-section-title">Dokumen Vendor</span>
+        <span class="profile-card-head__icon" aria-hidden="true">
+          <svg viewBox="0 0 24 24">
+            <path d="M14 3H7a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V8z" />
+            <path d="M14 3v5h5" />
+          </svg>
+        </span>
+      </div>
+
+      <p class="app-subtitle">Lengkapi legalitas vendor langsung dari halaman profil untuk mempercepat verifikasi.</p>
+
+      <div class="profile-document-list">
+        <article
+          class="app-card profile-document-card"
+          *ngFor="let document of vendorDocuments">
+          <div class="profile-document-card__head">
+            <div>
+              <strong>{{ document.label }}</strong>
+              <p>{{ document.fileName }}</p>
+            </div>
+
+            <span class="app-badge" [ngClass]="getDocumentBadgeClass(document.status)">
+              {{ getDocumentStatusLabel(document.status) }}
+            </span>
+          </div>
+
+          <label class="profile-document-card__picker">
+            <input
+              type="file"
+              accept=".pdf,.jpg,.jpeg,.png"
+              (change)="onVendorDocumentSelected(document.key, $event)" />
+            <span>{{ document.file ? document.file.name : document.hint }}</span>
+          </label>
+
+          <ion-button
+            expand="block"
+            class="app-button-secondary profile-document-card__button"
+            (click)="uploadVendorDocument(document.key)"
+            [disabled]="document.uploading || !document.file">
+            <span *ngIf="!document.uploading">{{ document.file ? 'Upload Sekarang' : 'Pilih File Dulu' }}</span>
+            <ion-spinner *ngIf="document.uploading" name="crescent"></ion-spinner>
+          </ion-button>
+        </article>
+      </div>
+    </section>
+
     <section class="profile-engagements">
-      <span class="app-section-title">Ongoing Engagements</span>
+      <span class="app-section-title">Engagement Berjalan</span>
 
       <div class="profile-engagements__rail" *ngIf="myTenders.length; else emptyEngagements">
         <article
@@ -143,15 +189,15 @@
 
       <ng-template #emptyEngagements>
         <div class="app-empty-state">
-          <strong>No ongoing engagements yet</strong>
-          <span>Your active tender participation will appear here when available.</span>
+          <strong>Belum ada engagement aktif</strong>
+          <span>Partisipasi tender Anda akan tampil di sini ketika data tersedia.</span>
         </div>
       </ng-template>
     </section>
 
     <section class="app-card profile-form-card">
       <div class="profile-card-head">
-        <span class="app-section-title">Edit Information</span>
+        <span class="app-section-title">Edit Informasi</span>
         <span class="profile-card-head__icon" aria-hidden="true">
           <svg viewBox="0 0 24 24">
             <path d="m4 20 4.2-1 9.4-9.4a2 2 0 1 0-2.8-2.8L5.4 16.2 4 20z" />
@@ -161,12 +207,12 @@
       </div>
 
       <div class="field-group">
-        <label for="company_name">Company Name</label>
+        <label for="company_name">Nama Perusahaan</label>
         <div class="app-input">
           <ion-input
             id="company_name"
             type="text"
-            placeholder="Company Name"
+            placeholder="Nama Perusahaan"
             [(ngModel)]="vendor.company_name">
           </ion-input>
         </div>
@@ -185,24 +231,24 @@
       </div>
 
       <div class="field-group">
-        <label for="address">Address</label>
+        <label for="address">Alamat</label>
         <div class="app-input">
           <ion-input
             id="address"
             type="text"
-            placeholder="Address"
+            placeholder="Alamat"
             [(ngModel)]="vendor.address">
           </ion-input>
         </div>
       </div>
 
       <div class="field-group">
-        <label for="contact">Contact</label>
+        <label for="contact">Kontak</label>
         <div class="app-input">
           <ion-input
             id="contact"
             type="text"
-            placeholder="Contact"
+            placeholder="Kontak"
             [(ngModel)]="vendor.contact">
           </ion-input>
         </div>
@@ -212,7 +258,40 @@
         expand="block"
         class="app-button-primary"
         (click)="saveProfile()">
-        Simpan Profile
+        Simpan Profil
+      </ion-button>
+    </section>
+
+    <section class="profile-actions">
+      <ion-button
+        expand="block"
+        fill="outline"
+        class="profile-help-button"
+        (click)="openHelpCenter()">
+        <span class="profile-button__icon" aria-hidden="true">
+          <svg viewBox="0 0 24 24">
+            <path d="M12 18h.01" />
+            <path d="M9.1 9a3 3 0 1 1 4.9 2.4c-.9.7-1.5 1.2-1.5 2.6" />
+            <path d="M12 4a8 8 0 1 1-8 8" />
+          </svg>
+        </span>
+        <span>Bantuan</span>
+      </ion-button>
+
+      <ion-button
+        expand="block"
+        fill="outline"
+        color="danger"
+        class="profile-logout-button"
+        (click)="confirmLogout()">
+        <span class="profile-button__icon" aria-hidden="true">
+          <svg viewBox="0 0 24 24">
+            <path d="M10 17l-1 4h8l-1-4" />
+            <path d="M14 7V4H6v16h8v-3" />
+            <path d="M14 12h7m-3-3 3 3-3 3" />
+          </svg>
+        </span>
+        <span>Logout</span>
       </ion-button>
     </section>
   </div>
