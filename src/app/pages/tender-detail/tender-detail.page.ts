@@ -65,6 +65,12 @@ export class TenderDetailPage implements OnInit {
     this.loadAanwijzing(id);
   }
 
+  ionViewWillEnter() {
+    if (this.tenderId && this.tender) {
+      this.loadTender(this.tenderId, true);
+    }
+  }
+
   async showToast(message: string, color: string = 'success') {
     const toast = await this.toastController.create({
       message,
@@ -141,11 +147,15 @@ export class TenderDetailPage implements OnInit {
     });
   }
 
-  private loadTender(id: number) {
+  get joinButtonLabel() {
+    return this.isEnglishLocale() ? 'Joined' : 'Anda Sudah Bergabung';
+  }
+
+  private loadTender(id: number, preserveJoinState = false) {
     this.loading = true;
     this.errorMessage = '';
-    this.tender = null;
-    this.joined = false;
+    this.tender = preserveJoinState ? this.tender : null;
+    this.joined = preserveJoinState ? this.joined : false;
 
     this.tenderService.getTenderById(id).subscribe({
       next: (res: any) => {
@@ -165,8 +175,11 @@ export class TenderDetailPage implements OnInit {
 
         if (!this.tender) {
           this.errorMessage = 'Data tender tidak ditemukan.';
+          this.loading = false;
+          return;
         }
 
+        this.refreshJoinedStatus(id);
         this.loading = false;
       },
       error: (err: any) => {
@@ -176,6 +189,23 @@ export class TenderDetailPage implements OnInit {
           err?.error?.message ||
           'Gagal memuat detail tender. Silakan coba lagi.';
         this.loading = false;
+      }
+    });
+  }
+
+  private refreshJoinedStatus(tenderId: number) {
+    this.tenderService.getMyTenders().subscribe({
+      next: (res: any) => {
+        const joinedTenders = this.extractTenderList(res);
+        const joinedFromList = joinedTenders.some((item: any) => {
+          const itemId = this.extractTenderId(item);
+          return itemId === tenderId;
+        });
+
+        this.joined = this.joined || joinedFromList;
+      },
+      error: (err: any) => {
+        console.log('MY TENDERS ERROR:', err);
       }
     });
   }
@@ -232,6 +262,54 @@ export class TenderDetailPage implements OnInit {
       res ||
       null
     );
+  }
+
+  private extractTenderList(res: any) {
+    if (Array.isArray(res)) {
+      return res;
+    }
+
+    if (Array.isArray(res?.data?.data)) {
+      return res.data.data;
+    }
+
+    if (Array.isArray(res?.data?.tenders)) {
+      return res.data.tenders;
+    }
+
+    if (Array.isArray(res?.data?.joined_tenders)) {
+      return res.data.joined_tenders;
+    }
+
+    if (Array.isArray(res?.data?.my_tenders)) {
+      return res.data.my_tenders;
+    }
+
+    if (Array.isArray(res?.data?.items)) {
+      return res.data.items;
+    }
+
+    if (Array.isArray(res?.data)) {
+      return res.data;
+    }
+
+    if (Array.isArray(res?.tenders)) {
+      return res.tenders;
+    }
+
+    if (Array.isArray(res?.joined_tenders)) {
+      return res.joined_tenders;
+    }
+
+    if (Array.isArray(res?.my_tenders)) {
+      return res.my_tenders;
+    }
+
+    if (Array.isArray(res?.items)) {
+      return res.items;
+    }
+
+    return [];
   }
 
   private extractAanwijzingList(res: any) {
@@ -348,6 +426,25 @@ export class TenderDetailPage implements OnInit {
     };
   }
 
+  private resolveJoinState(rawTender: any) {
+    if (!rawTender || typeof rawTender !== 'object') {
+      return this.joined;
+    }
+
+    const joinedFlags = [
+      rawTender?.joined,
+      rawTender?.is_joined,
+      rawTender?.has_joined,
+      rawTender?.participation?.joined,
+      rawTender?.participation?.is_joined,
+      rawTender?.participation?.status === 'joined',
+      rawTender?.vendor_participation?.joined,
+      rawTender?.vendor_participation?.status === 'joined'
+    ];
+
+    return joinedFlags.some((value) => Boolean(value));
+  }
+
   private normalizeAanwijzingItem(item: any) {
     if (!item || typeof item !== 'object') {
       return null;
@@ -418,6 +515,27 @@ export class TenderDetailPage implements OnInit {
       status,
       stepClass: answer ? 'detail-step--completed' : 'detail-step--upcoming'
     };
+  }
+
+  private extractTenderId(source: any) {
+    const candidate =
+      source?.id ||
+      source?.tender_id ||
+      source?.tender?.id ||
+      source?.tender?.tender_id ||
+      null;
+
+    const numericId = Number(candidate);
+
+    return Number.isFinite(numericId) && numericId > 0 ? numericId : null;
+  }
+
+  private isEnglishLocale() {
+    if (typeof navigator === 'undefined') {
+      return false;
+    }
+
+    return navigator.language?.toLowerCase().startsWith('en') || false;
   }
 
   private extractRequirements(rawTender: any) {
