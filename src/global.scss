@@ -49,6 +49,10 @@ ion-content {
   --background: var(--app-surface);
 }
 
+ion-content.app-page::part(scroll) {
+  padding-bottom: calc(144px + env(safe-area-inset-bottom, 0px));
+}
+
 ion-toolbar {
   --background: var(--ion-toolbar-background);
   --color: var(--app-text);

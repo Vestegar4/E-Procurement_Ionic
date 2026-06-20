@@ -11,8 +11,8 @@
 
     <main class="login-main">
       <section class="login-copy">
-        <h1>Welcome Back</h1>
-        <p>Access your procurement portal and manage high-value contracts with precision.</p>
+        <h1>Selamat Datang</h1>
+        <p>Masuk ke portal procurement untuk mengelola tender, dokumen, dan aktivitas vendor Anda.</p>
       </section>
 
       <section class="app-card login-card">
@@ -35,16 +35,14 @@
           <div class="field-group">
             <div class="login-field-head">
               <label for="password">Password</label>
-              <span routerLink="/forgot-password">
-                Forgot password?
-              </span>
+              <a routerLink="/forgot-password">Lupa Password?</a>
             </div>
             <div class="app-input login-input password-wrapper">
               <ion-input
                 id="password"
                 [type]="showPassword ? 'text' : 'password'"
                 autocomplete="current-password"
-                placeholder="Enter your password"
+                placeholder="Masukkan password"
                 [(ngModel)]="password"
                 name="password">
               </ion-input>
@@ -77,13 +75,13 @@
               *ngIf="loading"
               name="crescent">
             </ion-spinner>
-            <span *ngIf="!loading">SIGN IN</span>
+            <span *ngIf="!loading">MASUK</span>
             <i *ngIf="!loading" aria-hidden="true">→</i>
           </ion-button>
         </form>
 
         <section class="login-connect">
-          <span class="app-section-title">Institutional Connect</span>
+          <span class="app-section-title">Akses Institusional</span>
 
           <button
             type="button"
@@ -97,8 +95,8 @@
     </main>
 
     <footer class="login-footer">
-      <span>New to the platform?</span>
-      <a routerLink="/register">Request Access</a>
+      <span>Belum punya akun?</span>
+      <a routerLink="/register">Daftar Vendor</a>
     </footer>
   </div>
 </ion-content>

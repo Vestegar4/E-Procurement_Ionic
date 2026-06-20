@@ -1,0 +1,126 @@
+<ion-content class="edit-profile-page app-page" [fullscreen]="true">
+  <div class="app-container edit-profile-container">
+    <!-- Header/Topbar -->
+    <header class="edit-profile-topbar">
+      <a class="edit-profile-topbar__back" routerLink="/profile" aria-label="Kembali ke profil">
+        <svg viewBox="0 0 24 24">
+          <polyline points="15 18 9 12 15 6" />
+        </svg>
+      </a>
+      <h1>Edit Profil</h1>
+      <div class="edit-profile-topbar__spacer"></div>
+    </header>
+
+    <!-- Avatar Section -->
+    <section class="edit-profile-avatar-sec">
+      <div class="edit-profile-avatar">
+        <img *ngIf="avatarUrl" [src]="avatarUrl" alt="Foto Profil" />
+        <div *ngIf="!avatarUrl" class="edit-profile-avatar__placeholder">
+          <span>{{ vendorInitial }}</span>
+        </div>
+      </div>
+      <label class="edit-profile-avatar__change-btn">
+        Ubah Foto Profil
+        <input type="file" accept="image/*" (change)="onAvatarSelected($event)" />
+      </label>
+    </section>
+
+    <!-- Form Section -->
+    <section class="edit-profile-form">
+      <div class="field-group">
+        <label for="vendor_name">Nama Vendor</label>
+        <div class="app-input">
+          <ion-input
+            id="vendor_name"
+            type="text"
+            placeholder="Nama Vendor"
+            [(ngModel)]="vendor.name">
+          </ion-input>
+        </div>
+      </div>
+
+      <div class="field-group">
+        <label for="company_name">Nama Perusahaan</label>
+        <div class="app-input">
+          <ion-input
+            id="company_name"
+            type="text"
+            placeholder="Nama Perusahaan"
+            [(ngModel)]="vendor.company_name">
+          </ion-input>
+        </div>
+      </div>
+
+      <div class="field-group">
+        <label for="email">Email</label>
+        <div class="app-input">
+          <ion-input
+            id="email"
+            type="email"
+            placeholder="Email Resmi"
+            [(ngModel)]="vendor.email">
+          </ion-input>
+        </div>
+      </div>
+
+      <div class="field-group">
+        <label for="phone">Nomor Telepon</label>
+        <div class="app-input">
+          <ion-input
+            id="phone"
+            type="text"
+            placeholder="Nomor Telepon"
+            [(ngModel)]="vendor.contact">
+          </ion-input>
+        </div>
+      </div>
+
+      <div class="field-group">
+        <label for="address">Alamat Perusahaan</label>
+        <div class="app-input">
+          <ion-input
+            id="address"
+            type="text"
+            placeholder="Alamat Perusahaan"
+            [(ngModel)]="vendor.address">
+          </ion-input>
+        </div>
+      </div>
+    </section>
+
+    <!-- Read-only Metadata Section -->
+    <section class="edit-profile-metadata">
+      <span class="app-section-title">Informasi Sistem (Read-Only)</span>
+      
+      <div class="app-card metadata-card">
+        <div class="metadata-row">
+          <span>Vendor ID</span>
+          <strong>{{ vendor.id || '-' }}</strong>
+        </div>
+        <div class="metadata-row">
+          <span>Status Vendor</span>
+          <strong>{{ vendorVerificationStatusLabel || '-' }}</strong>
+        </div>
+        <div class="metadata-row">
+          <span>Tanggal Registrasi</span>
+          <strong>{{ registrationDateLabel }}</strong>
+        </div>
+      </div>
+    </section>
+  </div>
+  
+</ion-content>
+
+<!-- Sticky Bottom Button -->
+<footer class="edit-profile-footer">
+  <div class="edit-profile-footer__inner">
+    <ion-button
+      expand="block"
+      class="app-button-primary"
+      (click)="saveProfile()"
+      [disabled]="saving">
+      <span *ngIf="!saving">Simpan Perubahan</span>
+      <ion-spinner *ngIf="saving" name="crescent"></ion-spinner>
+    </ion-button>
+  </div>
+</footer>

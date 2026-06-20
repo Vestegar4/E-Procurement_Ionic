@@ -1,16 +1,24 @@
-import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { Component, OnInit } from '@angular/core';
+import { RouterModule } from '@angular/router';
 import {
   IonContent,
-  IonButton,
-  IonSelect,
-  IonSelectOption,
+  IonSpinner,
   ToastController
 } from '@ionic/angular/standalone';
-
-import { FormsModule } from '@angular/forms';
-import { RouterModule } from '@angular/router';
+import { AuthService } from 'src/app/services/auth.service';
 import { VendorService } from 'src/app/services/vendor.service';
+
+interface DocumentOverviewItem {
+  key: string;
+  label: string;
+  description: string;
+  status: 'uploaded' | 'pending' | 'missing';
+  fileName: string;
+  file: File | null;
+  uploading: boolean;
+  lastUploadedDate: string | null;
+}
 
 @Component({
   selector: 'app-documents',
@@ -19,32 +27,37 @@ import { VendorService } from 'src/app/services/vendor.service';
   standalone: true,
   imports: [
     CommonModule,
-    FormsModule,
     RouterModule,
     IonContent,
-    IonButton,
-    IonSelect,
-    IonSelectOption
+    IonSpinner
   ]
 })
 export class DocumentsPage implements OnInit {
-
-  documentType = '';
-  selectedFile: File | null = null;
-
-  uploadedDocuments: any[] = [];
+  vendor: any = {};
+  documentItems: DocumentOverviewItem[] = this.createDocumentItems();
 
   constructor(
     private vendorService: VendorService,
+    private authService: AuthService,
     private toastController: ToastController
   ) {}
 
   ngOnInit() {
-    this.loadDocuments();
+    this.loadProfile();
   }
 
-  onFileSelected(event: any) {
-    this.selectedFile = event.target.files[0];
+  private loadProfile() {
+    this.vendorService.getProfile().subscribe({
+      next: (res: any) => {
+        this.vendor = this.extractProfile(res);
+        this.documentItems = this.buildDocumentItems(this.vendor);
+      },
+      error: (err: any) => {
+        console.log('DOCUMENT PROFILE ERROR:', err);
+        this.vendor = this.authService.getStoredVendorProfile() || {};
+        this.documentItems = this.buildDocumentItems(this.vendor);
+      }
+    });
   }
 
   async showToast(message: string, color: string = 'success') {
@@ -53,89 +66,315 @@ export class DocumentsPage implements OnInit {
       duration: 2000,
       color
     });
-
     await toast.present();
   }
 
-  uploadDocument() {
-    if (!this.documentType) {
-      this.showToast('Pilih jenis dokumen', 'danger');
+  onDocumentSelected(documentKey: string, event: Event) {
+    const target = event.target as HTMLInputElement;
+    const selectedFile = target?.files?.[0] || null;
+
+    this.documentItems = this.documentItems.map((item) =>
+      item.key === documentKey
+        ? {
+            ...item,
+            file: selectedFile,
+            fileName: selectedFile ? selectedFile.name : item.fileName
+          }
+        : item
+    );
+  }
+
+  uploadDocument(documentKey: string) {
+    const targetItem = this.documentItems.find((item) => item.key === documentKey);
+
+    if (!targetItem?.file) {
+      this.showToast('Silakan pilih file terlebih dahulu', 'danger');
       return;
     }
 
-    if (!this.selectedFile) {
-      this.showToast('Pilih file terlebih dahulu', 'danger');
-      return;
-    }
+    this.documentItems = this.documentItems.map((item) =>
+      item.key === documentKey
+        ? {
+            ...item,
+            uploading: true
+          }
+        : item
+    );
 
-    const data = {
-      type: this.documentType,
-      file: this.selectedFile
-    };
-
-    this.vendorService.uploadDocument(data).subscribe({
+    this.vendorService.uploadDocument({
+      type: documentKey,
+      file: targetItem.file
+    }).subscribe({
       next: (res: any) => {
-        const uploadedDocument = this.extractUploadedDocument(res);
-
-        if (uploadedDocument) {
-          this.uploadedDocuments = [uploadedDocument, ...this.uploadedDocuments];
-        } else {
-          this.loadDocuments();
-        }
-
-        this.documentType = '';
-        this.selectedFile = null;
-
-        this.showToast(res?.message || 'Dokumen berhasil diupload');
+        this.showToast(res?.message || 'Dokumen berhasil diunggah');
+        this.loadProfile();
       },
       error: (err: any) => {
         console.log('UPLOAD DOCUMENT ERROR:', err);
-        this.showToast(err?.error?.message || 'Gagal upload dokumen', 'danger');
+        this.documentItems = this.documentItems.map((item) =>
+          item.key === documentKey
+            ? {
+                ...item,
+                uploading: false
+              }
+            : item
+        );
+        this.showToast(err?.error?.message || 'Gagal mengunggah dokumen', 'danger');
       }
     });
   }
 
-  private loadDocuments() {
-    this.vendorService.getProfile().subscribe({
-      next: (res: any) => {
-        const vendor = res?.vendor || res?.data?.vendor || res?.data || res || {};
-        const documents =
-          vendor?.documents ||
-          res?.documents ||
-          res?.data?.documents ||
-          [];
-
-        this.uploadedDocuments = Array.isArray(documents)
-          ? documents.map((doc: any) => ({
-              type: doc?.type || doc?.document_type || 'Dokumen',
-              filename: doc?.filename || doc?.name || doc?.file_name || '-',
-              status: doc?.status || 'uploaded'
-            }))
-          : [];
-      },
-      error: (err: any) => {
-        console.log('LOAD DOCUMENTS ERROR:', err);
-        this.uploadedDocuments = [];
-      }
-    });
+  getStatusLabel(status: string): string {
+    if (status === 'uploaded') {
+      return '✓ Uploaded';
+    }
+    if (status === 'pending') {
+      return '⏳ Pending Verification';
+    }
+    return '⚠ Belum Upload';
   }
 
-  private extractUploadedDocument(res: any) {
-    const document =
-      res?.document ||
-      res?.data?.document ||
-      res?.data ||
-      null;
-
-    if (!document) {
-      return null;
+  getDocumentBadgeClass(status: DocumentOverviewItem['status']) {
+    if (status === 'uploaded') {
+      return 'app-badge--open';
     }
 
-    return {
-      type: document?.type || document?.document_type || this.documentType,
-      filename: document?.filename || document?.name || document?.file_name || this.selectedFile?.name || '-',
-      status: document?.status || 'uploaded'
-    };
+    if (status === 'pending') {
+      return 'app-badge--bidding';
+    }
+
+    return 'app-badge--closed';
   }
 
+  formatLastUploadedDate(dateString: string | null): string {
+    if (!dateString) {
+      return 'Belum diunggah';
+    }
+    const date = new Date(dateString);
+    if (Number.isNaN(date.getTime())) {
+      return dateString;
+    }
+    return date.toLocaleDateString('id-ID', {
+      day: '2-digit',
+      month: 'long',
+      year: 'numeric'
+    });
+  }
+
+  private extractProfile(res: any) {
+    return (
+      res?.vendor ||
+      res?.user ||
+      res?.data?.vendor ||
+      res?.data?.user ||
+      res?.data ||
+      res ||
+      {}
+    );
+  }
+
+  private buildDocumentItems(profile: any) {
+    const documents = this.extractDocumentList(profile);
+
+    return this.createDocumentItems().map((item) => {
+      const source = this.findDocumentSource(documents, item.key);
+      const status = this.resolveStatus(profile, item.key, source);
+
+      return {
+        ...item,
+        status,
+        fileName: this.resolveFileName(profile, item.key, source, status),
+        lastUploadedDate: source?.updated_at || source?.created_at || null,
+        file: null,
+        uploading: false
+      };
+    });
+  }
+
+  private createDocumentItems(): DocumentOverviewItem[] {
+    return [
+      {
+        key: 'nib',
+        label: 'NIB',
+        description: 'Nomor Induk Berusaha',
+        status: 'missing',
+        fileName: 'Belum diunggah',
+        file: null,
+        uploading: false,
+        lastUploadedDate: null
+      },
+      {
+        key: 'npwp',
+        label: 'NPWP',
+        description: 'Dokumen pajak perusahaan',
+        status: 'missing',
+        fileName: 'Belum diunggah',
+        file: null,
+        uploading: false,
+        lastUploadedDate: null
+      },
+      {
+        key: 'company_profile',
+        label: 'Company Profile',
+        description: 'Profil perusahaan vendor',
+        status: 'missing',
+        fileName: 'Belum diunggah',
+        file: null,
+        uploading: false,
+        lastUploadedDate: null
+      },
+      {
+        key: 'supporting_documents',
+        label: 'Dokumen Pendukung',
+        description: 'Dokumen pendukung lainnya',
+        status: 'missing',
+        fileName: 'Belum diunggah',
+        file: null,
+        uploading: false,
+        lastUploadedDate: null
+      }
+    ];
+  }
+
+  private extractDocumentList(profile: any) {
+    const candidates = [
+      profile?.documents,
+      profile?.vendor_documents,
+      profile?.document_uploads,
+      profile?.attachments,
+      profile?.data?.documents,
+      profile?.data?.vendor_documents
+    ];
+
+    for (const candidate of candidates) {
+      if (Array.isArray(candidate)) {
+        return candidate;
+      }
+    }
+
+    return [];
+  }
+
+  private findDocumentSource(documentSources: any[], documentKey: string) {
+    const normalizedDocumentKey = this.normalizeDocumentKey(documentKey);
+
+    return documentSources.find((document) => {
+      const candidateKey = this.normalizeDocumentKey(
+        document?.type ||
+        document?.document_type ||
+        document?.category ||
+        document?.name
+      );
+
+      if (!candidateKey) {
+        return false;
+      }
+
+      return candidateKey.includes(normalizedDocumentKey) || normalizedDocumentKey.includes(candidateKey);
+    }) || null;
+  }
+
+  private resolveStatus(profile: any, documentKey: string, documentSource: any): DocumentOverviewItem['status'] {
+    const rawStatus = this.normalizeDocumentStatus(
+      documentSource?.status ||
+      documentSource?.upload_status ||
+      documentSource?.verification_status ||
+      documentSource?.approval_status ||
+      profile?.[`${documentKey}_status`] ||
+      profile?.[`${documentKey}Status`]
+    );
+
+    if (rawStatus === 'uploaded' || rawStatus === 'pending' || rawStatus === 'missing') {
+      return rawStatus;
+    }
+
+    if (documentSource) {
+      return 'pending';
+    }
+
+    return this.hasProfileDocument(profile, documentKey) ? 'uploaded' : 'missing';
+  }
+
+  private resolveFileName(profile: any, documentKey: string, documentSource: any, status: string) {
+    const directValue =
+      documentSource?.filename ||
+      documentSource?.name ||
+      documentSource?.file_name ||
+      documentSource?.document_name ||
+      profile?.[`${documentKey}_filename`] ||
+      profile?.[`${documentKey}FileName`] ||
+      profile?.[`${documentKey}_file`] ||
+      profile?.[documentKey];
+
+    const text = this.displayValue(directValue, '');
+
+    if (text) {
+      return text;
+    }
+
+    if (status === 'uploaded') {
+      return 'Dokumen tersimpan';
+    }
+
+    return 'Belum diunggah';
+  }
+
+  private hasProfileDocument(profile: any, documentKey: string) {
+    const keys = [
+      documentKey,
+      `${documentKey}_file`,
+      `${documentKey}_filename`,
+      `${documentKey}File`,
+      `${documentKey}FileName`
+    ];
+
+    return keys.some((key) => this.hasTruthyValue(profile?.[key]));
+  }
+
+  private normalizeDocumentKey(value: string) {
+    return String(value || '')
+      .toLowerCase()
+      .replace(/[_-]+/g, ' ')
+      .replace(/\s+/g, ' ')
+      .trim();
+  }
+
+  private normalizeDocumentStatus(value: any): 'uploaded' | 'pending' | 'missing' | '' {
+    const status = String(value || '').toLowerCase().trim();
+
+    if (['uploaded', 'approved', 'verified', 'complete', 'completed'].includes(status)) {
+      return 'uploaded';
+    }
+
+    if (['pending', 'review', 'submitted', 'waiting', 'in_review'].includes(status)) {
+      return 'pending';
+    }
+
+    if (['missing', 'not_available', 'unavailable', 'absent', 'none'].includes(status)) {
+      return 'missing';
+    }
+
+    return '';
+  }
+
+  private hasTruthyValue(value: any) {
+    if (Array.isArray(value)) {
+      return value.length > 0;
+    }
+
+    if (value === undefined || value === null) {
+      return false;
+    }
+
+    return String(value).trim() !== '';
+  }
+
+  private displayValue(value: any, fallback: string = '-') {
+    if (value === undefined || value === null) {
+      return fallback;
+    }
+
+    const text = String(value).trim();
+    return text ? text : fallback;
+  }
 }

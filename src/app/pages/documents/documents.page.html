@@ -1,83 +1,70 @@
 <ion-content class="documents-page app-page" [fullscreen]="true">
   <div class="app-container documents-container">
-    <section class="app-card documents-hero">
-      <span class="app-section-title">Document Management</span>
-      <h1 class="app-title">Kelola dokumen vendor dengan pengalaman yang rapi, premium, dan siap audit.</h1>
-      <p class="app-subtitle">Upload legalitas dan dokumen pendukung lalu pantau statusnya dari satu alur yang bersih.</p>
+    <!-- Header/Topbar -->
+    <header class="documents-topbar">
+      <a class="documents-topbar__back" routerLink="/profile" aria-label="Kembali ke profil">
+        <svg viewBox="0 0 24 24">
+          <polyline points="15 18 9 12 15 6" />
+        </svg>
+      </a>
+      <h1>Kelola Dokumen Vendor</h1>
+      <div class="documents-topbar__spacer"></div>
+    </header>
+
+    <section class="documents-info">
+      <p class="app-subtitle">Lengkapi legalitas dokumen Anda untuk mempercepat proses verifikasi oleh tim kurasi Proculus.</p>
     </section>
 
-    <section class="app-card documents-upload">
-      <div class="documents-upload__head">
-        <span class="app-section-title">Upload Document</span>
-        <h2>Tambah dokumen baru</h2>
-      </div>
-
-      <div class="field-group">
-        <label for="documentType">Jenis Dokumen</label>
-        <div class="app-input app-input--select">
-          <ion-select
-            id="documentType"
-            placeholder="Pilih jenis dokumen"
-            [(ngModel)]="documentType">
-            <ion-select-option value="Legalitas">
-              Legalitas
-            </ion-select-option>
-
-            <ion-select-option value="Izin Usaha">
-              Izin Usaha
-            </ion-select-option>
-
-            <ion-select-option value="Dokumen Pendukung">
-              Dokumen Pendukung
-            </ion-select-option>
-          </ion-select>
-        </div>
-      </div>
-
-      <div class="field-group">
-        <label>Pilih File</label>
-        <label class="documents-file">
-          <input
-            type="file"
-            accept=".pdf,.jpg,.jpeg,.png"
-            (change)="onFileSelected($event)" />
-          <span>{{ selectedFile ? selectedFile.name : 'Pilih file dokumen' }}</span>
-        </label>
-      </div>
-
-      <ion-button
-        expand="block"
-        class="app-button-secondary"
-        (click)="uploadDocument()">
-        Upload Dokumen
-      </ion-button>
-    </section>
-
+    <!-- Documents Cards List -->
     <section class="documents-list">
-      <div class="documents-list__head">
-        <span class="app-section-title">Uploaded Files</span>
-        <p class="app-subtitle">Daftar file vendor yang sudah masuk ke sistem.</p>
-      </div>
+      <article
+        class="app-card document-card"
+        *ngFor="let document of documentItems">
+        <div class="document-card__header">
+          <h2>{{ document.label }}</h2>
+          <span class="app-badge" [ngClass]="getDocumentBadgeClass(document.status)">
+            {{ getStatusLabel(document.status) }}
+          </span>
+        </div>
 
-      <div *ngIf="uploadedDocuments.length; else emptyDocuments" class="documents-list__items">
-        <div
-          class="app-list-item documents-item"
-          *ngFor="let doc of uploadedDocuments">
-          <div>
-            <strong>{{ doc.type }}</strong>
-            <p>{{ doc.filename }}</p>
+        <p class="document-card__description">{{ document.description }}</p>
+
+        <div class="document-card__meta">
+          <span class="meta-label">File Dokumen:</span>
+          <strong class="meta-value">{{ document.file ? document.file.name : document.fileName }}</strong>
+        </div>
+
+        <div class="document-card__meta">
+          <span class="meta-label">Terakhir diperbarui:</span>
+          <strong class="meta-value">{{ formatLastUploadedDate(document.lastUploadedDate) }}</strong>
+        </div>
+
+        <div class="document-card__actions">
+          <!-- File selection button (Upload or Ganti Dokumen) -->
+          <label *ngIf="!document.file && !document.uploading" class="document-action-btn document-action-btn--ghost">
+            <span>{{ document.status === 'missing' ? 'Upload' : 'Ganti Dokumen' }}</span>
+            <input
+              type="file"
+              accept=".pdf,.jpg,.jpeg,.png"
+              (change)="onDocumentSelected(document.key, $event)" />
+          </label>
+
+          <!-- Upload confirmation button when file is selected -->
+          <button
+            *ngIf="document.file && !document.uploading"
+            type="button"
+            class="document-action-btn document-action-btn--primary"
+            (click)="uploadDocument(document.key)">
+            Unggah Dokumen
+          </button>
+
+          <!-- Loading spinner -->
+          <div *ngIf="document.uploading" class="document-loading">
+            <ion-spinner name="crescent"></ion-spinner>
+            <span>Mengunggah...</span>
           </div>
-
-          <span class="app-badge app-badge--open">{{ doc.status }}</span>
         </div>
-      </div>
-
-      <ng-template #emptyDocuments>
-        <div class="app-empty-state">
-          <strong>Belum ada dokumen terupload</strong>
-          <span>Unggah file pertama Anda untuk mulai melengkapi persyaratan vendor.</span>
-        </div>
-      </ng-template>
+      </article>
     </section>
   </div>
 </ion-content>

@@ -1,66 +1,21 @@
-import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { Component } from '@angular/core';
 import { FormsModule } from '@angular/forms';
+import { Router, RouterModule } from '@angular/router';
 import {
+  IonButton,
   IonContent,
   IonInput,
-  IonButton,
+  IonSpinner,
   ToastController
 } from '@ionic/angular/standalone';
+import { AuthService } from 'src/app/services/auth.service';
 
-import { RouterModule } from '@angular/router';
+type ForgotPasswordStep = 'email' | 'otp' | 'password';
 
 @Component({
   selector: 'app-forgot-password',
-  template: `
-    <ion-content class="forgot-page" [fullscreen]="true">
-      <div class="forgot-shell">
-        <header class="forgot-brand">
-          <strong>PROCULUS</strong>
-          <span>INSTITUTIONAL EXCELLENCE</span>
-        </header>
-
-        <main class="forgot-main">
-          <section class="forgot-copy">
-            <h1>Reset Password</h1>
-            <p>
-              Enter your business email and we’ll send secure instructions to recover your procurement account.
-            </p>
-          </section>
-
-          <section class="app-card forgot-card">
-            <div class="field-group">
-              <label for="email">Business Email</label>
-              <div class="app-input forgot-input">
-                <ion-input
-                  id="email"
-                  type="email"
-                  inputmode="email"
-                  autocomplete="email"
-                  placeholder="executive@enterprise.com"
-                  [(ngModel)]="email"
-                  name="email">
-                </ion-input>
-              </div>
-            </div>
-
-            <ion-button
-              expand="block"
-              class="forgot-button-primary"
-              (click)="sendResetLink()"
-              [disabled]="loading">
-              <span>SEND RESET LINK</span>
-              <i aria-hidden="true">→</i>
-            </ion-button>
-          </section>
-        </main>
-
-        <footer class="forgot-footer">
-          <a routerLink="/login">Back to Sign In</a>
-        </footer>
-      </div>
-    </ion-content>
-  `,
+  templateUrl: './forgot-password.page.html',
   styleUrls: ['./forgot-password.page.scss'],
   standalone: true,
   imports: [
@@ -69,14 +24,23 @@ import { RouterModule } from '@angular/router';
     RouterModule,
     IonContent,
     IonInput,
-    IonButton
+    IonButton,
+    IonSpinner
   ]
 })
 export class ForgotPasswordPage {
+  step: ForgotPasswordStep = 'email';
   email = '';
+  otp = '';
+  password = '';
+  passwordConfirmation = '';
   loading = false;
 
-  constructor(private toastController: ToastController) {}
+  constructor(
+    private authService: AuthService,
+    private router: Router,
+    private toastController: ToastController
+  ) {}
 
   async showToast(message: string, color: string = 'success') {
     const toast = await this.toastController.create({
@@ -88,7 +52,7 @@ export class ForgotPasswordPage {
     await toast.present();
   }
 
-  sendResetLink() {
+  requestOtp() {
     if (!this.email) {
       this.showToast('Email wajib diisi', 'danger');
       return;
@@ -96,9 +60,84 @@ export class ForgotPasswordPage {
 
     this.loading = true;
 
-    setTimeout(() => {
-      this.loading = false;
-      this.showToast('Link reset password berhasil dikirim');
-    }, 1000);
+    this.authService.requestPasswordResetOtp({ email: this.email }).subscribe({
+      next: (res: any) => {
+        this.loading = false;
+        this.step = 'otp';
+        this.showToast(res?.message || 'OTP berhasil dikirim ke email Anda');
+      },
+      error: (err: any) => {
+        this.loading = false;
+        this.showToast(err?.error?.message || 'Gagal mengirim OTP', 'danger');
+      }
+    });
+  }
+
+  verifyOtp() {
+    if (!this.email || !this.otp) {
+      this.showToast('Email dan OTP wajib diisi', 'danger');
+      return;
+    }
+
+    this.loading = true;
+
+    this.authService.verifyPasswordResetOtp({
+      email: this.email,
+      otp: this.otp
+    }).subscribe({
+      next: (res: any) => {
+        this.loading = false;
+        this.step = 'password';
+        this.showToast(res?.message || 'OTP terverifikasi');
+      },
+      error: (err: any) => {
+        this.loading = false;
+        this.showToast(err?.error?.message || 'OTP tidak valid', 'danger');
+      }
+    });
+  }
+
+  resetPassword() {
+    if (!this.password || !this.passwordConfirmation) {
+      this.showToast('Password baru wajib diisi', 'danger');
+      return;
+    }
+
+    if (this.password !== this.passwordConfirmation) {
+      this.showToast('Konfirmasi password tidak sama', 'danger');
+      return;
+    }
+
+    this.loading = true;
+
+    this.authService.resetPasswordWithOtp({
+      email: this.email,
+      otp: this.otp,
+      password: this.password,
+      password_confirmation: this.passwordConfirmation
+    }).subscribe({
+      next: (res: any) => {
+        this.loading = false;
+        this.showToast(res?.message || 'Password berhasil diperbarui');
+        void this.router.navigate(['/login']);
+      },
+      error: (err: any) => {
+        this.loading = false;
+        this.showToast(err?.error?.message || 'Gagal memperbarui password', 'danger');
+      }
+    });
+  }
+
+  back(): void {
+    if (this.step === 'password') {
+      this.step = 'otp';
+      return;
+    }
+
+    this.step = 'email';
+  }
+
+  get currentStepIndex(): number {
+    return this.step === 'email' ? 1 : this.step === 'otp' ? 2 : 3;
   }
 }

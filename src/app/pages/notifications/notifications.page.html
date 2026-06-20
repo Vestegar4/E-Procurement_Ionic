@@ -1,0 +1,73 @@
+<ion-content class="notifications-page app-page" [fullscreen]="true">
+  <div class="app-container notifications-container">
+    <section class="notifications-topbar">
+      <div class="notifications-topbar__brand">
+        <h1>PROCULUS</h1>
+        <p>Notifikasi</p>
+      </div>
+
+      <span class="notifications-topbar__icon" aria-hidden="true">
+        <svg viewBox="0 0 24 24">
+          <path d="M12 4a4 4 0 0 0-4 4v2.2c0 .8-.24 1.58-.68 2.24L6 14.5V16h12v-1.5l-1.32-2.06A4.2 4.2 0 0 1 16 10.2V8a4 4 0 0 0-4-4Zm-2 14a2 2 0 0 0 4 0" />
+        </svg>
+      </span>
+    </section>
+
+    <section class="app-card notifications-hero">
+      <span class="app-section-title">Pusat Notifikasi</span>
+      <h2>Rangkuman tender, sistem, dan pembaruan procurement dalam satu tempat.</h2>
+      <p class="app-subtitle">Tetap terinformasi tanpa harus membuka banyak halaman.</p>
+    </section>
+
+    <section class="notifications-section">
+      <div class="notifications-section__bar">
+        <span class="app-section-title">Pengumuman Tender</span>
+      </div>
+
+      <div class="notifications-list">
+        <article class="app-list-item notifications-item" *ngFor="let item of tenderAnnouncements">
+          <div class="notifications-item__content">
+            <span class="app-badge app-badge--open">{{ item.badge }}</span>
+            <strong>{{ item.title }}</strong>
+            <p>{{ item.description }}</p>
+          </div>
+          <small>{{ item.time }}</small>
+        </article>
+      </div>
+    </section>
+
+    <section class="notifications-section">
+      <div class="notifications-section__bar">
+        <span class="app-section-title">Notifikasi Sistem</span>
+      </div>
+
+      <div class="notifications-list">
+        <article class="app-list-item notifications-item" *ngFor="let item of systemNotifications">
+          <div class="notifications-item__content">
+            <span class="app-badge app-badge--bidding">{{ item.badge }}</span>
+            <strong>{{ item.title }}</strong>
+            <p>{{ item.description }}</p>
+          </div>
+          <small>{{ item.time }}</small>
+        </article>
+      </div>
+    </section>
+
+    <section class="notifications-section">
+      <div class="notifications-section__bar">
+        <span class="app-section-title">Pembaruan Procurement</span>
+      </div>
+
+      <div class="notifications-list">
+        <article class="app-list-item notifications-item" *ngFor="let item of procurementUpdates">
+          <div class="notifications-item__content">
+            <span class="app-badge app-badge--closed">{{ item.badge }}</span>
+            <strong>{{ item.title }}</strong>
+            <p>{{ item.description }}</p>
+          </div>
+          <small>{{ item.time }}</small>
+        </article>
+      </div>
+    </section>
+  </div>
+</ion-content>

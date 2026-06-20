@@ -25,6 +25,18 @@ export class AuthService {
     return this.http.post<any>(`${this.apiUrl}/auth/vendor/register`, data);
   }
 
+  requestPasswordResetOtp(data: { email: string }) {
+    return this.http.post<any>(`${this.apiUrl}/auth/vendor/forgot-password/request-otp`, data);
+  }
+
+  verifyPasswordResetOtp(data: { email: string; otp: string }) {
+    return this.http.post<any>(`${this.apiUrl}/auth/vendor/forgot-password/verify-otp`, data);
+  }
+
+  resetPasswordWithOtp(data: { email: string; otp: string; password: string; password_confirmation: string }) {
+    return this.http.post<any>(`${this.apiUrl}/auth/vendor/forgot-password/reset`, data);
+  }
+
   me() {
     return this.http.get<any>(`${this.apiUrl}/auth/vendor/me`).pipe(
       tap((res) => this.persistVendorProfileFromResponse(res))

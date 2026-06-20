@@ -1,39 +1,45 @@
 import { CommonModule } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
-import { RouterModule } from '@angular/router';
+import { FormsModule } from '@angular/forms';
+import { Router, RouterModule } from '@angular/router';
 import {
-  AlertController,
-  IonContent
+  IonButton,
+  IonContent,
+  IonInput,
+  IonSpinner,
+  ToastController
 } from '@ionic/angular/standalone';
 import { AuthService } from 'src/app/services/auth.service';
 import { VendorService } from 'src/app/services/vendor.service';
 
 @Component({
-  selector: 'app-profile',
-  templateUrl: './profile.page.html',
-  styleUrls: ['./profile.page.scss'],
+  selector: 'app-edit-profile',
+  templateUrl: './edit-profile.page.html',
+  styleUrls: ['./edit-profile.page.scss'],
   standalone: true,
   imports: [
     CommonModule,
+    FormsModule,
     RouterModule,
-    IonContent
+    IonContent,
+    IonInput,
+    IonButton,
+    IonSpinner
   ]
 })
-export class ProfilePage implements OnInit {
+export class EditProfilePage implements OnInit {
   vendor: any = this.createEmptyVendor();
   avatarUrl: string | null = null;
+  saving = false;
 
   constructor(
     private authService: AuthService,
     private vendorService: VendorService,
-    private alertController: AlertController
+    private toastController: ToastController,
+    private router: Router
   ) {}
 
   ngOnInit() {
-    this.loadProfile();
-  }
-
-  ionViewWillEnter() {
     this.loadProfile();
   }
 
@@ -44,7 +50,7 @@ export class ProfilePage implements OnInit {
         this.loadAvatar();
       },
       error: (err: any) => {
-        console.log('PROFILE ERROR:', err);
+        console.log('EDIT PROFILE LOAD ERROR:', err);
         this.vendor = this.mapVendorProfile(this.authService.getStoredVendorProfile());
         this.loadAvatar();
       }
@@ -55,41 +61,51 @@ export class ProfilePage implements OnInit {
     this.avatarUrl = localStorage.getItem('vendor_avatar');
   }
 
-  async openHelpCenter() {
-    const targetUrl = 'https://proculus.dartd.my.id';
-    const capacitor = (window as any).Capacitor;
-    const browser = capacitor?.Plugins?.Browser || capacitor?.Browser;
-
-    if (browser?.open) {
-      try {
-        await browser.open({ url: targetUrl });
-        return;
-      } catch (error) {
-        console.log('BROWSER OPEN ERROR:', error);
-      }
-    }
-
-    window.open(targetUrl, '_system');
+  async showToast(message: string, color: string = 'success') {
+    const toast = await this.toastController.create({
+      message,
+      duration: 2000,
+      color
+    });
+    await toast.present();
   }
 
-  async confirmLogout() {
-    const alert = await this.alertController.create({
-      header: 'Keluar dari akun?',
-      message: 'Apakah Anda yakin ingin keluar?',
-      buttons: [
-        {
-          text: 'Batal',
-          role: 'cancel'
-        },
-        {
-          text: 'Logout',
-          role: 'destructive',
-          handler: () => this.performLogout()
-        }
-      ]
-    });
+  onAvatarSelected(event: Event) {
+    const fileInput = event.target as HTMLInputElement;
+    if (!fileInput.files || fileInput.files.length === 0) {
+      return;
+    }
 
-    await alert.present();
+    const file = fileInput.files[0];
+    const reader = new FileReader();
+    reader.onload = () => {
+      const base64String = reader.result as string;
+      localStorage.setItem('vendor_avatar', base64String);
+      this.avatarUrl = base64String;
+      this.showToast('Foto profil berhasil diperbarui secara lokal');
+    };
+    reader.readAsDataURL(file);
+  }
+
+  saveProfile() {
+    this.saving = true;
+    const payload = {
+      ...this.vendor,
+      phone: this.vendor.contact || this.vendor.phone
+    };
+
+    this.vendorService.updateProfile(payload).subscribe({
+      next: (res: any) => {
+        this.saving = false;
+        this.showToast(res?.message || 'Profil berhasil diperbarui');
+        this.router.navigate(['/profile']);
+      },
+      error: (err: any) => {
+        console.log('UPDATE PROFILE ERROR:', err);
+        this.saving = false;
+        this.showToast(err?.error?.message || 'Gagal memperbarui profil', 'danger');
+      }
+    });
   }
 
   get vendorInitial() {
@@ -97,36 +113,24 @@ export class ProfilePage implements OnInit {
     return name !== '-' ? name.charAt(0).toUpperCase() : 'V';
   }
 
-  get profileHeadline() {
-    return this.displayValue(this.vendor?.name || this.vendor?.company_name);
-  }
-
-  get profileSubtitle() {
-    return this.displayValue(this.vendor?.company_name);
-  }
-
-  get vendorVerificationStatus() {
-    return this.authService.getVendorVerificationStatus(this.vendor);
-  }
-
   get vendorVerificationStatusLabel() {
     return this.authService.formatVerificationStatus(this.vendor, '');
   }
 
-  get vendorVerificationBadgeClass() {
-    if (this.vendorVerificationStatus === 'approved') {
-      return 'app-badge--open';
+  get registrationDateLabel() {
+    const rawDate = this.vendor?.created_at || this.vendor?.registration_date;
+    if (!rawDate) {
+      return 'Tidak tersedia';
     }
-
-    if (this.vendorVerificationStatus === 'pending') {
-      return 'app-badge--bidding';
+    const date = new Date(rawDate);
+    if (Number.isNaN(date.getTime())) {
+      return 'Tidak tersedia';
     }
-
-    if (this.vendorVerificationStatus === 'rejected') {
-      return 'app-badge--closed';
-    }
-
-    return 'app-badge--closed';
+    return date.toLocaleDateString('id-ID', {
+      day: '2-digit',
+      month: 'long',
+      year: 'numeric'
+    });
   }
 
   displayValue(value: any, fallback: string = '-') {
@@ -136,13 +140,6 @@ export class ProfilePage implements OnInit {
 
     const text = String(value).trim();
     return text ? text : fallback;
-  }
-
-  private performLogout() {
-    this.authService.logoutApi().subscribe({
-      next: () => this.authService.logout(),
-      error: () => this.authService.logout()
-    });
   }
 
   private extractProfile(res: any) {

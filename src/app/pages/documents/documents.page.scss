@@ -1,71 +1,182 @@
 .documents-container {
   display: grid;
-  gap: 20px;
-  padding-bottom: 112px;
+  gap: 24px;
+  padding-bottom: 32px;
 }
 
-.documents-hero,
-.documents-upload {
+.documents-topbar {
+  display: grid;
+  grid-template-columns: 44px minmax(0, 1fr) 44px;
+  align-items: center;
+  gap: 14px;
+  padding-bottom: 8px;
+  border-bottom: 1px solid rgba(26, 26, 26, 0.06);
+}
+
+.documents-topbar h1 {
+  margin: 0;
+  text-align: center;
+  color: var(--app-primary);
+  font-size: 1.25rem;
+  font-weight: 600;
+  letter-spacing: -0.01em;
+}
+
+.documents-topbar__back {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background: var(--app-surface-low);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--app-primary);
+  text-decoration: none;
+}
+
+.documents-topbar__back svg {
+  width: 20px;
+  height: 20px;
+  stroke: currentColor;
+  stroke-width: 2.2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  fill: none;
+}
+
+.documents-topbar__spacer {
+  width: 44px;
+}
+
+.documents-info {
+  margin-bottom: 8px;
+}
+
+.documents-list {
+  display: grid;
+  gap: 20px;
+}
+
+.document-card {
   display: grid;
   gap: 16px;
+  padding: 20px;
+  background: #ffffff;
+  border: 1px solid var(--app-border-strong);
+  border-radius: var(--app-radius-md);
+  box-shadow: var(--app-shadow-card);
 }
 
-.documents-upload__head,
-.documents-list__head,
-.documents-list,
-.documents-list__items {
-  display: grid;
+.document-card__header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
   gap: 12px;
 }
 
-.documents-upload__head h2 {
+.document-card__header h2 {
   margin: 0;
-  font-size: 1.3rem;
+  color: var(--app-primary);
+  font-size: 1.15rem;
   font-weight: 600;
+  letter-spacing: -0.01em;
 }
 
-.field-group {
-  display: grid;
-  gap: 10px;
+.document-card__description {
+  margin: 0;
+  color: var(--app-text-muted);
+  font-size: 0.85rem;
+  line-height: 1.35;
 }
 
-.field-group label {
-  color: var(--app-text-soft);
-  font-size: 0.75rem;
-  font-weight: 600;
-  letter-spacing: 0.1em;
-  text-transform: uppercase;
+.document-card__meta {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  padding-bottom: 8px;
+  border-bottom: 1px solid rgba(26, 26, 26, 0.04);
+  font-size: 0.88rem;
+  gap: 16px;
 }
 
-.app-input--select {
-  padding-right: 18px;
+.document-card__meta:last-of-type {
+  border-bottom: none;
+  padding-bottom: 0;
 }
 
-.documents-file {
+.meta-label {
+  color: var(--app-text-muted);
+}
+
+.meta-value {
+  color: var(--app-primary);
+  font-weight: 500;
+  text-align: right;
+  word-break: break-all;
+}
+
+.document-card__actions {
+  margin-top: 8px;
+}
+
+.document-action-btn {
   display: flex;
   align-items: center;
-  min-height: 52px;
-  padding: 0 18px;
-  border: 1px dashed rgba(26, 26, 26, 0.16);
+  justify-content: center;
+  width: 100%;
+  min-height: 48px;
   border-radius: var(--app-radius-lg);
-  background: #ffffff;
-  color: var(--app-text-muted);
+  font-weight: 600;
   font-size: 0.92rem;
+  cursor: pointer;
+  text-align: center;
+  transition: all 0.2s;
+  box-sizing: border-box;
 }
 
-.documents-file input {
+.document-action-btn input[type="file"] {
   display: none;
 }
 
-.documents-item strong {
-  display: block;
-  margin-bottom: 6px;
-  font-size: 0.96rem;
-  font-weight: 600;
+.document-action-btn--ghost {
+  background: transparent;
+  border: 1px solid var(--app-primary);
+  color: var(--app-primary);
 }
 
-.documents-item p {
+.document-action-btn--ghost:active {
+  background: var(--app-surface-low);
+}
+
+.document-action-btn--primary {
+  background: var(--app-primary);
+  border: 1px solid var(--app-primary);
+  color: #ffffff;
   margin: 0;
+  outline: none;
+}
+
+.document-action-btn--primary:active {
+  opacity: 0.9;
+}
+
+.document-loading {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
   color: var(--app-text-muted);
-  font-size: 0.86rem;
+  font-size: 0.9rem;
+}
+
+.document-loading ion-spinner {
+  width: 24px;
+  height: 24px;
+}
+
+@media (min-width: 768px) {
+  .documents-container {
+    max-width: 760px;
+    margin: 0 auto;
+  }
 }

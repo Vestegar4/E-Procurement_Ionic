@@ -65,6 +65,16 @@ export const routes: Routes = [
     loadComponent: () => import('./pages/profile/profile.page').then(m => m.ProfilePage)
   },
   {
+    path: 'edit-profile',
+    canActivate: [authGuard],
+    loadComponent: () => import('./pages/edit-profile/edit-profile.page').then(m => m.EditProfilePage)
+  },
+  {
+    path: 'notifications',
+    canActivate: [authGuard],
+    loadComponent: () => import('./pages/notifications/notifications.page').then(m => m.NotificationsPage)
+  },
+  {
     path: 'documents',
     canActivate: [authGuard],
     loadComponent: () => import('./pages/documents/documents.page').then(m => m.DocumentsPage)
