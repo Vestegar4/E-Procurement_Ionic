@@ -151,11 +151,17 @@ export class TenderDetailPage implements OnInit {
       next: (res: any) => {
         const rawTender = this.extractTender(res);
         this.tender = rawTender ? this.normalizeTender(rawTender) : null;
+        
+        // ▼ PERBAIKAN UTAMA DI SINI ▼
+        // Cek 'is_joined' dari root response (bawaan Laravel), bukan hanya dari dalam rawTender
         this.joined = !!(
-          rawTender?.joined ||
-          rawTender?.is_joined ||
+          res?.is_joined || 
+          res?.data?.is_joined || 
+          rawTender?.joined || 
+          rawTender?.is_joined || 
           rawTender?.has_joined
         );
+        // ▲ SAMPAI DI SINI ▲
 
         if (!this.tender) {
           this.errorMessage = 'Data tender tidak ditemukan.';

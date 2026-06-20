@@ -1,5 +1,6 @@
 <ion-content class="detail-page app-page" [fullscreen]="true">
   <div class="app-container detail-container" *ngIf="tender; else tenderState">
+    
     <section class="detail-topbar">
       <button type="button" class="detail-topbar__back" routerLink="/tender-list" aria-label="Kembali ke daftar tender">
         <svg viewBox="0 0 24 24">
@@ -22,6 +23,7 @@
       </div>
     </section>
 
+    <!-- Bagian Hero (Judul & Deskripsi) -->
     <section class="detail-hero">
       <div class="detail-hero__eyebrow">
         <ion-badge
@@ -34,54 +36,16 @@
           }">
           {{ tender.status }}
         </ion-badge>
-        <span>Ref: {{ tender.reference_number }}</span>
       </div>
 
       <h2>{{ tender.title }}</h2>
       <p class="detail-hero__subtitle">{{ tender.description }}</p>
     </section>
 
-    <section class="app-card detail-summary">
-      <span class="app-section-title">Tender Summary</span>
+    <!-- Blok Ringkasan Tender (Nilai Kontrak & Spesifikasi) TELAH DIHAPUS -->
 
-      <p class="detail-summary__body">
-        {{ tender.description }}
-      </p>
-
-      <div class="detail-summary__stats">
-        <div>
-          <span>Contract Value</span>
-          <strong>{{ tender.budget }}</strong>
-        </div>
-
-        <div>
-          <span>Duration</span>
-          <strong>{{ tender.duration }}</strong>
-        </div>
-      </div>
-
-      <div class="detail-summary__divider"></div>
-
-      <div class="detail-summary__requirements">
-        <span class="app-section-title">Primary Requirements</span>
-
-        <div class="detail-requirement" *ngFor="let requirement of tender.requirements">
-          <span class="detail-requirement__icon" aria-hidden="true">
-            <svg viewBox="0 0 24 24">
-              <path d="m12 3 2.1 2.1 3-.2.7 2.9 2.5 1.5-1.1 2.8 1.1 2.8-2.5 1.5-.7 2.9-3-.2L12 21l-2.1-2.1-3 .2-.7-2.9-2.5-1.5 1.1-2.8-1.1-2.8 2.5-1.5.7-2.9 3 .2Z" />
-              <path d="m9.5 12 1.7 1.7 3.3-3.4" />
-            </svg>
-          </span>
-          <span>{{ requirement }}</span>
-        </div>
-
-        <p class="detail-hero__subtitle" *ngIf="!tender.requirements.length">
-          Persyaratan belum tersedia.
-        </p>
-      </div>
-    </section>
-
-    <section class="detail-timeline" *ngIf="tender.timeline.length; else emptyTimelineState">
+    <!-- Jadwal Tender -->
+    <section class="detail-timeline" *ngIf="tender.timeline && tender.timeline.length; else emptyTimelineState">
       <article class="detail-step" [ngClass]="item.stepClass" *ngFor="let item of tender.timeline">
         <div class="detail-step__rail" aria-hidden="true">
           <span class="detail-step__dot"></span>
@@ -98,6 +62,7 @@
       </article>
     </section>
 
+    <!-- Aanwijzing -->
     <section class="app-card detail-summary">
       <span class="app-section-title">Aanwijzing</span>
 
@@ -109,7 +74,7 @@
         {{ aanwijzingError }}
       </p>
 
-      <section class="detail-timeline" *ngIf="!aanwijzingLoading && aanwijzingList.length">
+      <section class="detail-timeline" *ngIf="!aanwijzingLoading && aanwijzingList && aanwijzingList.length">
         <article class="detail-step" [ngClass]="item.stepClass" *ngFor="let item of aanwijzingList">
           <div class="detail-step__rail" aria-hidden="true">
             <span class="detail-step__dot"></span>
@@ -127,7 +92,7 @@
         </article>
       </section>
 
-      <p class="detail-hero__subtitle" *ngIf="!aanwijzingLoading && !aanwijzingError && !aanwijzingList.length">
+      <p class="detail-hero__subtitle" *ngIf="!aanwijzingLoading && !aanwijzingError && (!aanwijzingList || !aanwijzingList.length)">
         Belum ada pertanyaan aanwijzing untuk tender ini.
       </p>
 
@@ -142,7 +107,7 @@
             labelPlacement="stacked"
             autoGrow="true"
             rows="4"
-            placeholder="Tulis pertanyaan untuk admin"
+            placeholder="Tulis pertanyaan atau klarifikasi terkait dokumen tender ini..."
             [disabled]="aanwijzingSubmitting">
           </ion-textarea>
         </div>
@@ -160,35 +125,66 @@
       </div>
     </section>
 
-    <section class="detail-site-card">
-      <div class="detail-site-card__image" aria-hidden="true"></div>
-      <div class="detail-site-card__overlay">
-        <span class="app-section-title">Project Site</span>
-        <strong>{{ tender.project_site }}</strong>
-      </div>
-    </section>
-
+    <!-- ▼ TOMBOL IKUTI TENDER DINAMIS ▼ -->
     <button
       type="button"
       class="detail-join-button"
+      style="margin-top: 24px; transition: all 0.3s ease;"
+      [style.background]="joined ? '#28a745' : ''"
+      [style.color]="joined ? '#ffffff' : ''"
+      [style.opacity]="(joined || tender.status_key !== 'open') ? '1' : ''"
       (click)="joinTender()"
       [disabled]="joined || tender.status_key !== 'open'">
-      <span>{{ joined ? 'Sudah Mengikuti Tender' : 'Join Tender' }}</span>
-      <svg viewBox="0 0 24 24" aria-hidden="true">
+      
+      <!-- Teks berubah sesuai status -->
+      <span style="font-weight: 800;">{{ joined ? 'Telah Bergabung' : 'Ikuti Tender' }}</span>
+      
+      <!-- Ikon Panah jika belum join -->
+      <svg *ngIf="!joined" viewBox="0 0 24 24" aria-hidden="true">
         <path d="M5 12h14M13 6l6 6-6 6" />
       </svg>
+      
+      <!-- Ikon Ceklis jika sudah join -->
+      <svg *ngIf="joined" viewBox="0 0 24 24" aria-hidden="true" style="stroke: #ffffff; stroke-width: 3; fill: none; stroke-linecap: round; stroke-linejoin: round;">
+        <path d="M20 6 9 17l-5-5" />
+      </svg>
     </button>
+    <!-- ▲ SAMPAI DI SINI ▲ -->
 
     <section class="detail-action-row">
-      <button type="button" class="detail-action-card" (click)="goToBidding()">
-        <span class="app-section-title">Next Step</span>
-        <strong>Open Bidding</strong>
+      
+      <button 
+        type="button" 
+        class="detail-action-card" 
+        (click)="goToBidding()" 
+        style="display: flex; justify-content: space-between; align-items: center; width: 100%; text-align: left; padding: 16px;">
+        
+        <div style="display: flex; flex-direction: column; justify-content: center; align-items: flex-start; gap: 4px; margin: 0; padding: 0;">
+          <span class="app-section-title" style="margin: 0; line-height: 1;">Langkah Berikutnya</span>
+          <strong style="font-size: 1.05rem; margin: 0; line-height: 1;">Ruang Penawaran</strong>
+        </div>
+        
+        <svg viewBox="0 0 24 24" style="width: 22px; height: 22px; stroke: currentColor; fill: none; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; opacity: 0.8; flex-shrink: 0;">
+          <path d="M5 12h14M12 5l7 7-7 7" />
+        </svg>
       </button>
 
-      <button type="button" class="detail-action-card detail-action-card--ghost" (click)="goToResult()">
-        <span class="app-section-title">Status</span>
-        <strong>View Result</strong>
+      <button 
+        type="button" 
+        class="detail-action-card detail-action-card--ghost" 
+        (click)="goToResult()" 
+        style="display: flex; justify-content: space-between; align-items: center; width: 100%; text-align: left; padding: 16px;">
+        
+        <div style="display: flex; flex-direction: column; justify-content: center; align-items: flex-start; gap: 4px; margin: 0; padding: 0;">
+          <span class="app-section-title" style="margin: 0; line-height: 1;">Status</span>
+          <strong style="font-size: 1.05rem; margin: 0; line-height: 1;">Lihat Hasil</strong>
+        </div>
+        
+        <svg viewBox="0 0 24 24" style="width: 22px; height: 22px; stroke: currentColor; fill: none; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; opacity: 0.8; flex-shrink: 0;">
+          <path d="M5 12h14M12 5l7 7-7 7" />
+        </svg>
       </button>
+
     </section>
   </div>
 
@@ -201,9 +197,9 @@
 
         <div class="detail-step__content">
           <div class="detail-step__head">
-            <h3>Timeline</h3>
+            <h3>Jadwal Tender</h3>
           </div>
-          <p>Timeline tender belum tersedia.</p>
+          <p>Jadwal tender belum tersedia.</p>
         </div>
       </article>
     </section>
@@ -228,7 +224,7 @@
       </section>
 
       <section class="app-card detail-summary">
-        <span class="app-section-title">Tender Detail</span>
+        <span class="app-section-title">Detail Tender</span>
         <h2 class="detail-missing__title">{{ loading ? 'Memuat detail tender...' : 'Tender tidak ditemukan' }}</h2>
         <p class="detail-hero__subtitle">
           {{ loading ? 'Mohon tunggu, data tender sedang diambil dari server.' : (errorMessage || 'Data tender untuk halaman ini belum tersedia atau ID tender tidak valid.') }}

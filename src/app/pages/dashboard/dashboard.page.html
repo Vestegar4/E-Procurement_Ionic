@@ -37,8 +37,8 @@
         </span>
       </div>
 
-      <p class="app-subtitle">Ringkasan tender aktif, status vendor, dan aktivitas terbaru Anda.</p>
-      <p class="dashboard-overview__note">{{ vendorVerificationMessage }}</p>
+      <p class="app-subtitle">{{ vendorVerificationMessage }} Pantau peluang tender dan kelola aktivitas pengadaan Anda hari ini.
+      </p>
     </section>
 
     <section class="dashboard-insights">
@@ -89,7 +89,7 @@
           <p>Unggah NIB, NPWP, dan dokumen pendukung.</p>
         </button>
 
-        <button type="button" class="dashboard-action-card app-card" (click)="openHelpCenter()">
+        <button type="button" class="dashboard-action-card app-card" routerLink="/customer-service">
           <span class="dashboard-action-card__icon">
             <svg viewBox="0 0 24 24">
               <path d="M12 18h.01" />
@@ -98,7 +98,7 @@
             </svg>
           </span>
           <strong>Bantuan</strong>
-          <p>Buka pusat bantuan Proculus secara cepat.</p>
+          <p>Kirim pesan pengaduan ke tim Admin.</p>
         </button>
       </div>
     </section>

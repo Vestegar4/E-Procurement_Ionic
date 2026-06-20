@@ -21,33 +21,33 @@
     </section>
 
     <section class="app-card bidding-empty" *ngIf="!tender">
-      <span class="app-section-title">Bidding Room</span>
+      <span class="app-section-title">Ruang Penawaran</span>
       <h2>{{ loading ? 'Memuat data bidding...' : 'Tender tidak ditemukan' }}</h2>
-      <p>{{ loading ? 'Mohon tunggu, detail bidding sedang diambil dari server.' : (pageError || 'Data tender untuk halaman bidding ini belum tersedia atau ID tender tidak valid.') }}</p>
+      <p>{{ loading ? 'Mohon tunggu, detail penawaran sedang diambil dari server.' : (pageError || 'Data tender untuk halaman ini belum tersedia atau ID tender tidak valid.') }}</p>
     </section>
 
     <ng-container *ngIf="tender">
       <section class="bidding-countdown" [class.is-closed]="!biddingActive">
-      <span class="app-section-title">Bidding Closes In</span>
+      <span class="app-section-title">Penawaran Ditutup Dalam</span>
 
       <div class="bidding-countdown__clock">
         <div class="bidding-countdown__block">
           <strong>{{ countdownHours }}</strong>
-          <span>HRS</span>
+          <span>JAM</span>
         </div>
 
         <span class="bidding-countdown__separator">:</span>
 
         <div class="bidding-countdown__block">
           <strong>{{ countdownMinutes }}</strong>
-          <span>MINS</span>
+          <span>MNT</span>
         </div>
 
         <span class="bidding-countdown__separator">:</span>
 
         <div class="bidding-countdown__block">
           <strong>{{ countdownSeconds }}</strong>
-          <span>SECS</span>
+          <span>DTK</span>
         </div>
       </div>
       </section>
@@ -55,21 +55,21 @@
       <section class="bidding-board" [class.is-closed]="!biddingActive">
         <div class="bidding-board__top">
           <div class="bidding-board__summary">
-            <span class="app-section-title">Current Lowest Bid</span>
+            <span class="app-section-title">Penawaran Terendah Saat Ini</span>
             <h2>{{ currentLowestBid }}</h2>
           </div>
 
           <div class="bidding-board__stats">
             <strong>{{ activeBidCount }}</strong>
-            <span>Active Bids</span>
+            <span>Penawaran Aktif</span>
           </div>
         </div>
 
         <div class="bidding-board__form">
-          <label for="bidAmount">Your Bid Amount</label>
+          <label for="bidAmount">Nominal Penawaran Anda</label>
 
           <div class="bidding-board__field">
-            <span class="bidding-board__currency">$</span>
+            <span class="bidding-board__currency">IDR</span>
             <input
               id="bidAmount"
               type="number"
@@ -79,17 +79,40 @@
               placeholder="1,230,000" />
           </div>
 
-          <p class="bidding-board__hint">Minimum decrement: {{ minimumDecrement }}</p>
+          <label style="margin-top: 20px; display: block; font-size: 13px; font-weight: 600; margin-bottom: 8px; color: var(--ion-color-dark);">
+            Dokumen Bidding (RAB/Proposal)
+          </label>
+
+          <div style="position: relative; overflow: hidden; width: 100%; border: 1px dashed var(--ion-color-primary); border-radius: 8px; background: transparent; transition: all 0.3s ease;">
+            
+            <div style="display: flex; align-items: center; justify-content: space-between; padding: 8px 12px 8px 16px;">
+              <span style="font-size: 14px; color: var(--ion-color-dark); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 55%;">
+                {{ selectedFile ? selectedFile.name : 'Pilih file PDF/ZIP...' }}
+              </span>
+              
+              <span style="background: var(--ion-color-primary); color: var(--ion-color-primary-contrast, #fff); padding: 10px 22px; border-radius: 6px; font-size: 14px; font-weight: 700; letter-spacing: 0.5px; box-shadow: 0 4px 6px rgba(0, 0, 0, 0.15);">
+                {{ selectedFile ? 'GANTI' : 'UNGGAH' }}
+              </span>
+            </div>
+
+            <input
+              id="bidDocument"
+              type="file"
+              accept=".pdf,.zip,.rar"
+              (change)="onFileSelected($event)"
+              [disabled]="!biddingActive || submitting"
+              style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; opacity: 0; cursor: pointer; z-index: 10;" />
+          </div>
         </div>
       </section>
 
       <section class="bidding-feed">
         <div class="bidding-feed__head">
-          <h3>Live Activity Feed</h3>
+          <h3>Aktivitas Terkini</h3>
 
           <span class="bidding-feed__live">
             <i></i>
-            Live updates
+            Pembaruan langsung
           </span>
         </div>
 
@@ -128,10 +151,10 @@
 
       <ion-button
         expand="block"
-        class="app-button-gold bidding-submit"
+        class="bidding-submit"
         (click)="submitBid()"
         [disabled]="!biddingActive || submitting || loading">
-        Submit Bid
+        Kirim Penawaran
       </ion-button>
     </ng-container>
   </div>

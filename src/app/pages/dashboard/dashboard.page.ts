@@ -173,8 +173,8 @@ export class DashboardPage implements OnInit {
     }
 
     return this.authService.isVendorApproved(this.vendor)
-      ? 'Vendor Anda siap mengikuti tender aktif hari ini.'
-      : 'Akun vendor masih menunggu approval admin.';
+      ? 'Vendor Terverifikasi.'
+      : 'Akun masih menunggu verifikasi admin.';
   }
 
   getBadgeClass(status: string) {

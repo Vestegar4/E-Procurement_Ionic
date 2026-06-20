@@ -1,0 +1,41 @@
+<ion-content class="app-page" [fullscreen]="true">
+  <div class="app-container">
+    
+    <section style="display: flex; align-items: center; justify-content: space-between; padding: 20px;">
+      <button routerLink="/dashboard" style="background: #f4f5f8; border: none; border-radius: 50%; width: 40px; height: 40px; display: flex; align-items: center; justify-content: center;">
+        <svg viewBox="0 0 24 24" style="width: 20px; height: 20px; stroke: #111; stroke-width: 2; fill: none; stroke-linecap: round; stroke-linejoin: round;">
+          <path d="M15 6 9 12l6 6" />
+        </svg>
+      </button>
+
+      <h1 style="font-size: 18px; font-weight: 800; margin: 0; color: var(--ion-color-dark);">Customer Service</h1>
+
+      <div style="width: 40px;"></div>
+    </section>
+
+    <div style="padding: 20px;">
+      <h2 style="font-size: 20px; font-weight: 800; margin-bottom: 8px;">Hubungi Admin</h2>
+      <p style="color: #666; font-size: 14px; margin-bottom: 24px; line-height: 1.5;">
+        Punya kendala teknis atau pertanyaan seputar tender? Tulis pesan Anda di bawah ini, tim Admin Proculus akan segera merespons Anda.
+      </p>
+
+      <div style="border: 1px dashed var(--ion-color-primary); border-radius: 8px; padding: 16px; background: transparent;">
+        <textarea
+          [(ngModel)]="message"
+          rows="6"
+          placeholder="Tulis keluhan atau pertanyaan Anda di sini..."
+          style="width: 100%; border: none; outline: none; background: transparent; resize: none; font-size: 14px; color: var(--ion-color-dark);">
+        </textarea>
+      </div>
+
+      <ion-button
+        expand="block"
+        style="margin-top: 32px; --background: var(--ion-color-primary); --color: #ffff; font-weight: 800; --border-radius: 8px; height: 52px; letter-spacing: 0.5px; box-shadow: 0 4px 10px rgba(0,0,0,0.2);"
+        (click)="submitMessage()"
+        [disabled]="isSubmitting">
+        {{ isSubmitting ? 'MENGIRIM...' : 'KIRIM PESAN' }}
+      </ion-button>
+    </div>
+
+  </div>
+</ion-content>

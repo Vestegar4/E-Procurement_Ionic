@@ -24,20 +24,32 @@
         </div>
       </div>
 
-      <h2>{{ vendor.name || 'Nama Vendor' }}</h2>
-      <h3>{{ vendor.company_name || 'Nama Perusahaan' }}</h3>
+      <div style="display: flex; align-items: center; justify-content: center; gap: 8px; margin-top: 8px;">
+        <h2 style="margin: 0;">{{ vendor.name || 'Nama Vendor' }}</h2>
+
+        <span
+          *ngIf="vendorVerificationStatusLabel === 'Approved' || vendorVerificationStatusLabel === 'Terverifikasi'"
+          style="display: flex; align-items: center; justify-content: center; width: 22px; height: 22px; background-color: #f3d67c !important; border-radius: 50%; box-shadow: 0 4px 10px rgba(0,0,0,0.15);"
+          aria-label="Vendor terverifikasi">
+          <svg viewBox="0 0 24 24" fill="none" stroke="#111111" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" style="width: 14px; height: 14px;">
+            <path d="M20 6 9 17l-5-5" />
+          </svg>
+        </span>
+      </div>
+
+      <h3 style="margin-top: 6px;">{{ vendor.address || 'Lokasi Vendor' }}</h3>
       
-      <div class="profile-hero__badge-container">
+      <div class="profile-hero__badge-container" *ngIf="vendorVerificationStatusLabel !== 'Approved' && vendorVerificationStatusLabel !== 'Terverifikasi'">
         <span class="app-badge" [ngClass]="vendorVerificationBadgeClass">
           {{ vendorVerificationStatusLabel || 'Tidak tersedia' }}
         </span>
       </div>
-    </section>
+      </section>
 
     <section class="profile-menu">
       <!-- Edit Profil Action Card -->
       <a class="profile-menu-card app-card" routerLink="/edit-profile">
-        <div class="profile-menu-card__icon">
+        <div class="profile-menu-card__icon" style="background: #f4f5f8;">
           <svg viewBox="0 0 24 24">
             <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" />
             <circle cx="12" cy="7" r="4" />
@@ -52,7 +64,7 @@
 
       <!-- Kelola Dokumen Action Card -->
       <a class="profile-menu-card app-card" routerLink="/documents">
-        <div class="profile-menu-card__icon">
+        <div class="profile-menu-card__icon" style="background: #f4f5f8;">
           <svg viewBox="0 0 24 24">
             <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2-2H12a2 2 0 0 0 2-2V8z" />
             <polyline points="14 2 14 8 20 8" />
@@ -69,8 +81,8 @@
       </a>
 
       <!-- Bantuan Card -->
-      <button class="profile-menu-card app-card" type="button" (click)="openHelpCenter()">
-        <div class="profile-menu-card__icon">
+      <button class="profile-menu-card app-card" routerLink="/customer-service">
+        <div class="profile-menu-card__icon" style="background: #f4f5f8;">
           <svg viewBox="0 0 24 24">
             <circle cx="12" cy="12" r="10" />
             <path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3" />
@@ -86,7 +98,7 @@
 
       <!-- Logout Card -->
       <button class="profile-menu-card app-card profile-menu-card--danger" type="button" (click)="confirmLogout()">
-        <div class="profile-menu-card__icon">
+        <div class="profile-menu-card__icon" style="background: #f4f5f8;">
           <svg viewBox="0 0 24 24">
             <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4" />
             <polyline points="16 17 21 12 16 7" />
