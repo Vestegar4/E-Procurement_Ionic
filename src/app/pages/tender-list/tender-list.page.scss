@@ -140,7 +140,7 @@
 .tender-featured__head {
   display: flex;
   justify-content: space-between;
-  align-items: start;
+  align-items: flex-start;
   gap: 12px;
 }
 
@@ -180,6 +180,7 @@
   font-weight: 600;
   line-height: 1.08;
   letter-spacing: -0.04em;
+  overflow-wrap: anywhere;
 }
 
 .tender-featured p {
@@ -190,6 +191,7 @@
   color: rgba(255, 255, 255, 0.72);
   font-size: 0.97rem;
   line-height: 1.55;
+  overflow-wrap: anywhere;
 }
 
 .tender-featured__footer {
@@ -201,6 +203,7 @@
   gap: 16px;
   padding-top: 16px;
   border-top: 1px solid rgba(255, 255, 255, 0.12);
+  flex-wrap: wrap;
 }
 
 .tender-featured__footer span {
@@ -244,11 +247,20 @@
   justify-content: space-between;
   align-items: center;
   gap: 12px;
+  min-width: 0;
 }
 
 .tender-section__filter {
   display: grid;
   place-items: center;
+  width: 36px;
+  height: 36px;
+  padding: 0;
+  border: 0;
+  border-radius: 999px;
+  background: transparent;
+  cursor: pointer;
+  flex: 0 0 auto;
   color: var(--app-primary);
 }
 
@@ -268,14 +280,34 @@
 .tender-item__head {
   display: flex;
   justify-content: space-between;
-  align-items: start;
+  align-items: flex-start;
   gap: 12px;
+  min-width: 0;
 }
 
 .tender-item__bookmark {
   display: grid;
   place-items: center;
+  width: 36px;
+  height: 36px;
+  padding: 0;
+  border: 0;
+  border-radius: 999px;
+  background: transparent;
+  cursor: pointer;
+  flex: 0 0 auto;
   color: #b7b9c1;
+  transition: color 160ms ease, transform 160ms ease, background-color 160ms ease;
+}
+
+.tender-item__bookmark--active {
+  color: var(--app-gold);
+  background: rgba(241, 210, 116, 0.12);
+  transform: translateY(-1px);
+}
+
+.tender-item__bookmark--active svg {
+  fill: currentColor;
 }
 
 .tender-item h3 {
@@ -285,6 +317,7 @@
   font-weight: 500;
   line-height: 1.28;
   letter-spacing: -0.02em;
+  overflow-wrap: anywhere;
 }
 
 .tender-item__divider {
@@ -315,6 +348,7 @@
   font-size: 0.96rem;
   font-weight: 600;
   line-height: 1.35;
+  overflow-wrap: anywhere;
 }
 
 @media (min-width: 768px) {
