@@ -84,11 +84,15 @@
     <section class="tender-section">
       <div class="tender-section__bar">
         <span class="app-section-title">Tender Terbuka ({{ filteredTenders.length }})</span>
-        <span class="tender-section__filter" aria-hidden="true">
+        <button
+          type="button"
+          class="tender-section__filter"
+          (click)="openTenderMenu()"
+          aria-label="Buka menu filter tender">
           <svg viewBox="0 0 24 24">
             <path d="M4 7h8M16 7h4M10 7a2 2 0 1 1-4 0 2 2 0 0 1 4 0ZM4 17h4M12 17h8M18 17a2 2 0 1 1-4 0 2 2 0 0 1 4 0ZM4 12h14M20 12h0" />
           </svg>
-        </span>
+        </button>
       </div>
 
       <div class="tender-list" *ngIf="filteredTenders.length; else emptyState">
@@ -108,11 +112,17 @@
               {{ tender.status }}
             </span>
 
-            <span class="tender-item__bookmark" aria-hidden="true">
+            <button
+              type="button"
+              class="tender-item__bookmark"
+              [class.tender-item__bookmark--active]="isTenderBookmarked(tender)"
+              (click)="toggleBookmark(tender, $event)"
+              [attr.aria-pressed]="isTenderBookmarked(tender)"
+              [attr.aria-label]="isTenderBookmarked(tender) ? 'Hapus tender tersimpan' : 'Simpan tender'">
               <svg viewBox="0 0 24 24">
                 <path d="M7 4h10v16l-5-3-5 3z" />
               </svg>
-            </span>
+            </button>
           </div>
 
           <h3>{{ tender.title }}</h3>

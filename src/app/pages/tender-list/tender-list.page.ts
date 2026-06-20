@@ -3,7 +3,9 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import {
   IonContent,
-  IonBadge
+  IonBadge,
+  ActionSheetController,
+  ToastController
 } from '@ionic/angular/standalone';
 import { RouterModule } from '@angular/router';
 import { TenderService } from 'src/app/services/tender.service';
@@ -27,13 +29,15 @@ export class TenderListPage implements OnInit {
   searchQuery = '';
   activeCategory: 'all' | 'infrastructure' = 'all';
   loading = false;
-  
-  // Variabel untuk inisial profil
+  private savedTenderIds = new Set<number>();
+  private bookmarkStorageKey = 'vendor_saved_tenders:guest';
   vendorInitial = 'V';
 
   constructor(
     private tenderService: TenderService,
-    private authService: AuthService
+    private authService: AuthService,
+    private actionSheetController: ActionSheetController,
+    private toastController: ToastController
   ) {}
 
   ngOnInit() {
@@ -41,18 +45,31 @@ export class TenderListPage implements OnInit {
     this.loadProfile();
   }
 
-  // Fungsi untuk memuat inisial profil vendor
+  async showToast(message: string, color: string = 'success') {
+    const toast = await this.toastController.create({
+      message,
+      duration: 1800,
+      color
+    });
+
+    await toast.present();
+  }
+
   loadProfile() {
     this.authService.me().subscribe({
       next: (res: any) => {
         const vendor = res?.data?.vendor || res?.vendor || res?.data || res;
         const name = vendor?.company_name || vendor?.name || 'Vendor';
         this.vendorInitial = name.charAt(0).toUpperCase();
+        this.bookmarkStorageKey = this.getBookmarkStorageKey(vendor);
+        this.loadSavedTenders();
       },
       error: () => {
         const vendor: any = this.authService.getStoredVendorProfile();
         const name = vendor?.company_name || vendor?.name || 'V';
         this.vendorInitial = name.charAt(0).toUpperCase();
+        this.bookmarkStorageKey = this.getBookmarkStorageKey(vendor);
+        this.loadSavedTenders();
       }
     });
   }
@@ -113,6 +130,54 @@ export class TenderListPage implements OnInit {
     this.activeCategory = category;
   }
 
+  async openTenderMenu() {
+    const actionSheet = await this.actionSheetController.create({
+      header: 'Filter Tender',
+      buttons: [
+        {
+          text: 'Semua Tender',
+          handler: () => this.setCategory('all')
+        },
+        {
+          text: 'Infrastruktur',
+          handler: () => this.setCategory('infrastructure')
+        },
+        {
+          text: 'Tutup',
+          role: 'cancel'
+        }
+      ]
+    });
+
+    await actionSheet.present();
+  }
+
+  toggleBookmark(tender: any, event?: Event) {
+    event?.preventDefault();
+    event?.stopPropagation();
+
+    const tenderId = this.extractTenderId(tender);
+
+    if (!tenderId) {
+      return;
+    }
+
+    if (this.savedTenderIds.has(tenderId)) {
+      this.savedTenderIds.delete(tenderId);
+      this.showToast('Tender dihapus dari tersimpan');
+    } else {
+      this.savedTenderIds.add(tenderId);
+      this.showToast('Tender disimpan');
+    }
+
+    this.persistSavedTenders();
+  }
+
+  isTenderBookmarked(tender: any) {
+    const tenderId = this.extractTenderId(tender);
+    return tenderId ? this.savedTenderIds.has(tenderId) : false;
+  }
+
   getDisplayValue(value: any, fallback: string = '-') {
     if (value === undefined || value === null || value === '') {
       return fallback;
@@ -171,6 +236,48 @@ export class TenderListPage implements OnInit {
       month: 'short',
       year: 'numeric'
     });
+  }
+
+  private loadSavedTenders() {
+    const rawValue = localStorage.getItem(this.bookmarkStorageKey);
+
+    if (!rawValue) {
+      this.savedTenderIds = new Set<number>();
+      return;
+    }
+
+    try {
+      const parsedValue = JSON.parse(rawValue);
+      const ids = Array.isArray(parsedValue) ? parsedValue : [];
+      this.savedTenderIds = new Set(
+        ids
+          .map((value: any) => Number(value))
+          .filter((value: number) => Number.isFinite(value) && value > 0)
+      );
+    } catch {
+      this.savedTenderIds = new Set<number>();
+    }
+  }
+
+  private persistSavedTenders() {
+    localStorage.setItem(
+      this.bookmarkStorageKey,
+      JSON.stringify(Array.from(this.savedTenderIds))
+    );
+  }
+
+  private getBookmarkStorageKey(vendor?: any) {
+    const profile = vendor || this.authService.getStoredVendorProfile() || {};
+    const vendorKey = profile?.id || profile?.vendor_id || profile?.email || profile?.company_name || profile?.name || 'guest';
+
+    return `vendor_saved_tenders:${String(vendorKey).trim().toLowerCase().replace(/[^a-z0-9]+/g, '-')}`;
+  }
+
+  private extractTenderId(tender: any) {
+    const candidate = tender?.id || tender?.tender_id || tender?.tender?.id;
+    const numericId = Number(candidate);
+
+    return Number.isFinite(numericId) && numericId > 0 ? numericId : null;
   }
 
   private matchesSearch(tender: any) {

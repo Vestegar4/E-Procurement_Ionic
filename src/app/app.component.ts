@@ -19,7 +19,7 @@ export class AppComponent {
     );
   }
 
-  isActiveSection(section: 'dashboard' | 'tender' | 'documents' | 'profile') {
+  isActiveSection(section: 'dashboard' | 'tender' | 'profile') {
     const url = this.router.url;
 
     if (section === 'dashboard') {
@@ -28,10 +28,6 @@ export class AppComponent {
 
     if (section === 'tender') {
       return url.startsWith('/tender-list') || url.startsWith('/tender-detail');
-    }
-
-    if (section === 'documents') {
-      return url.startsWith('/documents');
     }
 
     return url.startsWith('/profile');

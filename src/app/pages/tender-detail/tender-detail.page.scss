@@ -20,6 +20,7 @@
   font-weight: 700;
   line-height: 1;
   letter-spacing: -0.04em;
+  overflow-wrap: anywhere;
 }
 
 .detail-topbar__back,
@@ -93,6 +94,7 @@
   font-weight: 500;
   line-height: 1.08;
   letter-spacing: -0.05em;
+  overflow-wrap: anywhere;
 }
 
 .detail-hero__subtitle {
@@ -107,6 +109,7 @@
   gap: 22px;
   padding: 24px;
   border-radius: 22px;
+  min-width: 0;
 }
 
 .detail-summary__body {
@@ -114,6 +117,7 @@
   color: var(--app-primary);
   font-size: 1rem;
   line-height: 1.65;
+  overflow-wrap: anywhere;
 }
 
 .detail-summary__stats {
@@ -138,6 +142,7 @@
   font-size: clamp(1.45rem, 6vw, 2rem);
   font-weight: 500;
   line-height: 1.15;
+  overflow-wrap: anywhere;
 }
 
 .detail-summary__divider {
@@ -158,6 +163,7 @@
   color: var(--app-primary);
   font-size: 0.98rem;
   line-height: 1.45;
+  min-width: 0;
 }
 
 .detail-requirement__icon {
@@ -189,6 +195,12 @@
   font-size: 1.05rem;
   font-weight: 600;
   box-shadow: 0 18px 34px rgba(0, 0, 0, 0.12);
+  text-align: center;
+}
+
+.detail-join-button span {
+  min-width: 0;
+  overflow-wrap: anywhere;
 }
 
 .detail-join-button svg {
@@ -249,13 +261,15 @@
   display: grid;
   gap: 8px;
   padding-bottom: 18px;
+  min-width: 0;
 }
 
 .detail-step__head {
   display: flex;
-  align-items: baseline;
+  align-items: flex-start;
   justify-content: space-between;
   gap: 12px;
+  min-width: 0;
 }
 
 .detail-step__head h3 {
@@ -265,6 +279,7 @@
   font-weight: 500;
   line-height: 1.2;
   letter-spacing: -0.02em;
+  overflow-wrap: anywhere;
 }
 
 .detail-step__head span {
@@ -292,6 +307,7 @@
   color: #4f5058;
   font-size: 0.98rem;
   line-height: 1.55;
+  overflow-wrap: anywhere;
 }
 
 .detail-step strong {
@@ -300,6 +316,7 @@
   font-weight: 600;
   line-height: 1.45;
   letter-spacing: 0.02em;
+  overflow-wrap: anywhere;
 }
 
 .detail-action-row {
@@ -319,6 +336,7 @@
   gap: 8px;
   text-align: left;
   color: var(--app-primary);
+  min-width: 0;
 }
 
 .detail-action-card strong {
@@ -370,6 +388,7 @@
   font-weight: 500;
   line-height: 1.15;
   letter-spacing: -0.02em;
+  overflow-wrap: anywhere;
 }
 
 .detail-missing__title {
