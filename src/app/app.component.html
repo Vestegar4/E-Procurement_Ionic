@@ -6,6 +6,7 @@
       *ngIf="showBottomNav()"
       class="app-bottom-nav app-bottom-nav--global"
       aria-label="Primary navigation">
+      
       <a
         class="app-bottom-nav__item"
         [class.is-active]="isActiveSection('dashboard')"
@@ -15,7 +16,7 @@
             <path d="M4 10.5 12 4l8 6.5V20H4z" />
           </svg>
         </span>
-        <strong>Dashboard</strong>
+        <strong>Beranda</strong>
       </a>
 
       <a
@@ -39,8 +40,9 @@
             <path d="M12 12a4 4 0 1 0-4-4 4 4 0 0 0 4 4Zm-7 8a7 7 0 0 1 14 0" />
           </svg>
         </span>
-        <strong>Profile</strong>
+        <strong>Profil</strong>
       </a>
+      
     </nav>
   </div>
 </ion-app>
