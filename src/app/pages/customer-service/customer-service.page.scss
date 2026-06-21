@@ -1,0 +1,131 @@
+ion-content {
+  --background: #f8fafc;
+  --padding-bottom: 100px;
+}
+
+ion-footer {
+position: absolute;
+bottom: 0;
+width: 100%;
+z-index: 9999;
+background: white;
+box-shadow: 0 -2px 10px rgba(0,0,0,0.05);
+border-top: 1px solid #ddd;
+pointer-events: auto !important;
+}
+.chat-container {
+  display: flex;
+  flex-direction: column;
+  padding-bottom: 20px;
+}
+
+.message-wrapper {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+}
+
+.message-bubble {
+  max-width: 80%;
+  padding: 12px 16px;
+  border-radius: 16px;
+  margin-bottom: 12px;
+  position: relative;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+  
+  p {
+    margin: 0 0 5px 0;
+    font-size: 14.5px;
+    line-height: 1.4;
+  }
+
+  .time {
+    font-size: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    gap: 4px;
+    opacity: 0.8;
+  }
+}
+
+// Bubble Vendor (Warna Tema Utama, di Kanan)
+.vendor-bubble {
+  align-self: flex-end;
+  background: var(--ion-color-primary);
+  color: white;
+  border-bottom-right-radius: 4px;
+}
+
+// Bubble Admin (Warna Putih, di Kiri)
+.admin-bubble {
+  align-self: flex-start;
+  background: #ffffff;
+  color: #333333;
+  border: 1px solid #e2e8f0;
+  border-bottom-left-radius: 4px;
+}
+
+.empty-state {
+  text-align: center;
+  color: #888;
+  margin-top: 30vh;
+  
+  p {
+    font-size: 14px;
+    line-height: 1.5;
+  }
+}
+
+// Input Bawah
+.input-container {
+  display: flex;
+  align-items: flex-end;
+  padding: 10px 16px;
+  background: #ffffff;
+  border-top: 1px solid #e2e8f0;
+
+  .chat-input {
+    --background: #f1f5f9;
+    --padding-start: 16px;
+    --padding-end: 16px;
+    --padding-top: 12px;
+    --padding-bottom: 12px;
+    --border-radius: 24px;
+    --color: #333333; /* <-- Gunakan dash-dash (--) di sini */
+    margin-right: 12px;
+    margin-top: 0;
+    margin-bottom: 0;
+  }
+
+  .send-btn {
+    --background: var(--ion-color-primary);
+    --border-radius: 50%;
+    width: 48px;
+    height: 48px;
+    margin: 0;
+  }
+  // Mengatur agar page container memenuhi layar
+.chat-main-wrapper {
+  display: flex;
+  flex-direction: column;
+  height: 100%; // Memaksa container mengikuti tinggi layar
+  padding-bottom: 20px;
+}
+
+// Mengatur agar chat-container bisa scroll secara mandiri 
+// di dalam area yang tersedia
+.chat-container {
+  flex: 1;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  padding: 10px;
+}
+
+// Memastikan ion-footer tidak transparan dan berada di atas content
+ion-footer {
+  background: white;
+  border-top: 1px solid #e2e8f0;
+}
+}
