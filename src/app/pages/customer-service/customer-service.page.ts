@@ -1,5 +1,5 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
-import { CommonModule } from '@angular/common';
+import { CommonModule, Location } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { IonicModule, ToastController, IonContent } from '@ionic/angular';
 import { HttpClient } from '@angular/common/http';
@@ -8,7 +8,7 @@ import { RouterModule } from '@angular/router';
 
 // ▼ 1. IMPORT IKON DARI IONICONS ▼
 import { addIcons } from 'ionicons';
-import { send, chatbubblesOutline, checkmarkDoneOutline } from 'ionicons/icons';
+import { send, chatbubblesOutline, checkmarkDoneOutline, arrowBack } from 'ionicons/icons';
 
 @Component({
   selector: 'app-customer-service',
@@ -23,6 +23,7 @@ export class CustomerServicePage implements OnInit {
   iconSend = send;
   iconChat = chatbubblesOutline;
   iconCheck = checkmarkDoneOutline;
+  iconArrowBack = arrowBack;
   message: string = '';
   isSubmitting: boolean = false;
   chats: any[] = []; 
@@ -30,14 +31,19 @@ export class CustomerServicePage implements OnInit {
 
   constructor(
     private http: HttpClient,
-    private toastCtrl: ToastController
+    private toastCtrl: ToastController,
+    private location: Location
   ) {
     // ▼ 2. DAFTARKAN IKON AGAR TOMBOL MUNCUL ▼
-    addIcons({ send, chatbubblesOutline, checkmarkDoneOutline });
+    addIcons({ send, chatbubblesOutline, checkmarkDoneOutline, arrowBack });
   }
 
   ngOnInit() {
     this.loadChats();
+  }
+
+  goBack() {
+    this.location.back();
   }
 
   loadChats() {
