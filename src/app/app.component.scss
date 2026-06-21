@@ -5,3 +5,93 @@
 .app-shell__viewport {
   min-height: 100vh;
 }
+
+/* STYLE BAWAAN APLIKASI */
+.app-shell {
+  background: var(--app-surface);
+}
+
+.app-shell__viewport {
+  min-height: 100vh;
+}
+
+/* STYLE NAVIGASI BAWAH (HP & DESKTOP) */
+.app-bottom-nav {
+  /* Pastikan menggunakan flexbox */
+  display: flex;
+  align-items: center;
+  justify-content: space-between; 
+  
+  /* Hilangkan padding kiri-kanan agar tidak asimetris */
+  padding-left: 0; 
+  padding-right: 0;
+
+  /* --- TAMBAHKAN KODE INI --- */
+  outline: none; /* Menghilangkan garis hitam bawaan browser di desktop */
+  -webkit-tap-highlight-color: transparent; /* Menghilangkan blok abu-abu saat di-tap di HP */
+  
+  &:focus, &:active, &:focus-visible {
+    outline: none;
+  }
+
+  /* ... (biarkan background, border-radius, shadow aslimu tetap di sini) ... */
+}
+
+.app-bottom-nav__item {
+  /* INI KUNCINYA: flex: 1 akan memaksa ke-3 menu membagi rata ruang (masing-masing 33.3%) */
+  flex: 1; 
+  
+  /* Pusatkan konten di dalam masing-masing menu */
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  
+  /* --- Kode di bawah ini DIMASUKKAN ke dalam .app-bottom-nav__item --- */
+
+  /* Mengatur ukuran ikon SVG */
+  .app-bottom-nav__icon svg {
+    width: 24px;
+    height: 24px;
+    fill: currentColor; /* Warna SVG mengikuti warna teks */
+    margin-bottom: 4px;
+  }
+
+  strong {
+    font-size: 12px;
+    font-weight: 500;
+  }
+
+  /* Warna saat menu sedang aktif / dipilih */
+  &.is-active {
+    color: var(--ion-color-primary, #0f172a); /* Ganti dengan warna tema utama aplikasi */
+    
+    strong {
+      font-weight: 700;
+    }
+  }
+} /* --- AKHIR STYLE NAVIGASI BAWAH --- */
+
+/* KHUSUS MODE DESKTOP / TABLET (Layar Lebar)*/
+@media (min-width: 768px) {
+  .app-bottom-nav {
+    /* Mengubahnya jadi melayang di tengah (Floating Dock) */
+    bottom: 24px; /* Jarak dari dasar layar komputer */
+    left: 50%;
+    transform: translateX(-50%); /* Menarik persis ke tengah layar */
+    
+    /* Membatasi lebarnya agar tidak memanjang dari ujung ke ujung monitor */
+    max-width: 400px; 
+    
+    /* Mempercantik tampilannya */
+    border-radius: 35px; /* Dibuat melengkung seperti kapsul */
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.08); 
+    border: 1px solid #e2e8f0;
+    border-top: 1px solid #e2e8f0; /* Menimpa border-top bawaan mobile */
+    
+    /* Menyesuaikan tinggi dock di desktop */
+    height: 65px; 
+    padding: 0 10px;
+  }
+}

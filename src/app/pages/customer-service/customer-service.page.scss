@@ -1,131 +1,125 @@
 ion-content {
-  --background: #f8fafc;
-  --padding-bottom: 100px;
+  /* Background abu-abu seperti WhatsApp agar bubble chat sangat kontras */
+  --background: #e9edef; 
 }
 
 ion-footer {
-position: absolute;
-bottom: 0;
-width: 100%;
-z-index: 9999;
-background: white;
-box-shadow: 0 -2px 10px rgba(0,0,0,0.05);
-border-top: 1px solid #ddd;
-pointer-events: auto !important;
+  /* Background footer dibuat putih solid, tidak lagi transparan */
+  background: #ffffff;
+  
+  /* Shadow dan garis pembatas yang lebih tegas agar terpisah dari area chat */
+  box-shadow: 0 -2px 10px rgba(0,0,0,0.08); 
+  border-top: 1px solid #cbd5e1; 
+  
+  /* PENTING: Pertahankan ini agar tidak nabrak navbar bawah */
+  margin-bottom: 75px; 
+  z-index: 100;
+  position: relative;
+
+  ion-toolbar {
+    --background: transparent;
+    --padding-top: 10px;
+    --padding-bottom: 10px;
+    --padding-start: 12px;
+    --padding-end: 12px;
+  }
 }
-.chat-container {
+
+.chat-main-wrapper {
   display: flex;
   flex-direction: column;
-  padding-bottom: 20px;
+  /* height: 100%; */
+}
+
+.chat-container {
+  /* flex: 1; */
+  /* overflow-y: auto; */
+  
+  display: flex;
+  flex-direction: column;
+  padding: 16px 14px;
+  gap: 8px; 
 }
 
 .message-wrapper {
   display: flex;
   flex-direction: column;
   width: 100%;
+  margin-bottom: 6px; 
 }
 
 .message-bubble {
-  max-width: 80%;
+  max-width: 78%;
   padding: 12px 16px;
   border-radius: 16px;
-  margin-bottom: 12px;
   position: relative;
-  box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+  box-shadow: 0 1px 3px rgba(0,0,0,0.1); /* Shadow pada bubble dipertegas */
   
   p {
-    margin: 0 0 5px 0;
-    font-size: 14.5px;
-    line-height: 1.4;
-  }
-
-  .time {
-    font-size: 10px;
-    display: flex;
-    align-items: center;
-    justify-content: flex-end;
-    gap: 4px;
-    opacity: 0.8;
+    margin: 0;
+    font-size: 15px;
+    line-height: 1.45;
   }
 }
 
-// Bubble Vendor (Warna Tema Utama, di Kanan)
+/* --- BUBBLE USER / VENDOR (Kanan) --- */
 .vendor-bubble {
   align-self: flex-end;
-  background: var(--ion-color-primary);
-  color: white;
-  border-bottom-right-radius: 4px;
+  background: #222428; 
+  color: #ffffff;
+  border-bottom-right-radius: 4px; 
+  border-top-right-radius: 16px;
 }
 
-// Bubble Admin (Warna Putih, di Kiri)
+/* --- BUBBLE ADMIN (Kiri) --- */
 .admin-bubble {
   align-self: flex-start;
   background: #ffffff;
   color: #333333;
-  border: 1px solid #e2e8f0;
-  border-bottom-left-radius: 4px;
+  /* Tambahkan border abu-abu agar tidak nyatu kalau background mirip */
+  border: 1px solid #e2e8f0; 
+  border-bottom-left-radius: 4px; 
+  border-top-left-radius: 16px;
 }
 
-.empty-state {
-  text-align: center;
-  color: #888;
-  margin-top: 30vh;
+/* --- AREA INPUT PESAN BAWAH --- */
+ion-input {
+  /* Background input dibedakan dari footer */
+  --background: #f8fafc;
+  --padding-start: 16px;
+  --padding-end: 16px;
+  --border-radius: 24px; 
+  font-size: 15px;
+  height: 46px;
   
-  p {
-    font-size: 14px;
-    line-height: 1.5;
-  }
+  /* Diberi border yang jelas agar tau di mana batas area ketiknya */
+  border: 1px solid #cbd5e1; 
+  
+  /* Sedikit efek bayangan ke dalam supaya terlihat seperti kolom */
+  box-shadow: inset 0 1px 2px rgba(0,0,0,0.05);
 }
 
-// Input Bawah
-.input-container {
-  display: flex;
-  align-items: flex-end;
-  padding: 10px 16px;
-  background: #ffffff;
-  border-top: 1px solid #e2e8f0;
-
-  .chat-input {
-    --background: #f1f5f9;
-    --padding-start: 16px;
-    --padding-end: 16px;
-    --padding-top: 12px;
-    --padding-bottom: 12px;
-    --border-radius: 24px;
-    --color: #333333; /* <-- Gunakan dash-dash (--) di sini */
-    margin-right: 12px;
-    margin-top: 0;
-    margin-bottom: 0;
+/* --- TOMBOL KIRIM --- */
+ion-button[fill="clear"] {
+  --background: transparent; /* Kembalikan jadi transparan */
+  --color: var(--ion-color-primary, #e65100); /* Warna ikon saat aktif (akan mengikuti warna oren aplikasimu) */
+  height: 46px;
+  width: 46px;
+  margin: 0 0 0 12px;
+  
+  /* Saat belum ngetik (disabled), ikon jadi abu-abu */
+  &[disabled] {
+    --background: transparent;
+    --color: #cbd5e1;
+    opacity: 0.8; 
   }
 
-  .send-btn {
-    --background: var(--ion-color-primary);
-    --border-radius: 50%;
-    width: 48px;
-    height: 48px;
-    margin: 0;
+  &:not([disabled]):active {
+    transform: scale(0.92); /* Efek mengecil sedikit saat dipencet */
   }
-  // Mengatur agar page container memenuhi layar
-.chat-main-wrapper {
-  display: flex;
-  flex-direction: column;
-  height: 100%; // Memaksa container mengikuti tinggi layar
-  padding-bottom: 20px;
-}
 
-// Mengatur agar chat-container bisa scroll secara mandiri 
-// di dalam area yang tersedia
-.chat-container {
-  flex: 1;
-  overflow-y: auto;
-  display: flex;
-  flex-direction: column;
-  padding: 10px;
-}
-
-// Memastikan ion-footer tidak transparan dan berada di atas content
-ion-footer {
-  background: white;
-  border-top: 1px solid #e2e8f0;
-}
+  ion-icon {
+    font-size: 26px; /* Ukuran ikon dibesarkan sedikit agar pas */
+    margin-left: 0; 
+  }
 }

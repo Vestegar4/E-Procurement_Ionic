@@ -13,7 +13,7 @@ import { Router, RouterModule } from '@angular/router';
 export class AppComponent {
   constructor(private router: Router) {}
 
-  showBottomNav() {
+  showBottomNav(): boolean {
     return !['/splash', '/welcome', '/login', '/register', '/forgot-password'].some(path =>
       this.router.url.startsWith(path)
     );
