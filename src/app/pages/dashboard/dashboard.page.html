@@ -2,7 +2,8 @@
   <div class="app-container dashboard-container">
     <section class="dashboard-topbar">
       <div class="dashboard-avatar" aria-hidden="true">
-        <span>{{ vendorInitial }}</span>
+        <img *ngIf="avatarUrl" [src]="avatarUrl" style="width: 100%; height: 100%; border-radius: 50%; object-fit: cover;" alt="Avatar" />
+        <span *ngIf="!avatarUrl"> {{ vendorInitial }}</span>
       </div>
 
       <div class="dashboard-brand">
