@@ -41,6 +41,7 @@ export class DashboardPage implements OnInit {
   recentActivities: DashboardActivity[] = [];
   activeBids = 0;
   totalWon = 0;
+  avatarUrl: string | null = null; // TAMBAHKAN INI
 
   loading = true;
   private pendingLoads = 0;
@@ -63,11 +64,15 @@ export class DashboardPage implements OnInit {
     this.authService.me().subscribe({
       next: (res) => {
         this.vendor = this.extractItem(res, ['vendor', 'user']);
+        this.avatarUrl = this.vendor?.photo_url || this.vendor?.photo_path || this.vendor?.avatar || null;
+        
+        this.authService.saveVendorProfile(this.vendor);
         this.completeLoad();
       },
       error: (err) => {
         console.log('ME ERROR:', err);
         this.vendor = this.authService.getStoredVendorProfile();
+        this.avatarUrl = this.vendor?.photo_url || this.vendor?.photo_path || this.vendor?.avatar || null;
         this.completeLoad();
       }
     });
@@ -205,9 +210,13 @@ export class DashboardPage implements OnInit {
   }
 
   get potentialValue() {
-    const totalValue = this.tenders
-      .filter((tender) => this.isActiveTender(tender))
-      .reduce((sum, tender) => sum + this.extractTenderValue(tender), 0);
+    const totalValue = this.bids
+      .filter((bid) => this.isActiveBid(bid))
+      .reduce((sum, bid) => {
+        // Ambil nominal penawaran dari database
+        const amount = Number(bid?.amount || bid?.bid_amount || bid?.value || 0);
+        return sum + amount;
+      }, 0);
 
     return totalValue;
   }
@@ -261,16 +270,25 @@ export class DashboardPage implements OnInit {
       return res;
     }
 
+    // 2. [SOLUSI UTAMA] Deteksi Paginasi Laravel!
+    // Membaca ke dalam res.data.data tempat data asli bersembunyi
+    if (res?.data?.data && Array.isArray(res.data.data)) {
+      return res.data.data;
+    }
+
+    // 3. Pencarian standar
     for (const key of keys) {
       if (Array.isArray(res?.[key])) {
         return res[key];
       }
     }
 
+    // 4. Jika data berupa array langsung di dalam res.data
     if (Array.isArray(res?.data)) {
       return res.data;
     }
 
+    // Jika semua gagal, kembalikan array kosong
     return [];
   }
 
