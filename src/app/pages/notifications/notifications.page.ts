@@ -2,6 +2,7 @@ import { CommonModule } from '@angular/common';
 import { Component } from '@angular/core';
 import { RouterModule } from '@angular/router';
 import { IonContent } from '@ionic/angular/standalone';
+import { NavController } from '@ionic/angular';
 
 interface NotificationItem {
   title: string;
@@ -23,6 +24,15 @@ interface NotificationItem {
   ]
 })
 export class NotificationsPage {
+
+  constructor(
+    private navCtrl: NavController
+  ) { }
+
+  goBack(): void {
+    this.navCtrl.back();
+  }
+
   tenderAnnouncements: NotificationItem[] = [
     {
       title: 'Tender Infrastruktur Jaringan Dibuka',

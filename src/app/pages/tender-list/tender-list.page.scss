@@ -6,16 +6,17 @@
 
 .tender-topbar {
   display: grid;
-  grid-template-columns: 52px minmax(0, 1fr) 36px;
+  grid-template-columns: 52px minmax(0, 1fr) 52px;
   align-items: center;
   gap: 12px;
   padding-bottom: 8px;
   border-bottom: 1px solid rgba(26, 26, 26, 0.06);
+  min-width: 0;
 }
 
 .tender-avatar {
-  width: 44px;
-  height: 44px;
+  width: 48px;
+  height: 48px;
   border-radius: 50%;
   display: grid;
   place-items: center;
@@ -25,27 +26,42 @@
 
 .tender-avatar span {
   color: #f3d67c;
-  font-size: 0.94rem;
+  font-size: 1rem;
   font-weight: 600;
+}
+
+.tender-brand {
+  text-align: center;
+  min-width: 0;
 }
 
 .tender-brand h1 {
   margin: 0;
   color: var(--app-primary);
-  font-size: clamp(1.9rem, 8vw, 2.7rem);
+  font-size: clamp(2rem, 8vw, 2.9rem);
   font-weight: 700;
   line-height: 1;
   letter-spacing: -0.04em;
+  overflow-wrap: anywhere;
 }
 
-.tender-bell {
+.tender-topbar__action {
+  justify-self: end;
   display: grid;
   place-items: center;
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
   color: var(--app-primary);
   text-decoration: none;
 }
 
-.tender-bell svg,
+.tender-topbar__icon {
+  display: grid;
+  place-items: center;
+}
+
+.tender-topbar__icon svg,
 .tender-search__icon svg,
 .tender-section__filter svg,
 .tender-item__bookmark svg,
@@ -54,7 +70,7 @@
   width: 22px;
   height: 22px;
   stroke: currentColor;
-  stroke-width: 1.8;
+  stroke-width: 1.9;
   stroke-linecap: round;
   stroke-linejoin: round;
   fill: none;

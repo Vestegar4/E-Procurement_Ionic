@@ -5,39 +5,57 @@
         <ion-icon name="arrow-back"></ion-icon>
       </ion-button>
     </ion-buttons>
+
     <ion-title>Customer Service</ion-title>
   </ion-toolbar>
 </ion-header>
 
-<ion-content>
-  <div class="chat-main-wrapper">
-    
-    <div class="chat-container">
-      <div *ngFor="let chat of chats" class="message-wrapper">
-        <div class="message-bubble vendor-bubble" *ngIf="chat.message && chat.message !== '-'">
-          <p>{{ chat.message }}</p>
-        </div>
-        <div class="message-bubble admin-bubble" *ngIf="chat.admin_reply">
-          <p>{{ chat.admin_reply }}</p>
-        </div>
+<ion-content #content [fullscreen]="true">
+
+  <div class="chat-container">
+
+    <div *ngFor="let chat of chats" class="message-wrapper">
+
+      <div class="message-bubble vendor-bubble" *ngIf="chat.message && chat.message !== '-'">
+
+        <p>{{ chat.message }}</p>
+
       </div>
+
+      <div class="message-bubble admin-bubble" *ngIf="chat.admin_reply">
+
+        <p>{{ chat.admin_reply }}</p>
+
+      </div>
+
     </div>
 
   </div>
+
 </ion-content>
 
-<ion-footer>
-  <ion-toolbar style="--background: #ffffff; padding: 5px 10px;">
-    <div style="display: flex; align-items: center; width: 100%;">
-      <ion-input 
-        [(ngModel)]="message" 
-        placeholder="Ketik pesan..." 
-        style="background: #f0f0f0; border-radius: 20px; padding: 0 15px; margin-right: 10px; height: 50px; flex: 1;">
-      </ion-input>
-      
-      <ion-button (click)="submitMessage()" [disabled]="!message || message.trim() === ''" fill="clear" style="height: 50px;">
-        <ion-icon [icon]="iconSend" slot="icon-only"></ion-icon>
+<ion-footer class="chat-footer">
+
+  <ion-toolbar>
+
+    <div class="chat-input-wrapper">
+
+      <ion-textarea [(ngModel)]="message" placeholder="Tulis pesan..." auto-grow="true" rows="1" maxlength="1000"
+        enterkeyhint="enter" [disabled]="isSubmitting">
+      </ion-textarea>
+
+      <ion-button fill="clear" (click)="submitMessage()" [disabled]="!message?.trim() || isSubmitting">
+
+        <ion-spinner *ngIf="isSubmitting" name="crescent">
+        </ion-spinner>
+
+        <ion-icon *ngIf="!isSubmitting" [icon]="iconSend">
+        </ion-icon>
+
       </ion-button>
+
     </div>
+
   </ion-toolbar>
+
 </ion-footer>

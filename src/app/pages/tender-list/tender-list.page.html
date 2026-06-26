@@ -9,13 +9,15 @@
         <h1>PROCULUS</h1>
       </div>
 
-      <a
-        class="tender-bell"
-        routerLink="/notifications"
-        aria-label="Buka notifikasi">
-        <svg viewBox="0 0 24 24">
-          <path d="M12 4a4 4 0 0 0-4 4v2.2c0 .8-.24 1.58-.68 2.24L6 14.5V16h12v-1.5l-1.32-2.06A4.2 4.2 0 0 1 16 10.2V8a4 4 0 0 0-4-4Zm-2 14a2 2 0 0 0 4 0" />
-        </svg>
+      <a class="tender-topbar__action" routerLink="/notifications" aria-label="Buka notifikasi">
+
+        <span class="tender-topbar__icon">
+          <svg viewBox="0 0 24 24">
+            <path
+              d="M12 4a4 4 0 0 0-4 4v2.2c0 .8-.24 1.58-.68 2.24L6 14.5V16h12v-1.5l-1.32-2.06A4.2 4.2 0 0 1 16 10.2V8a4 4 0 0 0-4-4Zm-2 14a2 2 0 0 0 4 0" />
+          </svg>
+        </span>
+
       </a>
     </section>
 
@@ -25,34 +27,22 @@
           <path d="M11 18a7 7 0 1 1 4.95-2.05L21 21" />
         </svg>
       </span>
-      <input
-        type="text"
-        [(ngModel)]="searchQuery"
-        placeholder="Cari tender tersedia..."
+      <input type="text" [(ngModel)]="searchQuery" placeholder="Cari tender tersedia..."
         aria-label="Cari tender tersedia" />
     </section>
 
     <section class="tender-tabs">
-      <button
-        type="button"
-        class="tender-chip"
-        [class.tender-chip--active]="activeCategory === 'all'"
+      <button type="button" class="tender-chip" [class.tender-chip--active]="activeCategory === 'all'"
         (click)="setCategory('all')">
         Semua Tender
       </button>
-      <button
-        type="button"
-        class="tender-chip"
-        [class.tender-chip--active]="activeCategory === 'infrastructure'"
+      <button type="button" class="tender-chip" [class.tender-chip--active]="activeCategory === 'infrastructure'"
         (click)="setCategory('infrastructure')">
         Infrastruktur
       </button>
     </section>
 
-    <section
-      class="tender-featured"
-      *ngIf="featuredTender"
-      [routerLink]="['/tender-detail', featuredTender.id]">
+    <section class="tender-featured" *ngIf="featuredTender" [routerLink]="['/tender-detail', featuredTender.id]">
       <div class="tender-featured__head">
         <span class="tender-featured__tag">{{ getDisplayValue(featuredTender.status) }}</span>
         <span class="tender-featured__mark" aria-hidden="true">
@@ -64,7 +54,8 @@
 
       <div class="tender-featured__watermark" aria-hidden="true">
         <svg viewBox="0 0 24 24">
-          <path d="m12 3 2.2 1.5 2.65-.18 1.37 2.27 2.4 1.12-.47 2.62 1.18 2.38-1.88 1.88-.08 2.65-2.38 1.18-1.12 2.4-2.62-.47L12 21l-2.2-1.5-2.65.18-1.37-2.27-2.4-1.12.47-2.62L2.67 11.3l1.88-1.88.08-2.65 2.38-1.18 1.12-2.4 2.62.47Z" />
+          <path
+            d="m12 3 2.2 1.5 2.65-.18 1.37 2.27 2.4 1.12-.47 2.62 1.18 2.38-1.88 1.88-.08 2.65-2.38 1.18-1.12 2.4-2.62-.47L12 21l-2.2-1.5-2.65.18-1.37-2.27-2.4-1.12.47-2.62L2.67 11.3l1.88-1.88.08-2.65 2.38-1.18 1.12-2.4 2.62.47Z" />
         </svg>
       </div>
 
@@ -89,14 +80,10 @@
       </div>
 
       <div class="tender-list" *ngIf="filteredTenders.length; else emptyState">
-        <article
-          class="app-card tender-item"
-          *ngFor="let tender of filteredTenders"
+        <article class="app-card tender-item" *ngFor="let tender of filteredTenders"
           [routerLink]="['/tender-detail', tender.id]">
           <div class="tender-item__head">
-            <span
-              class="app-badge"
-              [ngClass]="{
+            <span class="app-badge" [ngClass]="{
                 'app-badge--open': tender.status_key === 'open',
                 'app-badge--bidding': tender.status_key === 'bidding',
                 'app-badge--closed': tender.status_key === 'closed',
@@ -116,7 +103,7 @@
 
           <div class="tender-item__divider"></div>
 
-            <div class="tender-item__meta">
+          <div class="tender-item__meta">
             <div>
               <span>Batas Akhir</span>
               <strong>

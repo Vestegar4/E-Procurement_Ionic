@@ -3,16 +3,26 @@
     <section class="profile-topbar">
       <div class="profile-topbar__avatar" aria-hidden="true">
         <img *ngIf="avatarUrl" [src]="avatarUrl" class="profile-topbar__avatar-img" alt="Avatar" />
-        <span *ngIf="!avatarUrl">{{ vendorInitial }}</span>
+
+        <span *ngIf="!avatarUrl">
+          {{ vendorInitial }}
+        </span>
       </div>
 
-      <h1>PROCULUS</h1>
-
-      <div class="profile-topbar__icon" aria-hidden="true">
-        <svg viewBox="0 0 24 24">
-          <path d="M12 4a4 4 0 0 0-4 4v2.2c0 .8-.24 1.58-.68 2.24L6 14.5V16h12v-1.5l-1.32-2.06A4.2 4.2 0 0 1 16 10.2V8a4 4 0 0 0-4-4Zm-2 14a2 2 0 0 0 4 0" />
-        </svg>
+      <div class="profile-topbar__brand">
+        <h1>PROCULUS</h1>
       </div>
+
+      <a class="profile-topbar__action" routerLink="/notifications" aria-label="Buka notifikasi">
+
+        <span class="profile-topbar__icon">
+          <svg viewBox="0 0 24 24">
+            <path
+              d="M12 4a4 4 0 0 0-4 4v2.2c0 .8-.24 1.58-.68 2.24L6 14.5V16h12v-1.5l-1.32-2.06A4.2 4.2 0 0 1 16 10.2V8a4 4 0 0 0-4-4Zm-2 14a2 2 0 0 0 4 0" />
+          </svg>
+        </span>
+
+      </a>
     </section>
 
     <section class="profile-hero">
@@ -27,24 +37,25 @@
       <div style="display: flex; align-items: center; justify-content: center; gap: 8px; margin-top: 8px;">
         <h2 style="margin: 0;">{{ vendor.name || 'Nama Vendor' }}</h2>
 
-        <span
-          *ngIf="vendorVerificationStatusLabel === 'Approved' || vendorVerificationStatusLabel === 'Terverifikasi'"
+        <span *ngIf="vendorVerificationStatusLabel === 'Approved' || vendorVerificationStatusLabel === 'Terverifikasi'"
           style="display: flex; align-items: center; justify-content: center; width: 22px; height: 22px; background-color: #f3d67c !important; border-radius: 50%; box-shadow: 0 4px 10px rgba(0,0,0,0.15);"
           aria-label="Vendor terverifikasi">
-          <svg viewBox="0 0 24 24" fill="none" stroke="#111111" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" style="width: 14px; height: 14px;">
+          <svg viewBox="0 0 24 24" fill="none" stroke="#111111" stroke-width="3" stroke-linecap="round"
+            stroke-linejoin="round" style="width: 14px; height: 14px;">
             <path d="M20 6 9 17l-5-5" />
           </svg>
         </span>
       </div>
 
       <h3 style="margin-top: 6px;">{{ vendor.address || 'Lokasi Vendor' }}</h3>
-      
-      <div class="profile-hero__badge-container" *ngIf="vendorVerificationStatusLabel !== 'Approved' && vendorVerificationStatusLabel !== 'Terverifikasi'">
+
+      <div class="profile-hero__badge-container"
+        *ngIf="vendorVerificationStatusLabel !== 'Approved' && vendorVerificationStatusLabel !== 'Terverifikasi'">
         <span class="app-badge" [ngClass]="vendorVerificationBadgeClass">
           {{ vendorVerificationStatusLabel || 'Tidak tersedia' }}
         </span>
       </div>
-      </section>
+    </section>
 
     <section class="profile-menu">
       <!-- Edit Profil Action Card -->

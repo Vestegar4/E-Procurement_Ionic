@@ -3,7 +3,13 @@ import type { CapacitorConfig } from '@capacitor/cli';
 const config: CapacitorConfig = {
   appId: 'proculus.app.dartd',
   appName: 'proculus',
-  webDir: 'www'
+  webDir: 'www',
+
+  plugins: {
+    Keyboard: {
+      resize: 'body'
+    }
+  }
 };
 
 export default config;

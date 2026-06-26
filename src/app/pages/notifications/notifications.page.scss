@@ -5,9 +5,9 @@
 }
 
 .notifications-topbar {
-  display: flex;
+  display: grid;
+  grid-template-columns: 1fr 48px;
   align-items: start;
-  justify-content: space-between;
   gap: 16px;
   padding-bottom: 8px;
   border-bottom: 1px solid rgba(26, 26, 26, 0.06);
@@ -31,17 +31,31 @@
   text-transform: uppercase;
 }
 
-.notifications-topbar__icon {
+.notifications-topbar__back {
+  border: none;
+  background: transparent;
+  padding: 0;
+  cursor: pointer;
+
+  justify-self: end;
   display: grid;
   place-items: center;
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
   color: var(--app-primary);
+  transition: background-color .2s ease;
 }
 
-.notifications-topbar__icon svg {
-  width: 22px;
-  height: 22px;
+.notifications-topbar__back:active {
+  background: rgba(0, 0, 0, 0.06);
+}
+
+.notifications-topbar__back svg {
+  width: 24px;
+  height: 24px;
   stroke: currentColor;
-  stroke-width: 1.8;
+  stroke-width: 2.4;
   stroke-linecap: round;
   stroke-linejoin: round;
   fill: none;
